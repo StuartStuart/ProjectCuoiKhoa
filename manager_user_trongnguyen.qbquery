@@ -62,5 +62,8 @@ VALUES (2,'Phòng phát triển số 2');
 INSERT INTO mst_group
 VALUES (3,'Phòng phát triển số 3');
 
+INSERT INTO mst_group
+VALUES (4,'Phòng phát triển số 4');
+
 INSERT INTO tbl_user(login_name, salt, `password`)
 VALUES ('admin', '1ǟ', '5fc13a2721ed4c84005a981bd4477e78b7a93334');
