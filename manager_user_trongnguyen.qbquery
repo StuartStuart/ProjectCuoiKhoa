@@ -13,15 +13,15 @@ email VARCHAR(255) not null default "",
 tel VARCHAR(15) not null default "0000-0000",
 birthday Date not null default "1900-01-01",
 salt VARCHAR(255) not null default "",
-category INT(11) not null default 0);
+category INT(11) not null default 1);
 
 CREATE TABLE IF NOT EXISTS `tbl_detail_user_japan`(
 detail_user_japan_id INT(11) not null PRIMARY KEY AUTO_INCREMENT,
 user_id INT(11) not null,
-code_level VARCHAR(15) not null,
-start_date	Date not null,
-end_date	Date not null,
-total	INT(11) not null);
+code_level VARCHAR(15) not null default 'N5',
+start_date	Date not null default '1900-01-01',
+end_date	Date not null default '1900-01-01',
+total	INT(11) not null default 0);
 
 CREATE TABLE IF NOT EXISTS `mst_group`(
 group_id	INT(11) not null PRIMARY KEY AUTO_INCREMENT,
@@ -65,5 +65,35 @@ VALUES (3,'Phòng phát triển số 3');
 INSERT INTO mst_group
 VALUES (4,'Phòng phát triển số 4');
 
-INSERT INTO tbl_user(login_name, salt, `password`)
-VALUES ('admin', '1ǟ', '5fc13a2721ed4c84005a981bd4477e78b7a93334');
+INSERT INTO tbl_user(login_name, salt, `password`, category)
+VALUES ('admin', '1ǟ', '5802b1d70ecfb1364e1d7ad0083c0748473e69ba', 0);
+
+INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
+VALUES ('Nguyễn Thị Mai Hương', '1983-07-08', 2, 'ntmhuong@luvina.net', '0914-3263-86', 1);
+
+INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
+VALUES ('Lê Thị Xoa', '1983-07-08', 3, 'xoalt@luvina.net', '1234-5678-94', 1);
+
+INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
+VALUES ('Đặng Thị Hân', '1983-07-08', 3, 'handt@luvina.net', '1234-5678-94', 1);
+
+INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
+VALUES ('Lê Nghiêm Thủy', '1983-07-08', 3, 'thuyln@luvina.net', '1234-5678-94', 1);
+
+INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
+VALUES ('Lê Phương Anh', '1983-07-08', 3, 'anhlp@luvina.net', '1234-5678-94', 1);
+
+INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
+VALUES (2, 'N4', '2011-07-08', 290);
+
+INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
+VALUES (3, 'N4', '2011-07-08', 290);
+
+INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
+VALUES (4, 'N4', '2011-07-08', 290);
+
+INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
+VALUES (5, 'N4', '2011-07-08', 290);
+
+INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
+VALUES (6, 'N4', '2011-07-08', 290);
