@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//WebContent/jsp/ADM001.jsp=UTF-8
+encoding//WebContent/jsp/ADM002.jsp=UTF-8
+encoding//WebContent/jsp/System_Error.jsp=UTF-8
+encoding//src/controllers/ListUserController.java=UTF-8
+encoding//src/controllers/LoginController.java=UTF-8
+encoding//src/controllers/LogoutController.java=UTF-8
+encoding//src/dao/impl/BaseDaoImpl.java=UTF-8
+encoding//src/dao/impl/TblUserDaoImpl.java=UTF-8
+encoding//src/filters/LoginFilter.java=UTF-8
+encoding//src/logics/BaseLogic.java=UTF-8
+encoding//src/logics/impl/BaseLogicImpl.java=UTF-8
+encoding//src/logics/impl/TblUserLogicImpl.java=UTF-8
+encoding//src/properties/DatabaseProperties.java=UTF-8
+encoding//src/validates/LoginValidate.java=UTF-8
+encoding/<project>=UTF-8

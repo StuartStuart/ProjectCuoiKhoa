@@ -1,0 +1,21 @@
+Forward từ HTML -> Servlet:
+	request.getServletContext().getRequestDispatcher("/URL_Cua_Servlet_Can_Chuyen_Den").forward(request, response);
+
+Nhận chuỗi ký tự sau ? của [/ListUser?ILA] trong Servlet:
+	request.getQueryString();
+
+Kỹ thuật tương ứng:  có 2 hoặc nhiều loai thông tin có cùng số lượng thì chuyển về mảng theo đúng thứ tự
+	Problem: Xử lý ORDER BY có 1 loại sắp xếp được ưu tiên (các loại sắp xếp có kèm theo thứ tự sắp xếp - ASC, DESC).
+
+	Input: Thứ tự sắp xếp default là [Type1, Type2, Type3] (loại sắp xếp tương ứng là [Way1, Way2, Way3]), loại sắp xếp được ưu tiên là Type2. 
+	Output: Thứ tự sắp xếp là [Type2, Type1, Type3] (loại sắp xếp tương ứng là [Way2, Way1, Way3])
+
+	Thực hiện:
+	Gán Type1, Type2, Type3 vào mảng SortingTypes
+	Gán Way1, Way2, Way3 vào mảng SortingWays theo thứ tự tương ứng với SortingTypes
+
+	Chừa vị trí đầu tiên trong Output để thêm Type được ưu tiên và Way tương ứng.
+	Dùng vòng lặp có xác định index để thêm các Type vào Output cùng Way tương ứng, nếu trùng Type ưu tiên thì lưu Way đó vào biến nhớ.
+	Thêm Type ưu tiên cùng biến nhớ vào vị trí đầu tiên trong Output => Xong
+
+Sử dụng forEach trong JSTL: items="${Cung_Ten}" var="Cung_Ten"

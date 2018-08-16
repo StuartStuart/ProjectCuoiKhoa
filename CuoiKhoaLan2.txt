@@ -1,0 +1,11 @@
+﻿ADM001:
+- Lỗi không nhập ID, pass: Có 2 message: 
+	[Hãy nhập id]
+	[Hãy nhập pass]
+- sửa font: getByte -> setCharset
+- tự động về ADM001 khi session time out
+
+ADM002:
+- Sửa link phải tương ứng màn hình
+- UrlPattern cho LoginFilter bởi Annotation
+- getTotalUser(groupId, fullName): thay vì sử dụng ArrayList.length() -> đếm số bản ghi bằng query

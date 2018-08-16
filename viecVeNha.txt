@@ -1,0 +1,16 @@
+﻿- filter khi logout: 
+	1: Vào ADM002
+	2: Logout
+	3: alt + <-
+	=> Vẫn vào được (Sai) -> phải làm ntn?
+
+ADM002:
+	- Phân biệt đối tượng được click -> 5 URL
+	- Truyền type từ 1 - 5 /listUser.do/?type=1
+	- gọi doGet
+	- getAllMstGroup() ở ngoài switch case
+	- getTotalUser: trả về tổng số trang
+	- session lưu paging
+	- getListPaging
+	- getListUser: đáp ứng 5 trường hợp
+	- tạo UserInfor
