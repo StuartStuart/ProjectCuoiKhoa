@@ -30,8 +30,6 @@ public class LoginController extends HttpServlet {
 	 *      response)
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher requestDispatcher;
-
 		try {
 			request.setCharacterEncoding("UTF-8");
 			// nhận về chuỗi đã nhập trong textbox [login]
@@ -43,13 +41,13 @@ public class LoginController extends HttpServlet {
 			if (0 == listMessage.size()) { // login thành công
 				HttpSession session = request.getSession(true); // tạo session
 				session.setAttribute("isLogin", true); // đánh dấu đăng nhập vào session
-				response.sendRedirect("jsp/ADM002.jsp");
+				response.sendRedirect("ListUser.do");
+//				request.getRequestDispatcher("ListUser.do").forward(request, response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
 				request.setAttribute("message", listMessage); // gửi message đến ADM001
 				request.setAttribute("loginId", loginId); // gửi loginId đến ADM001
 				request.setAttribute("password", password); // gửi pass đến ADM001
-				requestDispatcher = request.getRequestDispatcher("jsp/ADM001.jsp"); // sẽ chuyển đến ADM001
-				requestDispatcher.forward(request, response); // chuyển đến trang tương ứng
+				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response); // chuyển đến trang tương ứng
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

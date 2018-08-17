@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ListUserController
  */
 @SuppressWarnings("serial")
-@WebServlet(description = "ListUserController", urlPatterns = "/ListUser.do", name = "ListUser")
+@WebServlet(description = "ListUserController", urlPatterns = "/ListUser.do")
 public class ListUserController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -20,6 +20,10 @@ public class ListUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String query = request.getQueryString();
+		if(null == query) {
+			response.sendRedirect("jsp/ADM002.jsp");
+			return;
+		}
 		switch (query) {
 		case "type=1":
 			break;
@@ -32,6 +36,7 @@ public class ListUserController extends HttpServlet {
 		case "type=5":
 			break;
 		default:
+			
 			break;
 		}
 

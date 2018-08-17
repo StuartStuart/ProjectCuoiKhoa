@@ -9,24 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<!-- Begin vung header -->
-	<div>
-		<div>
-			<table>
-				<tr>
-					<td width="80%"><img src="../images/logo-manager-user.gif"
-						alt="Luvina" />
-					<td>
-					<td align="left"><a href="../Logout">ログアウト</a> &nbsp; <a
-						href="ADM002.html">トップ</a>
-					<td>
-				</tr>
-			</table>
-		</div>
-	</div>
-
-	<!-- End vung header -->
-
+	<%@ include file="header.jsp" %>
 	<!-- Begin vung dieu kien tim kiem -->
 	<form action="" method="post" name="mainform">
 		<table class="tbl_input" border="0" width="90%" cellpadding="0"
@@ -152,10 +135,7 @@
 	<!-- End vung paging -->
 
 	<!-- Begin vung footer -->
-	<div class="lbl_footer">
-		<br> <br> <br> <br> Copyright © 2010
-		ルビナソフトウエア株式会社. All rights reserved.
-	</div>
+	<%@ include file="footer.jsp" %>
 	<!-- End vung footer -->
 
 </body>

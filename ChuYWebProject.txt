@@ -19,3 +19,7 @@ Kỹ thuật tương ứng:  có 2 hoặc nhiều loai thông tin có cùng số
 	Thêm Type ưu tiên cùng biến nhớ vào vị trí đầu tiên trong Output => Xong
 
 Sử dụng forEach trong JSTL: items="${Cung_Ten}" var="Cung_Ten"
+
+sendRedirect sau forward: sẽ gây ra lỗi => không được
+
+Filter web và Filter servlet: trước web phải để [/], trước servlet không để [/] 

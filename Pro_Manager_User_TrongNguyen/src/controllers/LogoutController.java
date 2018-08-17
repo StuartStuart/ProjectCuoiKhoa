@@ -25,7 +25,6 @@ public class LogoutController extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		session.removeAttribute("isLogin");
-		System.out.println(session.getAttribute("isLogin"));
 		session.invalidate(); // xóa session
 		response.sendRedirect("../Pro_Manager_User_TrongNguyen"); // chuyển đến ADM001
 	}

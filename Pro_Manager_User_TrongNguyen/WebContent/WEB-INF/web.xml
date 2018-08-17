@@ -10,12 +10,4 @@
 	<session-config>
 		<session-timeout>5</session-timeout>
 	</session-config>
-	<filter>
- 		<filter-name>LoginFilter</filter-name> 
-  		<filter-class>filters.LoginFilter</filter-class> 
-	</filter>
-	<filter-mapping>
-  		<filter-name>LoginFilter</filter-name> 
-  		<url-pattern>/jsp/ADM002.jsp</url-pattern> 
-		</filter-mapping>
 </web-app>
