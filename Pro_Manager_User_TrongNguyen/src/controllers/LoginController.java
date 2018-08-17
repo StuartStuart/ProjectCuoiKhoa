@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utils.ConstantUtil;
 import validates.LoginValidate;
 
 /**
@@ -41,7 +42,7 @@ public class LoginController extends HttpServlet {
 			if (0 == listMessage.size()) { // login thành công
 				HttpSession session = request.getSession(true); // tạo session
 				session.setAttribute("isLogin", true); // đánh dấu đăng nhập vào session
-				response.sendRedirect("ListUser.do");
+				response.sendRedirect("ListUser.do?type=" + ConstantUtil.ADM002_NEW_STATUS);
 //				request.getRequestDispatcher("ListUser.do").forward(request, response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
 				request.setAttribute("message", listMessage); // gửi message đến ADM001

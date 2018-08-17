@@ -68,6 +68,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 				return true;
 			} else { // tài khoản tồn tại
 				String encodedPass = encodeMatKhau(pass, adminAccount.getSalt());
+//				System.out.println(encodedPass);
 				boolean isTrungMatKhau = adminAccount.getPassword().equals(encodedPass);
 				if (!isTrungMatKhau) { // 2 pass không trung nhau
 					return true;

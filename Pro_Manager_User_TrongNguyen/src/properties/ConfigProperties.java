@@ -1,6 +1,6 @@
 /**
- * Copyright(C) 2018 	Luvina
- * MessageErrorProperties.java, Aug 15, 2018, LA-PM
+ * Copyright(C) 2018 Luvina
+ * ConfigProperties.java, Aug 17, 2018 Stuart
  */
 package properties;
 
@@ -13,14 +13,14 @@ import java.util.Properties;
 import utils.ConstantUtil;
 
 /**
- * @author LA-PM
+ * @author TrongNguyen
  *
  */
-public class MessageErrorProperties {
+public class ConfigProperties {
 	private static HashMap<String, String> keyValuePartners;
 
 	/**
-	 * nháº­n dá»¯ liá»‡u tá»« database.properties
+	 * nhận dữ liệu từ Config.properties
 	 * 
 	 * @throws IOException
 	 */
@@ -28,8 +28,7 @@ public class MessageErrorProperties {
 		Properties prop = new Properties();
 		try {
 			// Ä‘áº¡i diá»‡n cho db
-			InputStream input = DatabaseProperties.class.getClassLoader()
-					.getResourceAsStream(ConstantUtil.MESSAGE_ERROR);
+			InputStream input = ConfigProperties.class.getClassLoader().getResourceAsStream(ConstantUtil.CONFIG);
 			// Ä‘á»• dá»¯ liá»‡u vÃ o prop
 			prop.load(input);
 			// Ä‘á»• dá»¯ liá»‡u vÃ o keyValuePartners
@@ -42,8 +41,7 @@ public class MessageErrorProperties {
 	/**
 	 * tráº£ vá»� value tÆ°Æ¡ng á»©ng key
 	 * 
-	 * @param key
-	 *            tÃªn biáº¿n cáº§n láº¥y
+	 * @param key tÃªn biáº¿n cáº§n láº¥y
 	 * @return value tÆ°Æ¡ng á»©ng vá»›i key
 	 * @throws IOException
 	 */

@@ -6,3 +6,10 @@
 	- session lưu paging
 	- getListPaging
 	- getListUser: đáp ứng 5 trường hợp
+Database:
+	- Đọc tên trường của 1 table trong db: select colummeName
+Project:
+	- Sửa tên biến phù hợp Requirement
+Properties:
+	- pageLimit và UserLimit lưu trong properties
+	- sửa tên viết hoa và tương ứng trong project

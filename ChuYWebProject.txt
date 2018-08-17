@@ -3,6 +3,7 @@ Forward từ HTML -> Servlet:
 
 Nhận chuỗi ký tự sau ? của [/ListUser?ILA] trong Servlet:
 	request.getQueryString();
+	tuy nhiên, với [?type=1], ta có thể lấy [1] bằng request.getParameter("type")
 
 Kỹ thuật tương ứng:  có 2 hoặc nhiều loai thông tin có cùng số lượng thì chuyển về mảng theo đúng thứ tự
 	Problem: Xử lý ORDER BY có 1 loại sắp xếp được ưu tiên (các loại sắp xếp có kèm theo thứ tự sắp xếp - ASC, DESC).
