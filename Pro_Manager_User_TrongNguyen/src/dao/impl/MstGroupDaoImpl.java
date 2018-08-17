@@ -48,9 +48,10 @@ public class MstGroupDaoImpl extends BaseDaoImpl implements MstGroupDao {
 				listAllMstGroup.add(tblMstGroupEntity);
 			}
 
-			this.closeConnection();
 		} catch (Exception e) {
 			throw e;
+		} finally {
+			this.closeConnection();
 		}
 
 		return listAllMstGroup;

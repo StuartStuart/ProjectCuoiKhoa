@@ -69,11 +69,11 @@ public class UserInforEntity {
 		this.tel = tel;
 	}
 
-	public String getNameDevel() {
+	public String getNameLevel() {
 		return nameLevel;
 	}
 
-	public void setNameDevel(String nameLevel) {
+	public void setNameLevel(String nameLevel) {
 		this.nameLevel = nameLevel;
 	}
 

@@ -10,6 +10,8 @@ Database:
 	- Đọc tên trường của 1 table trong db: select colummeName
 Project:
 	- Sửa tên biến phù hợp Requirement
+	- Sửa finally có thêm closeConnection()
 Properties:
 	- pageLimit và UserLimit lưu trong properties
 	- sửa tên viết hoa và tương ứng trong project
+getListUser(): Sửa từ ? sang cộng luôn

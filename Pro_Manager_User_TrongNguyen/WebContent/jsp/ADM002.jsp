@@ -1,6 +1,8 @@
+<%@page import="properties.ConfigProperties"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="UTF-8">
@@ -9,7 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="header.jsp" %>
+	<%@ include file="header.jsp"%>
 	<!-- Begin vung dieu kien tim kiem -->
 	<form action="" method="post" name="mainform">
 		<table class="tbl_input" border="0" width="90%" cellpadding="0"
@@ -26,17 +28,20 @@
 						<tr>
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
-								name="name" value="" size="20"
-								onfocus="this.style.borderColor='#0066ff';"
+								name=<%=ConfigProperties.getValue("ADM002_Textbox")%> value=""
+								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="lbl_left">グループ:</td>
-							<td align="left" width="80px"><select name="group_id">
-									<option value="0">全て</option>
-									<option value="0">Nhóm 1</option>
-									<option value="0">Nhóm 2</option>
+							<td align="left" width="80px"><select
+								name=<%=ConfigProperties.getValue("ADM002_GroupId")%>>
+									<option value="">全て</option>
+									<c:forEach items="${groups}" var="groups">
+										<option value="${groups.groupId}">${groups.groupName}</option>
+									</c:forEach>
+
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
 								<input class="btn" type="button" value="新規追加" /></td>
@@ -65,63 +70,19 @@
 			</th>
 			<th align="left">点数</th>
 		</tr>
-
-		<tr>
-			<td align="right"><a href="ADM005.html">1</a></td>
-			<td>Nguyễn Thị Mai Hương</td>
-			<td align="center">1983/07/08</td>
-			<td>Phòng QAT</td>
-			<td>ntmhuong@luvina.net</td>
-			<td>0914326386</td>
-			<td>Trình độ tiếng nhật cấp 4</td>
-			<td align="center">2011/07/08</td>
-			<td align="right">290</td>
-		</tr>
-		<tr>
-			<td align="right"><a href="ADM005.html">2</a></td>
-			<td>Lê Thị Xoa</td>
-			<td align="center">1983/07/08</td>
-			<td>Phòng DEV1</td>
-			<td>xoalt@luvina.net</td>
-			<td>1234567894</td>
-			<td>Trình độ tiếng nhật cấp 4</td>
-			<td align="center">2011/07/08</td>
-			<td align="right">290</td>
-		</tr>
-		<tr>
-			<td align="right"><a href="ADM005.html">3</a></td>
-			<td>Đặng Thị Hân</td>
-			<td align="center">1983/07/08</td>
-			<td>Phòng DEV1</td>
-			<td>handt@luvina.net</td>
-			<td>1234567894</td>
-			<td>Trình độ tiếng nhật cấp 4</td>
-			<td align="center">2011/07/08</td>
-			<td align="right">290</td>
-		</tr>
-		<tr>
-			<td align="right"><a href="ADM005.html">4</a></td>
-			<td>Lê Nghiêm Thủy</td>
-			<td align="center">1983/07/08</td>
-			<td>Phòng DEV1</td>
-			<td>thuyln@luvina.net</td>
-			<td>1234567894</td>
-			<td>Trình độ tiếng nhật cấp 4</td>
-			<td align="center">2011/07/08</td>
-			<td align="right">290</td>
-		</tr>
-		<tr>
-			<td align="right"><a href="ADM005.html">5</a></td>
-			<td>Lê Phương Anh</td>
-			<td align="center">1983/07/08</td>
-			<td>Phòng QAT</td>
-			<td>anhlp@luvina.net</td>
-			<td>1234567894</td>
-			<td>Trình độ tiếng nhật cấp 4</td>
-			<td align="center">2011/07/08</td>
-			<td align="right">290</td>
-		</tr>
-
+		<c:forEach items="${userInfors}" var="userInfors">
+			<tr>
+				<td align="right"><a href="#">${userInfors.userId}</a></td>
+				<td>${userInfors.fullName}</td>
+				<td align="center">${userInfors.birthDay}</td>
+				<td>${userInfors.groupName}</td>
+				<td>${userInfors.email}</td>
+				<td>${userInfors.tel}</td>
+				<td>${userInfors.nameLevel}</td>
+				<td align="center">${userInfors.endDate}</td>
+				<td align="right">${userInfors.total}</td>
+			</tr>
+		</c:forEach>
 	</table>
 	<!-- End vung hien thi danh sach user -->
 
@@ -135,7 +96,7 @@
 	<!-- End vung paging -->
 
 	<!-- Begin vung footer -->
-	<%@ include file="footer.jsp" %>
+	<%@ include file="footer.jsp"%>
 	<!-- End vung footer -->
 
 </body>

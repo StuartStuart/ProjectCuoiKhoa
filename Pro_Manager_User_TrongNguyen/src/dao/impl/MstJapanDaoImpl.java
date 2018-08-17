@@ -8,9 +8,9 @@ import dao.MstJapanDao;
 
 /**
  * đối tượng MstJapanDao
+ * 
  * @author TrongNguyen
  *
  */
-public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao{
-
+public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 }

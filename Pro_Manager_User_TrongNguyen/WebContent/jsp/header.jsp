@@ -11,10 +11,10 @@
 		<div>
 			<table>
 				<tr>
-					<td width="80%"><img src="../images/logo-manager-user.gif"
+					<td width="80%"><img src="${pageContext.request.contextPath}/images/logo-manager-user.gif"
 						alt="Luvina" />
 					<td>
-					<td align="left"><a href="../Logout">ログアウト</a> &nbsp; <a
+					<td align="left"><a href="${pageContext.request.contextPath}/Logout">ログアウト</a> &nbsp; <a
 						href="ADM002.html">トップ</a>
 					<td>
 				</tr>

@@ -25,53 +25,59 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName tên đăng nhập
+	 * @param userName
+	 *            tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
 	@Override
 	public TblUserEntity getAdminAccount(String userName) throws Exception {
-		this.openConnection(); // mở kết nối
-		query = "select * from tbl_user where `login_name` = ?;";
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, userName);
+		TblUserEntity tblU = new TblUserEntity();
 
-		ResultSet rs = ps.executeQuery(); // nháº­n vá»� cÃ¡c báº£n ghi
-		// nhận các thông tin từ db
-		int i = 1;
-		while (rs.next()) {
-			// lấy thông tin từ 1 recorđ
-			int userId = rs.getInt(i++);
-			int groupId = rs.getInt(i++);
-			String loginName = rs.getString(i++);
-			String password = rs.getString(i++);
-			String fullName = rs.getString(i++);
-			String fullNameKana = rs.getString(i++);
-			String email = rs.getString(i++);
-			String tel = rs.getString(i++);
-			String birthDay = rs.getString(i++);
-			String salt = rs.getString(i++);
-			int category = rs.getInt(i++);
+		try {
+			this.openConnection(); // mở kết nối
+			query = "select * from tbl_user where `login_name` = ?;";
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, userName);
 
-			// lưu thông tin vào đối tượng
-			TblUserEntity tblU = new TblUserEntity();
-			tblU.setUserId(userId);
-			tblU.setGroupId(groupId);
-			tblU.setLoginName(loginName);
-			tblU.setPassword(password);
-			tblU.setFullName(fullName);
-			tblU.setFullNameKana(fullNameKana);
-			tblU.setEmail(email);
-			tblU.setTel(tel);
-			tblU.setBirthDay(birthDay);
-			tblU.setSalt(salt);
-			tblU.setCategory(category);
+			ResultSet rs = ps.executeQuery(); // nháº­n vá»� cÃ¡c báº£n ghi
+			// nhận các thông tin từ db
+			int i = 1;
+			while (rs.next()) {
+				// lấy thông tin từ 1 recorđ
+				int userId = rs.getInt(i++);
+				int groupId = rs.getInt(i++);
+				String loginName = rs.getString(i++);
+				String password = rs.getString(i++);
+				String fullName = rs.getString(i++);
+				String fullNameKana = rs.getString(i++);
+				String email = rs.getString(i++);
+				String tel = rs.getString(i++);
+				String birthDay = rs.getString(i++);
+				String salt = rs.getString(i++);
+				int category = rs.getInt(i++);
 
+				// lưu thông tin vào đối tượng
+
+				tblU.setUserId(userId);
+				tblU.setGroupId(groupId);
+				tblU.setLoginName(loginName);
+				tblU.setPassword(password);
+				tblU.setFullName(fullName);
+				tblU.setFullNameKana(fullNameKana);
+				tblU.setEmail(email);
+				tblU.setTel(tel);
+				tblU.setBirthDay(birthDay);
+				tblU.setSalt(salt);
+				tblU.setCategory(category);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			this.closeConnection(); // đóng kết nối
-			return tblU;
 		}
 
-		return null;
+		return tblU;
 	}
 
 	/*
@@ -126,7 +132,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		ArrayList<UserInforEntity> listUser = new ArrayList<>();
 
 		// thêm các trường thông tin cần lấy của User
-		StringBuilder query = new StringBuilder("SELECT");// COUNT(*) AS totalUsers FROM tbl_user ");
+		StringBuilder query = new StringBuilder("SELECT");
 		for (String infor : ConstantUtil.USER_INFORMATIONS) {
 			query.append(" " + infor + ",");
 		}
@@ -143,7 +149,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
 			query.append(" AND mst_group.group_id = ?");
 		}
-		if (null != fullNameSearching && !"".equals(fullNameSearching)) { // tìm kiếm theo fullName được chọn
+		if (null != fullNameSearching && !"".equals(fullNameSearching)) {
 			query.append(" AND tbl_user.full_name LIKE '?'");
 		}
 
@@ -153,7 +159,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		 * các kiểu sắp xếp tương ứng với loại sắp xếp
 		 */
 		String[] sortingWays = { sortByFullName, sortByCodeLevel, sortByEndDate };
-		int lengthSortTypes = ConstantUtil.CAC_LOAI_SAP_XEP.length; // độ dài các loại sắp xếp
+		int lengthSortTypes = ConstantUtil.CAC_LOAI_SAP_XEP.length;
 		/*
 		 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
 		 */
@@ -170,7 +176,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				cachSapXepCuaKieuUuTien = sortingWays[i];
 			}
 		}
-		
+
 		// thêm giời hạn số lượng bản ghi
 		query.append(" LIMIT " + limit);
 
@@ -188,41 +194,29 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
 			ps.setInt(++i, groupIdSearching);
 		}
-		if (null != fullNameSearching && !"".equals(fullNameSearching)) { // tìm kiếm theo fullName được chọn
+		if (null != fullNameSearching && !"".equals(fullNameSearching)) { // tìm
+																			// theo
+																			// fullname
 			fullNameSearching = CommonUtil.convertWildCard(fullNameSearching);
 			ps.setString(++i, "%" + fullNameSearching + "%");
 		}
 		ps.setString(++i, sortType + " " + cachSapXepCuaKieuUuTien);
-
 		/*
 		 * lấy về dữ liệu
 		 */
 		ResultSet rs = ps.executeQuery();
-		// nhận các thông tin từ db
-		int index = 0;
 		while (rs.next()) {
-			// lấy thông tin từ 1 recorđ
-			int userId = rs.getInt(++index);
-			String fullName = rs.getString(++index);
-			String birthDay = rs.getString(++index);
-			String groupName = rs.getString(++index);
-			String email = rs.getString(++index);
-			String tel = rs.getString(++index);
-			String nameLevel = rs.getString(++index);
-			String endDate = rs.getString(++index);
-			int total = rs.getInt(++index);
-
 			// lưu thông tin vào đối tượng
 			UserInforEntity userInfors = new UserInforEntity();
-			userInfors.setUserId(userId);
-			userInfors.setFullName(fullName);
-			userInfors.setBirthDay(birthDay);
-			userInfors.setGroupName(groupName);
-			userInfors.setEmail(email);
-			userInfors.setTel(tel);
-			userInfors.setNameDevel(nameLevel);
-			userInfors.setEndDate(endDate);
-			userInfors.setTotal(total);
+			userInfors.setUserId(rs.getInt("user_id"));
+			userInfors.setFullName(rs.getString("full_name"));
+			userInfors.setBirthDay(rs.getString("birthday"));
+			userInfors.setGroupName(rs.getString("group_name"));
+			userInfors.setEmail(rs.getString("email"));
+			userInfors.setTel(rs.getString("tel"));
+			userInfors.setNameLevel(rs.getString("name_level"));
+			userInfors.setEndDate(rs.getString("end_date"));
+			userInfors.setTotal(rs.getInt("total"));
 
 			listUser.add(userInfors);
 		}
@@ -233,6 +227,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 	public static void main(String[] args) throws Exception {
 		TblUserDaoImpl o = new TblUserDaoImpl();
-		System.out.println(o.getListUser(0, 2, 1, null, "mst_japan.code_level", "ASC", "ASC", "ASC").size());
+		System.out.println(o.getListUser(0, 10, 0, null, "mst_japan.code_level", "ASC", "ASC", "ASC").size());
 	}
 }
