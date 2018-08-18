@@ -45,11 +45,44 @@ public class ConstantUtil {
 	public static final String[] CAC_LOAI_SAP_XEP = { "tbl_user.full_name", "mst_japan.code_level",
 			"tbl_detail_user_japan.end_date" };
 	/*
-	 * giữ trạng thái ADM002
+	 * tìm kiếm trong ADM002
 	 */
-	public static final String ADM002_SAVED_STATUS = "ADM002_SAVED_STATUS";
+	public static final String ADM002_SEARCH = "search";
 	/*
-	 * không giữ trạng thái ADM002
+	 * quay lại ADM002
 	 */
-	public static final String ADM002_NEW_STATUS = "ADM002_NEW_STATUS";
+	public static final String ADM002_BACK = "back";
+	/*
+	 * sắp xếp tại ADM002
+	 */
+	public static final String ADM002_SORT = "sort";
+	/*
+	 * ưu tiên full name
+	 */
+	public static final String ADM002_FULL_NAME_SORT = "fullname";
+	/*
+	 * ưu tiên full name
+	 */
+	public static final String ADM002_CODE_LEVEL_SORT = "codelevel";
+	/*
+	 * ưu tiên end date
+	 */
+	public static final String ADM002_END_DATE_SORT = "enddate";
+	/*
+	 * paging tại ADM002
+	 */
+	public static final String ADM002_PAGING = "paging";
+	/*
+	 * biểu tượng sắp xếp tăng
+	 */
+	public static final String ADM002_ASC = "▲▽";
+	/*
+	 * biểu tượng sắp xếp giảm
+	 */
+	public static final String ADM002_DESC = "△▼";
+
+	public static void main(String[] args) {
+		System.out.println(ConstantUtil.ADM002_DESC);
+		System.out.println(ConstantUtil.ADM002_ASC);
+	}
 }

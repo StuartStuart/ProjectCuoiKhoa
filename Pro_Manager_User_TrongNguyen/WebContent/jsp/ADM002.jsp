@@ -1,3 +1,4 @@
+<%@page import="utils.ConstantUtil"%>
 <%@page import="properties.ConfigProperties"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -28,7 +29,8 @@
 						<tr>
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
-								name=<%=ConfigProperties.getValue("ADM002_Textbox")%> value=""
+								name=<%=ConfigProperties.getValue("ADM002_Textbox")%>
+								value=<%=request.getSession().getAttribute(ConfigProperties.getValue("ADM002_Textbox"))%>
 								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
@@ -37,7 +39,7 @@
 							<td class="lbl_left">グループ:</td>
 							<td align="left" width="80px"><select
 								name=<%=ConfigProperties.getValue("ADM002_GroupId")%>>
-									<option value="">全て</option>
+									<option value="0">全て</option>
 									<c:forEach items="${groups}" var="groups">
 										<option value="${groups.groupId}">${groups.groupName}</option>
 									</c:forEach>
@@ -58,15 +60,21 @@
 
 		<tr class="tr2">
 			<th align="center" width="20px">ID</th>
-			<th align="left">氏名 <a href="">▲▽</a>
+			<th align="left">氏名 <a
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_FULL_NAME_SORT
+					+ "&sort=" + request.getAttribute("symbolFullName").toString()%>><%=request.getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
 			<th align="left">グループ</th>
 			<th align="left">メールアドレス</th>
 			<th align="left" width="70px">電話番号</th>
-			<th align="left">日本語能力 <a href="">▲▽</a>
+			<th align="left">日本語能力 <a
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
+					+ ConstantUtil.ADM002_CODE_LEVEL_SORT + "&sort=" + request.getAttribute("symbolCodeLevel")%>><%=request.getAttribute("symbolCodeLevel")%></a>
 			</th>
-			<th align="left">失効日 <a href="">△▼</a>
+			<th align="left">失効日 <a
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_END_DATE_SORT
+					+ "&sort=" + request.getAttribute("symbolEndDate")%>><%=request.getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
 		</tr>

@@ -43,7 +43,7 @@ public class CommonUtil {
 	 * lấy danh sách số thứ tự của các trang để được hiển thị trên web browser
 	 * 
 	 * @param totalUser   tổng số user tìm được
-	 * @param limit       số lượng tối đa paging trên web browser
+	 * @param limit       số lượng tối đa user trên 1 web browser
 	 * @param currentPage trang hiện thời
 	 * @return danh sách có nhiều nhất limit trang
 	 * @throws Exception
@@ -73,6 +73,12 @@ public class CommonUtil {
 		return listPaging;
 	}
 
+	/**
+	 * xác định số lượng user info hiển thị trên web browser
+	 * 
+	 * @return số lượng lớn nhất
+	 * @throws Exception
+	 */
 	public static int getLimit() throws Exception {
 		// xác định số trang có thể hiển thị
 		return Integer.parseInt(ConfigProperties.getValue("User_Limit"));

@@ -66,13 +66,13 @@ INSERT INTO mst_group
 VALUES (4,'Phòng phát triển số 4');
 
 INSERT INTO tbl_user(login_name, salt, `password`, category)
-VALUES ('admin', '1ǟ', '5fc13a2721ed4c84005a981bd4477e78b7a93334', 0);
+VALUES ('admin', '1ǟ', '5802b1d70ecfb1364e1d7ad0083c0748473e69ba', 0);
 
 INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
 VALUES ('Nguyễn Thị Mai Hương', '1983-07-08', 2, 'ntmhuong@luvina.net', '0914-3263-86', 1);
 
 INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
-VALUES ('Lê Thị Xoa', '1983-07-08', 3, 'xoalt@luvina.net', '1234-5678-94', 1);
+VALUES ('Lê Thị Xoa', '1983-07-08', 2, 'xoalt@luvina.net', '1234-5678-94', 1);
 
 INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
 VALUES ('Đặng Thị Hân', '1983-07-08', 3, 'handt@luvina.net', '1234-5678-94', 1);

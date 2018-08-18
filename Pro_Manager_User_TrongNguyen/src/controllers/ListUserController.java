@@ -13,6 +13,7 @@ import entities.UserInforEntity;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
+import utils.CommonUtil;
 import utils.ConstantUtil;
 
 /**
@@ -27,39 +28,80 @@ public class ListUserController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String type = request.getParameter("type");
 		try {
-			switch (type) {
-			case ConstantUtil.ADM002_NEW_STATUS:
-				// nhận dữ liệu từ ADM002
-				Object fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
-				Object groupId = request.getParameter(ConfigProperties.getValue("ADM002_GroupId"));
-				// nhận về danh sách User và đẩy lên ADM002
-				ArrayList<UserInforEntity> listUserInfors = null;
-				if (null == fullName && null == groupId) {
-					listUserInfors = new TblUserLogicImpl().getListUser(0, 10, 0, null,
-							ConfigProperties.getValue("ADM002_FirstSorting"), ConstantUtil.SAP_XEP_TANG,
-							ConstantUtil.SAP_XEP_TANG, ConstantUtil.SAP_XEP_GIAM);
-				} else {
+			request.setAttribute("groups", new MstGroupLogicImpl().getAllMstGroup());
 
+			int offset = 0, groupId = 0;
+			String fullName = null, sortType = ConfigProperties.getValue("ADM002_FirstSorting");
+			String typeByFullName = ConstantUtil.SAP_XEP_TANG, typeByCodeLevel = ConstantUtil.SAP_XEP_TANG,
+					typeByEndDate = ConstantUtil.SAP_XEP_GIAM;
+			switch (request.getParameter("type")) {
+			case ConstantUtil.ADM002_BACK:
+				break;
+			case ConstantUtil.ADM002_PAGING:
+			case ConstantUtil.ADM002_SORT:
+				switch (request.getParameter("priority")) {
+				case ConstantUtil.ADM002_FULL_NAME_SORT:
+					sortType = ConfigProperties.getValue("ADM002_FirstSorting");
+					if (request.getParameter("sort").equals(ConstantUtil.ADM002_ASC.toString())) {
+						request.setAttribute("symbolCodeLevel", ConstantUtil.ADM002_DESC);
+					} else {
+						request.setAttribute("symbolCodeLevel", ConstantUtil.ADM002_ASC);
+					}
+					break;
+				case ConstantUtil.ADM002_CODE_LEVEL_SORT:
+					sortType = ConfigProperties.getValue("ADM002_SecondSorting");
+					if (ConstantUtil.ADM002_ASC.equals(request.getAttribute("symbolCodeLevel"))) {
+						request.setAttribute("symbolCodeLevel", ConstantUtil.ADM002_DESC);
+					} else {
+						request.setAttribute("symbolCodeLevel", ConstantUtil.ADM002_ASC);
+					}
+					break;
+				case ConstantUtil.ADM002_END_DATE_SORT:
+					sortType = ConfigProperties.getValue("ADM002_ThirdSorting");
+					if (ConstantUtil.ADM002_ASC.equals(request.getAttribute("symbolEndDate"))) {
+						request.setAttribute("symbolEndDate", ConstantUtil.ADM002_DESC);
+					} else {
+						request.setAttribute("symbolEndDate", ConstantUtil.ADM002_ASC);
+					}
+					break;
+
+				default:
+					break;
 				}
-				request.setAttribute("groups", new MstGroupLogicImpl().getAllMstGroup());
-				request.setAttribute("userInfors", listUserInfors);
-				// request đến ADM002
-				request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
-				break;
-			case ConstantUtil.ADM002_SAVED_STATUS:
-				break;
-			default:
-
+			case ConstantUtil.ADM002_SEARCH:
+				request.setAttribute("symbolFullName", ConstantUtil.ADM002_ASC);
+				request.setAttribute("symbolCodeLevel", ConstantUtil.ADM002_ASC);
+				request.setAttribute("symbolEndDate", ConstantUtil.ADM002_DESC);
+			default:// case ConstantUtil.ADM002_SEARCH:
+				// fullName
+				fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
+				// groupId
+				String loaiNhom = request.getParameter(ConfigProperties.getValue("ADM002_GroupId"));
+				groupId = (null == loaiNhom) ? 0 : Integer.parseInt(loaiNhom);
 				break;
 			}
-		} catch (Exception e) {
+
+			request.setAttribute("userInfors", new TblUserLogicImpl().getListUser(offset, CommonUtil.getLimit(),
+					groupId, fullName, sortType, typeByFullName, typeByCodeLevel, typeByEndDate));
+			// request đến ADM002
+			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
 			response.sendRedirect("jsp/System_Error.jsp"); // sẽ chuyển đến
 															// system_error
 		}
+	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
 	}
 }

@@ -2,9 +2,7 @@
 	- Phân biệt đối tượng được click -> 5 URL
 	- Truyền type từ 1 - 5 /listUser.do/?type=1
 	- gọi doGet
-	- getAllMstGroup() ở ngoài switch case
 	- session lưu paging
-	- getListPaging
 	- getListUser: đáp ứng 5 trường hợp
 Database:
 	- Đọc tên trường của 1 table trong db: select colummeName
@@ -12,6 +10,4 @@ Project:
 	- Sửa tên biến phù hợp Requirement
 	- Sửa finally có thêm closeConnection()
 Properties:
-	- pageLimit và UserLimit lưu trong properties
 	- sửa tên viết hoa và tương ứng trong project
-getListUser(): Sửa từ ? sang cộng luôn

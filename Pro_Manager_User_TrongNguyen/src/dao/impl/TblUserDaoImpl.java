@@ -25,8 +25,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName
-	 *            tên đăng nhập
+	 * @param userName tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -147,14 +146,16 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		// thêm điều kiện tìm kiếm
 		query.append("\nWHERE category = 1");
 		if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
-			query.append(" AND mst_group.group_id = ?");
+			query.append(" AND tbl_user.group_id = ?");
 		}
 		if (null != fullNameSearching && !"".equals(fullNameSearching)) {
-			query.append(" AND tbl_user.full_name LIKE '?'");
+			query.append(" AND tbl_user.full_name LIKE ?");
 		}
 
 		// thêm điều kiện sắp xếp
-		query.append("\nORDER BY ?");
+		query.append("\nORDER BY ");
+
+		StringBuilder queryTail = new StringBuilder("");
 		/*
 		 * các kiểu sắp xếp tương ứng với loại sắp xếp
 		 */
@@ -166,16 +167,19 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		String cachSapXepCuaKieuUuTien = "";
 		for (int i = 0; i < lengthSortTypes; i++) {
 			if (!ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
-				query.append(", " + ConstantUtil.CAC_LOAI_SAP_XEP[i]);
+				queryTail.append(", " + ConstantUtil.CAC_LOAI_SAP_XEP[i]);
 				if (sortingWays.length > i) {
-					query.append(" " + sortingWays[i]);
+					queryTail.append(" " + sortingWays[i]);
 				} else { // Khi có kiểu sắp xếp với cách sắp được ngầm định
-					query.append(" " + ConstantUtil.SAP_XEP_MAC_DINH);
+					queryTail.append(" " + ConstantUtil.SAP_XEP_MAC_DINH);
 				}
 			} else {
 				cachSapXepCuaKieuUuTien = sortingWays[i];
 			}
 		}
+		// nối queryTail vào đuôi query
+		query.append(sortType).append(" ").append(cachSapXepCuaKieuUuTien);
+		query.append(queryTail);
 
 		// thêm giời hạn số lượng bản ghi
 		query.append(" LIMIT " + limit);
@@ -194,13 +198,11 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
 			ps.setInt(++i, groupIdSearching);
 		}
-		if (null != fullNameSearching && !"".equals(fullNameSearching)) { // tìm
-																			// theo
-																			// fullname
+		if (null != fullNameSearching && !"".equals(fullNameSearching)) {
 			fullNameSearching = CommonUtil.convertWildCard(fullNameSearching);
 			ps.setString(++i, "%" + fullNameSearching + "%");
 		}
-		ps.setString(++i, sortType + " " + cachSapXepCuaKieuUuTien);
+
 		/*
 		 * lấy về dữ liệu
 		 */
@@ -227,6 +229,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 	public static void main(String[] args) throws Exception {
 		TblUserDaoImpl o = new TblUserDaoImpl();
-		System.out.println(o.getListUser(0, 10, 0, null, "mst_japan.code_level", "ASC", "ASC", "ASC").size());
+		System.out.println(o.getListUser(0, 10, 2, "n", "mst_japan.code_level", "ASC", "ASC", "ASC").size());
 	}
 }
