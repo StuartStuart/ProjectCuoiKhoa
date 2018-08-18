@@ -41,7 +41,7 @@
 								name=<%=ConfigProperties.getValue("ADM002_GroupId")%>>
 									<option value="0">全て</option>
 									<c:forEach items="${groups}" var="groups">
-										<option value="${groups.groupId}">${groups.groupName}</option>
+										${groups}
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
@@ -61,19 +61,22 @@
 			<th align="center" width="20px">ID</th>
 			<th align="left">氏名 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_FULL_NAME_SORT
-					+ "&sort=" + (int) request.getAttribute("symbolFullName").toString().charAt(0)%>><%=request.getAttribute("symbolFullName")%></a>
+					+ "&sort=" + (int) request.getSession().getAttribute("symbolFullName").toString().charAt(0)%>>
+					<%=request.getSession().getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
 			<th align="left">グループ</th>
 			<th align="left">メールアドレス</th>
 			<th align="left" width="70px">電話番号</th>
 			<th align="left">日本語能力 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_CODE_LEVEL_SORT
-							+ "&sort=" + (int) request.getAttribute("symbolCodeLevel").toString().charAt(0)%>><%=request.getAttribute("symbolCodeLevel")%></a>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_CODE_LEVEL_SORT 
+					+ "&sort=" + (int) request.getSession().getAttribute("symbolCodeLevel").toString().charAt(0)%>>
+					<%=request.getSession().getAttribute("symbolCodeLevel")%></a>
 			</th>
 			<th align="left">失効日 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_END_DATE_SORT
-					+ "&sort=" + (int) request.getAttribute("symbolEndDate").toString().charAt(0)%>><%=request.getAttribute("symbolEndDate")%></a>
+					+ "&sort=" + (int) request.getSession().getAttribute("symbolEndDate").toString().charAt(0)%>>
+					<%=request.getSession().getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
 		</tr>
@@ -96,7 +99,7 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td class="lbl_paging"><%= request.getAttribute("htmlPaging") %></td>
+			<td class="lbl_paging"><%=request.getSession().getAttribute("htmlPaging")%></td>
 		</tr>
 	</table>
 	<!-- End vung paging -->

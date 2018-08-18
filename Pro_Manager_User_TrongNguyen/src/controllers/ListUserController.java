@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.impl.MstGroupDaoImpl;
+import entities.TblMstGroupEntity;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
@@ -24,6 +27,7 @@ public class ListUserController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
@@ -33,12 +37,12 @@ public class ListUserController extends HttpServlet {
 			// nhận fullName
 			String fullName = (String) request.getSession().getAttribute((ConfigProperties.getValue("ADM002_Textbox")));
 
-			// nhận groupId từ request
+			// nhận groupId từ session
 			Integer groupId = (Integer) request.getSession()
 					.getAttribute((ConfigProperties.getValue("ADM002_GroupId")));
 
 			// tạo ADM002 - search select - option groupId
-
+			ArrayList<String> groups = (ArrayList) request.getSession().getAttribute("groups");
 			// tạo search - sortType
 			String sortType = ConfigProperties.getValue("ADM002_FirstSorting");
 
@@ -60,7 +64,6 @@ public class ListUserController extends HttpServlet {
 			/*
 			 * Các loại vào ADM002
 			 */
-			String a = request.getParameter("type");
 			switch (request.getParameter("type")) {
 			case ConstantUtil.ADM002_BACK:
 				// get old status textbox[fullName]
@@ -129,8 +132,27 @@ public class ListUserController extends HttpServlet {
 			case ConstantUtil.ADM002_SEARCH:
 				fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
 
-				String group = request.getParameter((ConfigProperties.getValue("ADM002_GroupId")));
-				groupId = Integer.parseInt((null == group) ? "0" : group);
+				String groupType = request.getParameter((ConfigProperties.getValue("ADM002_GroupId")));
+				groupId = Integer.parseInt((null == groupType) ? "0" : groupType);
+				groups = new ArrayList<>();
+
+				for (TblMstGroupEntity group : new MstGroupLogicImpl().getAllMstGroup()) {
+					// tạo html
+					StringBuilder groupHTML = new StringBuilder("");
+					groupHTML.append("<option value='");
+					groupHTML.append(group.getGroupId() + "'");
+					// thêm điều kiện selected vào đây
+					if(group.getGroupId()==groupId) {
+						groupHTML.append(" selected");
+					}
+					// thêm đoạn html còn lại
+					groupHTML.append(">");
+					groupHTML.append(group.getGroupName());
+					groupHTML.append("</option>");
+
+					// thêm vào list
+					groups.add(groupHTML.toString());
+				}
 				break;
 			default:
 				break;
@@ -151,18 +173,19 @@ public class ListUserController extends HttpServlet {
 			 * 
 			 * 
 			 */
-			request.setAttribute("groups", new MstGroupLogicImpl().getAllMstGroup());
+			request.getSession().setAttribute("groups", groups);
 			// gửi các icon
-			request.setAttribute("symbolFullName", firstSortSymbol);
-			request.setAttribute("symbolCodeLevel", secondSortSymbol);
-			request.setAttribute("symbolEndDate", thirdSortSymbol);
+			request.getSession().setAttribute("symbolFullName", firstSortSymbol);
+			request.getSession().setAttribute("symbolCodeLevel", secondSortSymbol);
+			request.getSession().setAttribute("symbolEndDate", thirdSortSymbol);
 			// gửi danh sách user
-			request.setAttribute("userInfors",
+			request.getSession().setAttribute("userInfors",
 					new TblUserLogicImpl().getListUser(offset, CommonUtil.getLimit(), (null == groupId) ? 0 : groupId,
 							fullName, sortType, typeByFullName, typeByCodeLevel, typeByEndDate));
 			// gửi chuỗi paging
-			request.setAttribute("htmlPaging", "<a href=\"#\"><<</a> " + "&nbsp;" + "<a href=\"#\">1</a>" + " &nbsp;"
-					+ "<a href=\"#\">2</a>" + "&nbsp;" + "<a href=\"#\">3</a>" + "&nbsp;" + "<a href=\"#\">>></a>");
+			request.getSession().setAttribute("htmlPaging",
+					"<a href=\"#\"><<</a> " + "&nbsp;" + "<a href=\"#\">1</a>" + " &nbsp;" + "<a href=\"#\">2</a>"
+							+ "&nbsp;" + "<a href=\"#\">3</a>" + "&nbsp;" + "<a href=\"#\">>></a>");
 			// request đến ADM002
 			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
 		} catch (
