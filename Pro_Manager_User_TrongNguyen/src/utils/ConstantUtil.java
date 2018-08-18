@@ -73,6 +73,14 @@ public class ConstantUtil {
 	 */
 	public static final String ADM002_PAGING = "paging";
 	/*
+	 * chỉ định cho <<
+	 */
+	public static final String ADM002_PAGE_BACK="pageback";
+	/*
+	 * chỉ định cho >>
+	 */
+	public static final String ADM002_PAGE_NEXT="pagenext";
+	/*
 	 * biểu tượng sắp xếp tăng
 	 */
 	public static final String ADM002_ASC = "▲▽";
@@ -80,9 +88,4 @@ public class ConstantUtil {
 	 * biểu tượng sắp xếp giảm
 	 */
 	public static final String ADM002_DESC = "△▼";
-
-	public static void main(String[] args) {
-		System.out.println(ConstantUtil.ADM002_DESC);
-		System.out.println(ConstantUtil.ADM002_ASC);
-	}
 }

@@ -40,8 +40,8 @@
 							<td align="left" width="80px"><select
 								name=<%=ConfigProperties.getValue("ADM002_GroupId")%>>
 									<option value="0">全て</option>
-									<c:forEach items="${groups}" var="groups">
-										${groups}
+									<c:forEach items="${groupHTML}" var="groupHTML">
+										${groupHTML}
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
@@ -69,8 +69,9 @@
 			<th align="left">メールアドレス</th>
 			<th align="left" width="70px">電話番号</th>
 			<th align="left">日本語能力 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_CODE_LEVEL_SORT 
-					+ "&sort=" + (int) request.getSession().getAttribute("symbolCodeLevel").toString().charAt(0)%>>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
+					+ ConstantUtil.ADM002_CODE_LEVEL_SORT + "&sort="
+					+ (int) request.getSession().getAttribute("symbolCodeLevel").toString().charAt(0)%>>
 					<%=request.getSession().getAttribute("symbolCodeLevel")%></a>
 			</th>
 			<th align="left">失効日 <a
@@ -99,7 +100,10 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td class="lbl_paging"><%=request.getSession().getAttribute("htmlPaging")%></td>
+			<td class="lbl_paging">
+			<c:forEach items="${adm002paging}" var="adm002paging">
+				${adm002paging}
+			</c:forEach></td>
 		</tr>
 	</table>
 	<!-- End vung paging -->
