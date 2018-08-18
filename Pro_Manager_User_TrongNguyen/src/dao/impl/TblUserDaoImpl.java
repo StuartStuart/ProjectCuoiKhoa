@@ -85,7 +85,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	@Override
 	public int getTotalUser(int groupIdSearching, String fullNameSearching) throws Exception {
 		int totalUsers = -1;
-
 		try {
 			this.openConnection();
 

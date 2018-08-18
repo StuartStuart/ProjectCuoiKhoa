@@ -30,7 +30,7 @@
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
 								name=<%=ConfigProperties.getValue("ADM002_Textbox")%>
-								value=<%=request.getSession().getAttribute(ConfigProperties.getValue("ADM002_Textbox"))%>
+								value='<%=request.getSession().getAttribute(ConfigProperties.getValue("ADM002_Textbox"))%>'
 								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
@@ -43,7 +43,6 @@
 									<c:forEach items="${groups}" var="groups">
 										<option value="${groups.groupId}">${groups.groupName}</option>
 									</c:forEach>
-
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
 								<input class="btn" type="button" value="新規追加" /></td>
@@ -62,19 +61,19 @@
 			<th align="center" width="20px">ID</th>
 			<th align="left">氏名 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_FULL_NAME_SORT
-					+ "&sort=" + request.getAttribute("symbolFullName").toString()%>><%=request.getAttribute("symbolFullName")%></a>
+					+ "&sort=" + (int) request.getAttribute("symbolFullName").toString().charAt(0)%>><%=request.getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
 			<th align="left">グループ</th>
 			<th align="left">メールアドレス</th>
 			<th align="left" width="70px">電話番号</th>
 			<th align="left">日本語能力 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-					+ ConstantUtil.ADM002_CODE_LEVEL_SORT + "&sort=" + request.getAttribute("symbolCodeLevel")%>><%=request.getAttribute("symbolCodeLevel")%></a>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_CODE_LEVEL_SORT
+							+ "&sort=" + (int) request.getAttribute("symbolCodeLevel").toString().charAt(0)%>><%=request.getAttribute("symbolCodeLevel")%></a>
 			</th>
 			<th align="left">失効日 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_END_DATE_SORT
-					+ "&sort=" + request.getAttribute("symbolEndDate")%>><%=request.getAttribute("symbolEndDate")%></a>
+					+ "&sort=" + (int) request.getAttribute("symbolEndDate").toString().charAt(0)%>><%=request.getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
 		</tr>
@@ -97,8 +96,7 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td class="lbl_paging"><a href="#">1</a> &nbsp;<a href="#">2</a>
-				&nbsp;<a href="#">3</a>&nbsp;<a href="#">>></a></td>
+			<td class="lbl_paging"><%= request.getAttribute("htmlPaging") %></td>
 		</tr>
 	</table>
 	<!-- End vung paging -->

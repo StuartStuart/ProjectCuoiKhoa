@@ -26,6 +26,6 @@ public class LogoutController extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.removeAttribute("isLogin");
 		session.invalidate(); // xóa session
-		response.sendRedirect("../Pro_Manager_User_TrongNguyen"); // chuyển đến ADM001
+		response.sendRedirect("jsp/ADM001.jsp"); // chuyển đến ADM001
 	}
 }
