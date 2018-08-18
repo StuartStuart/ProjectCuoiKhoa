@@ -94,7 +94,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				query.append(" AND group_id = ?");
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
-				query.append(" AND full_name LIKE '?'");
+				query.append(" AND full_name LIKE ?");
 			}
 			query.append(";");
 			ps = conn.prepareStatement(query.toString());
@@ -105,7 +105,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				ps.setInt(++i, groupIdSearching);
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
-				ps.setString(++i, fullNameSearching);
+				fullNameSearching = CommonUtil.convertWildCard(fullNameSearching);
+				ps.setString(++i, "%" + fullNameSearching + "%");
 			}
 
 			// lấy về kết quả

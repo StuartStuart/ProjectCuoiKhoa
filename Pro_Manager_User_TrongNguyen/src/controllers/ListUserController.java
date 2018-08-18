@@ -60,8 +60,7 @@ public class ListUserController extends HttpServlet {
 			int curentPage = 1;
 
 			// tạo search - htmlPaging
-			ArrayList<String> pagingHTMLs = (ArrayList) request.getSession()
-					.getAttribute((ConfigProperties.getValue("ADM002_Paging")));
+			ArrayList<String> pagingHTMLs = (ArrayList) request.getSession().getAttribute("adm002paging");
 			/*
 			 * Các loại vào ADM002
 			 */
@@ -125,6 +124,7 @@ public class ListUserController extends HttpServlet {
 				default:
 					break;
 				}
+				break;
 			case ConstantUtil.ADM002_PAGING:
 				// tính giá trị offset
 				System.out.println("Đã vào paging");
@@ -214,7 +214,7 @@ public class ListUserController extends HttpServlet {
 			request.getSession().setAttribute("symbolCodeLevel", secondSortSymbol);
 			request.getSession().setAttribute("symbolEndDate", thirdSortSymbol);
 			// gửi danh sách user
-			request.getSession().setAttribute("userInfors",
+			request.setAttribute("userInfors",
 					new TblUserLogicImpl().getListUser(CommonUtil.getOffSet(curentPage, userLimit), userLimit,
 							(null == groupId) ? 0 : groupId, fullName, sortType, typeByFullName, typeByCodeLevel,
 							typeByEndDate));
