@@ -61,8 +61,8 @@
 			<th align="center" width="20px">ID</th>
 			<th align="left">氏名 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_FULL_NAME_SORT
-					+ "&sort=" + (int) request.getSession().getAttribute("symbolFullName").toString().charAt(0)%>>
-					<%=request.getSession().getAttribute("symbolFullName")%></a>
+					+ "&sort=" + (int) request.getAttribute("symbolFullName").toString().charAt(0)%>>
+					<%=request.getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
 			<th align="left">グループ</th>
@@ -71,13 +71,13 @@
 			<th align="left">日本語能力 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
 					+ ConstantUtil.ADM002_CODE_LEVEL_SORT + "&sort="
-					+ (int) request.getSession().getAttribute("symbolCodeLevel").toString().charAt(0)%>>
-					<%=request.getSession().getAttribute("symbolCodeLevel")%></a>
+					+ (int) request.getAttribute("symbolCodeLevel").toString().charAt(0)%>>
+					<%=request.getAttribute("symbolCodeLevel")%></a>
 			</th>
 			<th align="left">失効日 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_END_DATE_SORT
-					+ "&sort=" + (int) request.getSession().getAttribute("symbolEndDate").toString().charAt(0)%>>
-					<%=request.getSession().getAttribute("symbolEndDate")%></a>
+					+ "&sort=" + (int) request.getAttribute("symbolEndDate").toString().charAt(0)%>>
+					<%=request.getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
 		</tr>

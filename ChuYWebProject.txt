@@ -26,3 +26,5 @@ sendRedirect sau forward: sẽ gây ra lỗi => không được
 Filter web và Filter servlet: trước web phải để [/], trước servlet không để [/] 
 
 Trong PreparedStatement, phương thức setString() đã kèm theo thêm '' vào query nên không được để '' trong query trước khi execute
+
+Thay đổi kiểu của biến: rất có thể sẽ chuyển từ dạng nguyên thủy sang dạng phức, dẫn đến đối nguyên thủy bị null, điều đó làm chương trình khó fix

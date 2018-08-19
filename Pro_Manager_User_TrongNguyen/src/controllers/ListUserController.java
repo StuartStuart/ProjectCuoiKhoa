@@ -26,206 +26,187 @@ public class ListUserController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			int userLimit = CommonUtil.getLimit();
-			/*
-			 * ADM002 - search
-			 */
-			// nhận fullName
+			// get old status textbox[fullName]
 			String fullName = (String) request.getSession().getAttribute((ConfigProperties.getValue("ADM002_Textbox")));
-
-			// nhận groupId từ session
+			// get old status combobox[groupId]
 			Integer groupId = (Integer) request.getSession()
 					.getAttribute((ConfigProperties.getValue("ADM002_GroupId")));
+			// get old status sortType
+			String sortType = (String) request.getSession()
+					.getAttribute((ConfigProperties.getValue("ADM002_SortType")));
+			// get old status sortWay
+			String sortSymbol = (String) request.getSession()
+					.getAttribute(ConfigProperties.getValue("ADM002_SortSymbol"));
+			// get old status pageNum
+			Integer currentPage = (Integer) request.getSession()
+					.getAttribute(ConfigProperties.getValue("ADM002_CurrentPage"));
 
-			// tạo ADM002 - search select - option groupId
-			ArrayList<String> groupHTMLs = (ArrayList) request.getSession().getAttribute("groups");
-			// tạo search - sortType
-			String sortType = ConfigProperties.getValue("ADM002_FirstSorting");
-
-			// tạo search - sortTypeSymbols
+			// Khởi tạo các biến có thể sử dụng
+			int userLimit = CommonUtil.getLimit();
 			String firstSortSymbol = ConstantUtil.ADM002_ASC;
 			String secondSortSymbol = ConstantUtil.ADM002_ASC;
 			String thirdSortSymbol = ConstantUtil.ADM002_DESC;
-
-			// các giá trị của sortTypes
-			String typeByFullName = ConstantUtil.SAP_XEP_TANG;
-			String typeByCodeLevel = ConstantUtil.SAP_XEP_TANG;
-			String typeByEndDate = ConstantUtil.SAP_XEP_GIAM;
-
-			// giá trị ban đầu của offset
-			int curentPage = 1;
-
-			// tạo search - htmlPaging
-			ArrayList<String> pagingHTMLs = (ArrayList) request.getSession().getAttribute("adm002paging");
 			/*
 			 * Các loại vào ADM002
 			 */
 			switch (request.getParameter("type")) {
-			case ConstantUtil.ADM002_BACK:
-				// get old status textbox[fullName]
-
-				// get old status combobox[groupId]
-
-				// get old status link[sortFullName]
-
-				// get old status link[sortCodeLevel]
-
-				// get old status link[sortEndDate]
-
-				// get old status html[Paging]
-
-				break;
-			case ConstantUtil.ADM002_SORT:
-				// sắp xếp cũ là ASC
-				boolean isASCOldSort = (int) ConstantUtil.ADM002_ASC.toString().charAt(0) == Integer
-						.parseInt(request.getParameter("sort"));
-
-				switch (request.getParameter("priority")) {
-				case ConstantUtil.ADM002_FULL_NAME_SORT:
-					// xác định loại sắp xếp được ưu tiên
-					sortType = ConfigProperties.getValue("ADM002_FirstSorting");
-
-					if (isASCOldSort) {
-						// thay đổi hiển thị trên màn hình
-						firstSortSymbol = ConstantUtil.ADM002_DESC;
-						// xác định loại sắp xếp là tăng hay giảm
-						typeByFullName = ConstantUtil.SAP_XEP_GIAM;
-					} else {
-						firstSortSymbol = ConstantUtil.ADM002_ASC;
-						typeByFullName = ConstantUtil.SAP_XEP_TANG;
-					}
-					break;
-				case ConstantUtil.ADM002_CODE_LEVEL_SORT:
-					sortType = ConfigProperties.getValue("ADM002_SecondSorting");
-
-					if (isASCOldSort) {
-						secondSortSymbol = ConstantUtil.ADM002_DESC;
-						typeByEndDate = ConstantUtil.SAP_XEP_GIAM;
-					} else {
-						secondSortSymbol = ConstantUtil.ADM002_ASC;
-						typeByEndDate = ConstantUtil.SAP_XEP_TANG;
-					}
-					break;
-				case ConstantUtil.ADM002_END_DATE_SORT:
-					sortType = ConfigProperties.getValue("ADM002_ThirdSorting");
-
-					if (isASCOldSort) {
-						thirdSortSymbol = ConstantUtil.ADM002_DESC;
-						typeByEndDate = ConstantUtil.SAP_XEP_GIAM;
-					} else {
-						thirdSortSymbol = ConstantUtil.ADM002_ASC;
-						typeByEndDate = ConstantUtil.SAP_XEP_TANG;
-					}
-					break;
-				default:
-					break;
-				}
-				break;
 			case ConstantUtil.ADM002_PAGING:
-				// tính giá trị offset
-				System.out.println("Đã vào paging");
-
-				String pageNums = request.getParameter("page");
-				switch (pageNums) {
+				// tính giá trị currentPage
+				String page = request.getParameter("page");
+				switch (page) {
 				case ConstantUtil.ADM002_PAGE_BACK:
+					// xử lý chuỗi paging
 					System.out.println("Đã vào page back");
 					break;
 				case ConstantUtil.ADM002_PAGE_NEXT:
+					// xử lý chuỗi paging
 					System.out.println("Đã vào page next");
 					break;
 				default:
-					System.out.println("Đã vào page " + pageNums);
+					// xác định currentPage
+					currentPage = Integer.parseInt(page);
+					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 					break;
 				}
 				break;
+			case ConstantUtil.ADM002_SORT:
+				// xác định kiểu sortSymbol
+				if ((int) ConstantUtil.ADM002_ASC.toString().charAt(0) == Integer
+						.parseInt(request.getParameter("sort"))) {
+					sortSymbol = ConstantUtil.ADM002_DESC;
+				} else {
+					sortSymbol = ConstantUtil.ADM002_ASC;
+				}
+				// lưu session
+				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
 
+				// xác định priorityType
+				switch (request.getParameter("priority")) {
+				case ConstantUtil.ADM002_FULL_NAME_SORT:
+					// xác định loại sắp xếp được ưu tiên
+					sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
+					// thay đổi dạng icon
+					firstSortSymbol = sortSymbol;
+					break;
+				case ConstantUtil.ADM002_CODE_LEVEL_SORT:
+					sortType = ConstantUtil.CAC_LOAI_SAP_XEP[1];
+					secondSortSymbol = sortSymbol;
+					break;
+				case ConstantUtil.ADM002_END_DATE_SORT:
+					sortType = ConstantUtil.CAC_LOAI_SAP_XEP[2];
+					thirdSortSymbol = sortSymbol;
+					break;
+				default:
+					break;
+				}
+				// lưu session
+				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
+				break;
 			case ConstantUtil.ADM002_SEARCH:
 				// nhận full name
 				fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
+				fullName = (null == fullName) ? "" : fullName;
+				// lưu session
+				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_Textbox"), fullName);
 
 				// nhận groupId
 				String groupType = request.getParameter((ConfigProperties.getValue("ADM002_GroupId")));
 				groupId = Integer.parseInt((null == groupType) ? "0" : groupType);
-
-				/*
-				 * nhận htmlgroup
-				 */
-				groupHTMLs = new ArrayList<>();
-				for (TblMstGroupEntity group : new MstGroupLogicImpl().getAllMstGroup()) {
-					// tạo html
-					StringBuilder groupHTML = new StringBuilder("");
-					groupHTML.append("<option value='");
-					groupHTML.append(group.getGroupId() + "'");
-					// thêm điều kiện selected vào đây
-					if (group.getGroupId() == groupId) {
-						groupHTML.append(" selected");
-					}
-					// thêm đoạn html còn lại
-					groupHTML.append(">");
-					groupHTML.append(group.getGroupName());
-					groupHTML.append("</option>");
-
-					// thêm vào list
-					groupHTMLs.add(groupHTML.toString());
-				}
-
-				/*
-				 * xây dụng htmlPaging
-				 */
-				int totalUser = new TblUserLogicImpl().getTotalUser(groupId, fullName);
-				pagingHTMLs = new ArrayList<>();
-				ArrayList<Integer> listPageNum = CommonUtil.getListPaging(totalUser,
-						Integer.parseInt(ConfigProperties.getValue("User_Limit")), curentPage);
-				// thêm paging <<
-				if (1 != listPageNum.get(0)) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
-							+ ConstantUtil.ADM002_PAGE_BACK + "'><<</a> " + "&nbsp;");
-				}
-				// thêm paging N
-				for (Integer pageNum : listPageNum) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page=" + pageNum
-							+ "'>" + pageNum + "</a>" + " &nbsp;");
-				}
-				// thêm paging >>
-				int lastPageNum = listPageNum.get(listPageNum.size() - 1);
-				if (lastPageNum * userLimit < totalUser) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
-							+ ConstantUtil.ADM002_PAGE_NEXT + "'>>></a> " + "&nbsp;");
-				}
+				// lưu session
+				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_GroupId"), groupId);
 				break;
 			default:
 				break;
 			}
+
 			/*
-			 * gửi dữ liệu lên ADM002
+			 * xây dựng htmlGroupId
 			 */
-			// gửi giá trị textbox[fullName]
-			request.getSession().setAttribute(ConfigProperties.getValue("ADM002_Textbox"),
-					(null == fullName) ? "" : fullName);
-			request.getSession().setAttribute(ConfigProperties.getValue("ADM002_GroupId"), groupId);
-			// lưu giá trị combobox[groupId] lên session viết vào đây
-			request.getSession().setAttribute("groupHTML", groupHTMLs);
-			// gửi các icon
-			request.getSession().setAttribute("symbolFullName", firstSortSymbol);
-			request.getSession().setAttribute("symbolCodeLevel", secondSortSymbol);
-			request.getSession().setAttribute("symbolEndDate", thirdSortSymbol);
-			// gửi danh sách user
-			request.setAttribute("userInfors",
-					new TblUserLogicImpl().getListUser(CommonUtil.getOffSet(curentPage, userLimit), userLimit,
-							(null == groupId) ? 0 : groupId, fullName, sortType, typeByFullName, typeByCodeLevel,
-							typeByEndDate));
-			// gửi chuỗi paging
-			request.getSession().setAttribute("adm002paging", pagingHTMLs);
+			ArrayList<String> groupHTMLs = new ArrayList<>();
+			for (TblMstGroupEntity group : new MstGroupLogicImpl().getAllMstGroup()) {
+				// tạo html
+				StringBuilder groupHTML = new StringBuilder("");
+				groupHTML.append("<option value='");
+				groupHTML.append(group.getGroupId() + "'");
+				// thêm điều kiện selected vào đây
+				if (group.getGroupId() == groupId) {
+					groupHTML.append(" selected");
+				}
+				// thêm đoạn html còn lại
+				groupHTML.append(">");
+				groupHTML.append(group.getGroupName());
+				groupHTML.append("</option>");
+
+				// thêm vào list
+				groupHTMLs.add(groupHTML.toString());
+			}
+			request.setAttribute("groupHTML", groupHTMLs); // gửi combobox[groupId]
+
+			/*
+			 * gửi symbols
+			 */
+			// tạo search - sortTypeSymbols default
+			// chuyển các symbol về chính xác
+			if (sortType != null) {
+				switch (sortType) {
+				case ConstantUtil.ADM002_FULL_NAME_SORT:
+					firstSortSymbol = sortSymbol;
+					break;
+				case ConstantUtil.ADM002_CODE_LEVEL_SORT:
+					secondSortSymbol = sortSymbol;
+					break;
+				case ConstantUtil.ADM002_END_DATE_SORT:
+					thirdSortSymbol = sortSymbol;
+					break;
+				default:
+					break;
+				}
+			} else {
+				sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
+			}
+			// gửi symbols
+			request.setAttribute("symbolFullName", firstSortSymbol);
+			request.setAttribute("symbolCodeLevel", secondSortSymbol);
+			request.setAttribute("symbolEndDate", thirdSortSymbol);
+
+			// used for send userInfors List and build htmlPaging
+			TblUserLogicImpl tblUserLogic = new TblUserLogicImpl();
+
+			request.setAttribute("userInfors", // send userInfors List
+					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
+							sortType, CommonUtil.convertSymbol(firstSortSymbol),
+							CommonUtil.convertSymbol(secondSortSymbol), CommonUtil.convertSymbol(thirdSortSymbol)));
+			/*
+			 * build htmlPaging
+			 */
+			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
+			ArrayList<String> pagingHTMLs = new ArrayList<>();
+			ArrayList<Integer> listPageNum = CommonUtil.getListPaging(totalUser,
+					Integer.parseInt(ConfigProperties.getValue("User_Limit")), (null == currentPage) ? 1 : currentPage);
+			// thêm paging <<
+			if (1 != listPageNum.get(0)) {
+				pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
+						+ ConstantUtil.ADM002_PAGE_BACK + "'><<</a> " + "&nbsp;");
+			}
+			// thêm paging N
+			for (Integer pageNums : listPageNum) {
+				pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page=" + pageNums + "'>"
+						+ pageNums + "</a>" + " &nbsp;");
+			}
+			// thêm paging >>
+			int lastPageNum = listPageNum.get(listPageNum.size() - 1);
+			if (lastPageNum * userLimit < totalUser) {
+				pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
+						+ ConstantUtil.ADM002_PAGE_NEXT + "'>>></a> " + "&nbsp;");
+			}
+			request.setAttribute("adm002paging", pagingHTMLs); // gửi htmlPaging
+
 			// request đến ADM002
 			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
-		} catch (
-
-		Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 			// chuyển đến màn hình Error
 			response.sendRedirect("jsp/System_Error.jsp");
 		}

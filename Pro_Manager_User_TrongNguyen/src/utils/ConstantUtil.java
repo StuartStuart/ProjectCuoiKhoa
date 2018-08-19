@@ -28,11 +28,11 @@ public class ConstantUtil {
 	/*
 	 * sắp xếp tăng
 	 */
-	public static final String SAP_XEP_TANG = "ASC";
+	public static final String ADM002_TANG = "ASC";
 	/*
 	 * sắp xếp giảm
 	 */
-	public static final String SAP_XEP_GIAM = "DESC";
+	public static final String ADM002_GIAM = "DESC";
 	/*
 	 * các thông tin cần lấy của user
 	 */
@@ -48,10 +48,6 @@ public class ConstantUtil {
 	 * tìm kiếm trong ADM002
 	 */
 	public static final String ADM002_SEARCH = "search";
-	/*
-	 * quay lại ADM002
-	 */
-	public static final String ADM002_BACK = "back";
 	/*
 	 * sắp xếp tại ADM002
 	 */
