@@ -11,6 +11,11 @@
 <link href="${pageContext.request.contextPath}/css/style.css"
 	rel="stylesheet" type="text/css" />
 <title>Insert title here</title>
+<script type="text/javascript">
+	function addNewUser() {
+		window.location="${pageContext.request.contextPath}/jsp/ADM003.jsp";
+	}
+</script>
 </head>
 <body>
 	<%@ include file="header.jsp"%>
@@ -48,7 +53,7 @@
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
-								<input class="btn" type="button" value="新規追加" /></td>
+								<input class="btn" type="button" value="新規追加" onclick="addNewUser()"/></td>
 						</tr>
 					</table>
 				</td>

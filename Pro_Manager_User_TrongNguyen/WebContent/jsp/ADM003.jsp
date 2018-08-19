@@ -6,6 +6,11 @@
 <meta charset="UTF-8">
 <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
 <title>Insert title here</title>
+<script type="text/javascript">
+function backADM002() {
+	window.location="${pageContext.request.contextPath}/ListUser.do?type=back"
+}
+</script>
 </head>
 <body>
 	<!-- Begin vung header -->	
@@ -349,7 +354,7 @@
 					<input class="btn" type="submit" value="確認" />					
 				</td>	
 				<td>
-					<input class="btn" type="button" value="戻る" />						
+					<input class="btn" type="button" value="戻る" onclick="backADM002()"/>						
 				</td>
 		</tr>		
 	</table>
