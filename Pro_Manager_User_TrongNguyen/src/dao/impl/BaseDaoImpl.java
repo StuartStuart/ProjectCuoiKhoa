@@ -5,14 +5,21 @@
 package dao.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import dao.BaseDao;
+import properties.ConfigProperties;
 import properties.DatabaseProperties;
+import utils.ConstantUtil;
 
 /**
  * Ä�á»‘i tÆ°á»£ng base dao
@@ -25,6 +32,8 @@ public class BaseDaoImpl implements BaseDao {
 	protected Statement stt;
 	protected PreparedStatement ps;
 	protected String query;
+
+	protected static ArrayList<String> listDBFieldName;
 
 	/**
 	 * má»Ÿ káº¿t ná»‘i db
@@ -57,8 +66,7 @@ public class BaseDaoImpl implements BaseDao {
 			try {
 				// thiáº¿t láº­p káº¿t ná»‘i
 				conn = DriverManager.getConnection(DatabaseProperties.getValue("url"),
-						DatabaseProperties.getValue("user"),
-						DatabaseProperties.getValue("pass"));
+						DatabaseProperties.getValue("user"), DatabaseProperties.getValue("pass"));
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw e;
@@ -87,6 +95,24 @@ public class BaseDaoImpl implements BaseDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
+		}
+	}
+
+	/*
+	 * @see dao.BaseDao#getListDBColummeName()
+	 * 
+	 */
+	@Override
+	public void getListDBFieldName() throws Exception {
+		if (null == listDBFieldName) {
+			/*
+			 * Select COLUMN_NAME From INFORMATION_SCHEMA.COLUMNS Where TABLE_SCHEMA Like
+			 * 'manager_user_trongnguyen' AND TABLE_NAME in
+			 * ('tbl_user','mst_japan','tbl_detail_user_japan');
+			 */
+			// lấy trực tiếp danh sách tên các trường trong DB
+			// gán listDBFieldName là danh sách các trường đã lấy
+
 		}
 	}
 }

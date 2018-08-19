@@ -14,5 +14,16 @@ import java.sql.SQLException;
  */
 public interface BaseDao {
 	void openConnection() throws Exception;
+
 	void closeConnection() throws SQLException;
+
+	/**
+	 * Lưu tên các trường trong db chỉ với 1 câu query
+	 * 
+	 * Select COLUMN_NAME From INFORMATION_SCHEMA.COLUMNS Where TABLE_SCHEMA Like
+	 * 'manager_user_trongnguyen';
+	 * 
+	 * @throws Exception
+	 */
+	void getListDBFieldName() throws Exception;
 }

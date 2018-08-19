@@ -11,3 +11,7 @@ Properties:
 Servlet - ListUser: 
 	- sort không lưu value của parameter
 Hỏi chị Hương WhileList
+BaseDao:
+	- thêm static lấy danh sách các trường
+ADM003:
+	- Gắn URL cho button[Back]
