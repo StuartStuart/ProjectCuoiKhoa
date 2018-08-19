@@ -53,17 +53,13 @@ public class ConstantUtil {
 	 */
 	public static final String ADM002_SORT = "sort";
 	/*
-	 * ưu tiên full name
+	 * các kiểu sắp xếp
 	 */
-	public static final String ADM002_FULL_NAME_SORT = "fullname";
+	public static final String ADM002_SORT_TYPE_URL[] = { "fullname", "codelevel", "enddate" };
 	/*
-	 * ưu tiên full name
+	 * kiểu sắp xếp mặc đinh theo thứ tự ưu tiên
 	 */
-	public static final String ADM002_CODE_LEVEL_SORT = "codelevel";
-	/*
-	 * ưu tiên end date
-	 */
-	public static final String ADM002_END_DATE_SORT = "enddate";
+	public static final String ADM002_DEFAULT_SORT_WAY_ORDERS[] = { ADM002_TANG, ADM002_TANG, ADM002_GIAM };
 	/*
 	 * paging tại ADM002
 	 */
@@ -71,17 +67,9 @@ public class ConstantUtil {
 	/*
 	 * chỉ định cho <<
 	 */
-	public static final String ADM002_PAGE_BACK="pageback";
+	public static final String ADM002_PAGE_BACK = "pageback";
 	/*
 	 * chỉ định cho >>
 	 */
-	public static final String ADM002_PAGE_NEXT="pagenext";
-	/*
-	 * biểu tượng sắp xếp tăng
-	 */
-	public static final String ADM002_ASC = "▲▽";
-	/*
-	 * biểu tượng sắp xếp giảm
-	 */
-	public static final String ADM002_DESC = "△▼";
+	public static final String ADM002_PAGE_NEXT = "pagenext";
 }

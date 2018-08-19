@@ -1,3 +1,4 @@
+<%@page import="utils.CommonUtil"%>
 <%@page import="utils.ConstantUtil"%>
 <%@page import="properties.ConfigProperties"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -14,7 +15,9 @@
 <body>
 	<%@ include file="header.jsp"%>
 	<!-- Begin vung dieu kien tim kiem -->
-	<form action="${pageContext.request.contextPath}/ListUser.do?type=<%=ConstantUtil.ADM002_SEARCH %>" method="post" name="mainform">
+	<form
+		action="${pageContext.request.contextPath}/ListUser.do?type=<%=ConstantUtil.ADM002_SEARCH %>"
+		method="post" name="mainform">
 		<table class="tbl_input" border="0" width="90%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -60,8 +63,8 @@
 		<tr class="tr2">
 			<th align="center" width="20px">ID</th>
 			<th align="left">氏名 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_FULL_NAME_SORT
-					+ "&sort=" + (int) request.getAttribute("symbolFullName").toString().charAt(0)%>>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_SORT_TYPE_URL[0]
+					+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
 					<%=request.getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
@@ -69,14 +72,13 @@
 			<th align="left">メールアドレス</th>
 			<th align="left" width="70px">電話番号</th>
 			<th align="left">日本語能力 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-					+ ConstantUtil.ADM002_CODE_LEVEL_SORT + "&sort="
-					+ (int) request.getAttribute("symbolCodeLevel").toString().charAt(0)%>>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_SORT_TYPE_URL[1]
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolCodeLevel"))%>>
 					<%=request.getAttribute("symbolCodeLevel")%></a>
 			</th>
 			<th align="left">失効日 <a
-				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_END_DATE_SORT
-					+ "&sort=" + (int) request.getAttribute("symbolEndDate").toString().charAt(0)%>>
+				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_SORT_TYPE_URL[2]
+					+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
 					<%=request.getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
@@ -100,8 +102,8 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td class="lbl_paging">
-			<c:forEach items="${adm002paging}" var="adm002paging">
+			<td class="lbl_paging"><c:forEach items="${adm002paging}"
+					var="adm002paging">
 				${adm002paging}
 			</c:forEach></td>
 		</tr>

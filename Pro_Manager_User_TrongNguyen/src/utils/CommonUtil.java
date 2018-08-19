@@ -108,8 +108,15 @@ public class CommonUtil {
 	 * 
 	 * @param firstSortSymbol biểu tượng cần chuyển
 	 * @return ASC hoặc DESC
+	 * @throws Exception
 	 */
 	public static String convertSymbol(String sortSymbol) {
-		return (ConstantUtil.ADM002_ASC.equals(sortSymbol)) ? ConstantUtil.ADM002_TANG : ConstantUtil.ADM002_GIAM;
+		try {
+			return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol)) ? ConstantUtil.ADM002_TANG
+					: ConstantUtil.ADM002_GIAM;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

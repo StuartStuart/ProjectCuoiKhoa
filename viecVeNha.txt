@@ -10,3 +10,4 @@ Properties:
 	- sửa tên viết hoa và tương ứng trong project
 Servlet - ListUser: 
 	- sort không lưu value của parameter
+Hỏi chị Hương WhileList

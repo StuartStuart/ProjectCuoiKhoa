@@ -29,17 +29,17 @@ public class ListUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			request.setCharacterEncoding("UTF-8");
 			// Khởi tạo các biến sẽ sử dụng
 			String fullName;
 			Integer groupId;
 			String sortType;
 			String sortSymbol;
 			Integer currentPage;
-			String firstSortSymbol = ConstantUtil.ADM002_ASC;
-			String secondSortSymbol = ConstantUtil.ADM002_ASC;
-			String thirdSortSymbol = ConstantUtil.ADM002_DESC;
+			String defaultSortSymbolOrders[] = { ConfigProperties.getValue("ADM002_ASCSymbol"),
+					ConfigProperties.getValue("ADM002_ASCSymbol"), ConfigProperties.getValue("ADM002_DESCSymbol") };
 			int userLimit = CommonUtil.getLimit();
-
+			int amountSortType = defaultSortSymbolOrders.length;
 			/*
 			 * Các loại vào ADM002
 			 */
@@ -61,7 +61,7 @@ public class ListUserController extends HttpServlet {
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 
 				// đổi lại sortSymbol
-				sortSymbol = ConstantUtil.ADM002_ASC;
+				sortSymbol = ConfigProperties.getValue("ADM002_ASCSymbol");
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
 
 				// đổi lại currentPage
@@ -106,33 +106,22 @@ public class ListUserController extends HttpServlet {
 					break;
 				case ConstantUtil.ADM002_SORT:
 					// xác định kiểu sortSymbol
-					if ((int) ConstantUtil.ADM002_ASC.toString().charAt(0) == Integer
-							.parseInt(request.getParameter("sort"))) {
-						sortSymbol = ConstantUtil.ADM002_DESC;
+					if (ConstantUtil.ADM002_TANG.equals(request.getParameter("sort"))) {
+						sortSymbol = ConfigProperties.getValue("ADM002_DESCSymbol");
 					} else {
-						sortSymbol = ConstantUtil.ADM002_ASC;
+						sortSymbol = ConfigProperties.getValue("ADM002_ASCSymbol");
 					}
 					// lưu session
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
 
 					// xác định priorityType
-					switch (request.getParameter("priority")) {
-					case ConstantUtil.ADM002_FULL_NAME_SORT:
-						// xác định loại sắp xếp được ưu tiên
-						sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
-						// thay đổi dạng icon
-						firstSortSymbol = sortSymbol;
-						break;
-					case ConstantUtil.ADM002_CODE_LEVEL_SORT:
-						sortType = ConstantUtil.CAC_LOAI_SAP_XEP[1];
-						secondSortSymbol = sortSymbol;
-						break;
-					case ConstantUtil.ADM002_END_DATE_SORT:
-						sortType = ConstantUtil.CAC_LOAI_SAP_XEP[2];
-						thirdSortSymbol = sortSymbol;
-						break;
-					default:
-						break;
+					String sortTypeUrl = request.getParameter("priority");
+					for (int i = 0; i < amountSortType; i++) {
+						if (ConstantUtil.ADM002_SORT_TYPE_URL[i].equals(sortTypeUrl)) {
+							// xác định loại sắp xếp được ưu tiên
+							sortType = ConstantUtil.CAC_LOAI_SAP_XEP[i];
+							break;
+						}
 					}
 					// lưu session
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
@@ -164,35 +153,25 @@ public class ListUserController extends HttpServlet {
 				groupHTMLs.add(groupHTML.toString());
 			}
 			request.setAttribute("groupHTML", groupHTMLs); // gửi combobox[groupId]
-
-			/*
-			 * gửi symbols
-			 */
 			// chuyển các symbol về chính xác
-			switch (sortType) {
-			case ConstantUtil.ADM002_FULL_NAME_SORT:
-				firstSortSymbol = sortSymbol;
-				break;
-			case ConstantUtil.ADM002_CODE_LEVEL_SORT:
-				secondSortSymbol = sortSymbol;
-				break;
-			case ConstantUtil.ADM002_END_DATE_SORT:
-				thirdSortSymbol = sortSymbol;
-				break;
-			default:
-				break;
+			for (int i = 0; i < amountSortType; i++) {
+				if (ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
+					defaultSortSymbolOrders[i] = sortSymbol;
+					break;
+				}
 			}
 			// gửi symbols
-			request.setAttribute("symbolFullName", firstSortSymbol);
-			request.setAttribute("symbolCodeLevel", secondSortSymbol);
-			request.setAttribute("symbolEndDate", thirdSortSymbol);
+			request.setAttribute("symbolFullName", defaultSortSymbolOrders[0]);
+			request.setAttribute("symbolCodeLevel", defaultSortSymbolOrders[1]);
+			request.setAttribute("symbolEndDate", defaultSortSymbolOrders[2]);
 
 			// used for send userInfors List and build htmlPaging
 			TblUserLogicImpl tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
-							sortType, CommonUtil.convertSymbol(firstSortSymbol),
-							CommonUtil.convertSymbol(secondSortSymbol), CommonUtil.convertSymbol(thirdSortSymbol)));
+							sortType, CommonUtil.convertSymbol(defaultSortSymbolOrders[0]),
+							CommonUtil.convertSymbol(defaultSortSymbolOrders[1]),
+							CommonUtil.convertSymbol(defaultSortSymbolOrders[2])));
 			/*
 			 * build htmlPaging
 			 */
