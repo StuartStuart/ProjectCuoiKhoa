@@ -23,7 +23,7 @@ public class CommonUtil {
 	 * @return thứ tự đầu tiên
 	 */
 	public static int getOffSet(Integer pageNumber, int limit) {
-		return ((null == pageNumber) ? 1 : pageNumber - 1) * limit;
+		return (((null == pageNumber) ? 1 : pageNumber) - 1) * limit;
 	}
 
 	/**
@@ -110,7 +110,6 @@ public class CommonUtil {
 	 * @return ASC hoặc DESC
 	 */
 	public static String convertSymbol(String sortSymbol) {
-		return (ConstantUtil.ADM002_ASC.equals(sortSymbol)) ? ConstantUtil.ADM002_TANG
-				: ConstantUtil.ADM002_GIAM;
+		return (ConstantUtil.ADM002_ASC.equals(sortSymbol)) ? ConstantUtil.ADM002_TANG : ConstantUtil.ADM002_GIAM;
 	}
 }
