@@ -1,20 +1,12 @@
 ﻿ADM002:
 	- chuyển method="post" sang "get"
-	- Phân biệt đối tượng được click -> 5 URL
-	- Truyền type từ 1 - 5 /listUser.do/?type=1
-	- gọi doGet
-	- session lưu paging
 	- đổi fix cứng tên attribute "adm002paging" sang ConfigProperties.getValue()
-	- getListUser: đáp ứng 5 trường hợp
 Database:
 	- Đổi tên user về mặc định
 Project:
 	- xóa method doPost()
 	- Sửa tên biến phù hợp Requirement
-	- Sửa finally có thêm closeConnection()
 Properties:
 	- sửa tên viết hoa và tương ứng trong project
 Servlet - ListUser: 
-	- lưu html Select - Option vào request
 	- sort không lưu value của parameter
-	- không đọc lại rồi lưu lại vào session

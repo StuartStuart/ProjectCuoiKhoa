@@ -1,12 +1,3 @@
-/Config.properties
-/Database.properties
-/Message.properties
-/MessageError.properties
-/controllers/
 /dao/
-/entities/
-/filters/
-/logics/
-/properties/
+/controllers/
 /utils/
-/validates/

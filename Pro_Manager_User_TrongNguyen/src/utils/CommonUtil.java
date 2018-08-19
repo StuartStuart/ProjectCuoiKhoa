@@ -57,7 +57,7 @@ public class CommonUtil {
 			// số paging trên web browser
 			int pageLimit = Integer.parseInt(ConfigProperties.getValue("Paging_Limit"));
 			// thứ tự bắt đầu thêm vào list dựa vào currentPage
-			int offsetNumber = currentPage / pageLimit * pageLimit;
+			int offsetNumber = (currentPage - 1) / pageLimit * pageLimit;
 			// thêm vào list
 			while (listPaging.size() < pageLimit && offsetNumber < totalPage) { // còn nhỏ hơn số trang tối đa
 				// browser

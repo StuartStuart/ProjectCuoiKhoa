@@ -84,14 +84,18 @@ public class ListUserController extends HttpServlet {
 				case ConstantUtil.ADM002_PAGING:
 					// tính giá trị currentPage
 					String page = request.getParameter("page");
+					// số paging trên web browser
+					int pageLimit = Integer.parseInt(ConfigProperties.getValue("Paging_Limit"));
 					switch (page) {
 					case ConstantUtil.ADM002_PAGE_BACK:
 						// xử lý chuỗi paging
-						currentPage = currentPage / userLimit * userLimit;
+						currentPage = (currentPage - 1) / pageLimit * pageLimit;
+						request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 						break;
 					case ConstantUtil.ADM002_PAGE_NEXT:
 						// xử lý chuỗi paging
-						currentPage = (currentPage / userLimit + 1) * userLimit + 1;
+						currentPage = ((currentPage - 1) / pageLimit + 1) * pageLimit + 1;
+						request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 						break;
 					default:
 						// xác định currentPage
@@ -194,8 +198,7 @@ public class ListUserController extends HttpServlet {
 			 */
 			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
 			ArrayList<String> pagingHTMLs = new ArrayList<>();
-			ArrayList<Integer> listPageNum = CommonUtil.getListPaging(totalUser,
-					Integer.parseInt(ConfigProperties.getValue("User_Limit")), (null == currentPage) ? 1 : currentPage);
+			ArrayList<Integer> listPageNum = CommonUtil.getListPaging(totalUser, userLimit, currentPage);
 			if (0 != listPageNum.size()) {
 				// thêm paging <<
 				if (1 != listPageNum.get(0)) {
