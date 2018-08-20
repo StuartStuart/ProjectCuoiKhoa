@@ -21,7 +21,7 @@
 	<%@ include file="header.jsp"%>
 	<!-- Begin vung dieu kien tim kiem -->
 	<form
-		action="${pageContext.request.contextPath}/ListUser.do?type=<%=ConstantUtil.ADM002_SEARCH %>"
+		action="${pageContext.request.contextPath}/ListUser.do"
 		method="get" name="mainform">
 		<table class="tbl_input" border="0" width="90%" cellpadding="0"
 			cellspacing="0">

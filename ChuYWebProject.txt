@@ -29,4 +29,8 @@ Trong PreparedStatement, phương thức setString() đã kèm theo thêm '' và
 
 Thay đổi kiểu của biến: rất có thể sẽ chuyển từ dạng nguyên thủy sang dạng phức, dẫn đến đối nguyên thủy bị null, điều đó làm chương trình khó fix
 
+Kiểm tra equals() luôn để sau null
+
 Luôn để e.printStackTrace() để kiểm soát lỗi lặt vặt
+
+Submit(get) -> Request -> không lưu được type -> URL không thêm tham số
