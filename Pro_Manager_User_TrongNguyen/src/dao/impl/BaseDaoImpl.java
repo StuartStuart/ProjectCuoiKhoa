@@ -30,11 +30,11 @@ public class BaseDaoImpl implements BaseDao {
 
 	protected static ArrayList<String> listDBFieldName;
 
-	protected void initListDMFieldName() throws Exception {
+	@Override
+	public void initListDBFieldName() throws Exception {
 		if (null == listDBFieldName) {
 			listDBFieldName = new ArrayList<>();
 			try {
-				openConnection();
 				/*
 				 * kiểm tra db tồn tại
 				 */
@@ -58,7 +58,8 @@ public class BaseDaoImpl implements BaseDao {
 								.executeQuery();
 						while (rsTables.next()) {
 							/*
-							 * list tên trường thuộc 1 table sẽ đổ dữ liệu đã qua xử lý vào listDBFieldName
+							 * list tên trường thuộc 1 table sẽ đổ dữ liệu đã
+							 * qua xử lý vào listDBFieldName
 							 */
 							ArrayList<String> listTableFieldName = new ArrayList<>();
 
@@ -67,13 +68,13 @@ public class BaseDaoImpl implements BaseDao {
 							/*
 							 * lấy tên tất cả các trường trong table
 							 */
-							ResultSet rsFields = conn.prepareStatement("Select COLUMN_NAME "
+							ResultSet rsFields = conn.prepareStatement("Select DISTINCT(COLUMN_NAME) "
 									+ "From INFORMATION_SCHEMA.COLUMNS " + "Where TABLE_SCHEMA = '" + nameDB
-									+ "' AND TABLE_NAME = " + nameTable + ";").executeQuery();
+									+ "' AND TABLE_NAME = '" + nameTable + "';").executeQuery();
 							while (rsFields.next()) {
 								/*
-								 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì thêm vào
-								 * listTableFieldName
+								 * kiểm tra tên trường đã tồn tại hay chưa, nếu
+								 * chưa thì thêm vào listTableFieldName
 								 */
 								String nameField = rsFields.getString("COLUMN_NAME");
 
@@ -81,41 +82,27 @@ public class BaseDaoImpl implements BaseDao {
 									listTableFieldName.add(nameTable + "." + nameField);
 								} else {
 									/*
-									 * kiểm tra nameField đã tồn tại chưa nếu chưa thì thêm vào listTableFieldName
+									 * kiểm tra nameField đã tồn tại chưa nếu
+									 * chưa thì thêm vào listTableFieldName
 									 */
+									for (final String oldColName : listDBFieldName) {
+										// không tồn tại trong listDBFieldName
+										if (!oldColName.matches(".*" + nameField + "$")) {
+											listTableFieldName.add(nameTable + "." + nameField);
+											break;
+										}
+									}
 								}
 							}
 							// đổ dữ liệu listTableFieldName vào listDBFieldName
-
+							listDBFieldName.addAll(listTableFieldName);
 						}
 					}
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
-			} finally {
-				try {
-					closeConnection();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw e;
-				}
+				e.printStackTrace();
+				throw e;
 			}
-		}
-	}
-
-	public static void main(String[] args) {
-		ArrayList<Integer> a1 = new ArrayList<>();
-
-		ArrayList<Integer> a2 = new ArrayList<>();
-		a2.add(1);
-		a2.add(2);
-		a2.add(3);
-		a2.add(4);
-		a2.add(5);
-		a1.addAll(a2);
-		a1.addAll(a2);
-		for(int i:a1) {
-			System.out.print(i);
 		}
 	}
 
@@ -184,20 +171,23 @@ public class BaseDaoImpl implements BaseDao {
 	}
 
 	/*
-	 * @see dao.BaseDao#getListDBColummeName()
+	 * (non-Javadoc)
 	 * 
+	 * @see dao.BaseDao#isExistColName(java.lang.String)
 	 */
 	@Override
-	public void getListDBFieldName() throws Exception {
-		if (null == listDBFieldName) {
-			/*
-			 * Select COLUMN_NAME From INFORMATION_SCHEMA.COLUMNS Where TABLE_SCHEMA Like
-			 * 'manager_user_trongnguyen' AND TABLE_NAME in
-			 * ('tbl_user','mst_japan','tbl_detail_user_japan');
-			 */
-			// lấy trực tiếp danh sách tên các trường trong DB
-			// gán listDBFieldName là danh sách các trường đã lấy
-
+	public boolean isExistColName(String nameField) throws Exception {
+		try {
+			this.initListDBFieldName();
+			for (final String nameDBField : listDBFieldName) {
+				if (nameDBField.matches(".*" + nameField + "$")) {
+					return true;
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 }

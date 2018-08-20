@@ -44,7 +44,7 @@ public class ListUserController extends HttpServlet {
 			 * Các loại vào ADM002
 			 */
 			String type = request.getParameter("type");
-			if (ConstantUtil.ADM002_SEARCH.equals(type)) { // nhận full name
+			if (null == type || ConstantUtil.ADM002_SEARCH.equals(type)) {
 				fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
 				fullName = (null == fullName) ? "" : fullName;
 				// lưu session
@@ -152,7 +152,8 @@ public class ListUserController extends HttpServlet {
 				// thêm vào list
 				groupHTMLs.add(groupHTML.toString());
 			}
-			request.setAttribute("groupHTML", groupHTMLs); // gửi combobox[groupId]
+			request.setAttribute("groupHTML", groupHTMLs); // gửi
+															// combobox[groupId]
 			// chuyển các symbol về chính xác
 			for (int i = 0; i < amountSortType; i++) {
 				if (ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
@@ -207,12 +208,13 @@ public class ListUserController extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+	// /**
+	// * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	// * response)
+	// */
+	// protected void doPost(HttpServletRequest request, HttpServletResponse
+	// response)
+	// throws ServletException, IOException {
+	// doGet(request, response);
+	// }
 }

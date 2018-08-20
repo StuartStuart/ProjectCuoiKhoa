@@ -25,7 +25,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName tên đăng nhập
+	 * @param userName
+	 *            tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -121,7 +122,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 			query.deleteCharAt(query.length() - 1);
 
-			// thêm bản ghi(đã được join với nhau) mà các thông tin được lấy từ đó
+			// thêm bản ghi(đã được join với nhau) mà các thông tin được lấy từ
+			// đó
 			query.append("\nFROM");
 			query.append(" tbl_user INNER JOIN mst_group ON tbl_user.group_id = mst_group.group_id");
 			query.append(" LEFT JOIN tbl_detail_user_japan ON tbl_user.user_id = tbl_detail_user_japan.user_id");
@@ -136,6 +138,10 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				query.append(" AND tbl_user.full_name LIKE ?");
 			}
 
+			/*
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
+			 * thì thực hiện bình thường
+			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
 
@@ -148,13 +154,18 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			/*
 			 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
 			 */
+			if (!this.isExistColName(sortType)) { // be hacked
+				sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
+			}
+			
 			String cachSapXepCuaKieuUuTien = "";
 			for (int i = 0; i < lengthSortTypes; i++) {
 				if (!ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
 					queryTail.append(", " + ConstantUtil.CAC_LOAI_SAP_XEP[i]);
 					if (sortingWays.length > i) {
 						queryTail.append(" " + sortingWays[i]);
-					} else { // Khi có kiểu sắp xếp với cách sắp được ngầm định
+					} else { // Khi có kiểu sắp xếp với cách sắp được ngầm
+								// định
 						queryTail.append(" " + ConstantUtil.SAP_XEP_MAC_DINH);
 					}
 				} else {
@@ -164,7 +175,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			// nối queryTail vào đuôi query
 			query.append(sortType).append(" ").append(cachSapXepCuaKieuUuTien);
 			query.append(queryTail);
-
 			// thêm giời hạn số lượng bản ghi
 			query.append(" LIMIT " + limit);
 
