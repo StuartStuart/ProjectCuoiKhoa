@@ -4,6 +4,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/manageruser"/>
         <property name="java-output-path" value="/Pro_Manager_User_TrongNguyen2/build/classes"/>
-        <property name="context-root" value="Pro_Manager_User_TrongNguyen2"/>
+        <property name="context-root" value="Pro_Manager_User_TrongNguyen"/>
     </wb-module>
 </project-modules>
