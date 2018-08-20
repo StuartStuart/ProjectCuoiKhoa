@@ -38,7 +38,7 @@
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
 								name=<%=ConfigProperties.getValue("ADM002_Textbox")%>
-								value='<%=request.getSession().getAttribute(ConfigProperties.getValue("ADM002_Textbox"))%>'
+								value="<%=request.getSession().getAttribute(ConfigProperties.getValue("ADM002_Textbox"))%>"
 								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>

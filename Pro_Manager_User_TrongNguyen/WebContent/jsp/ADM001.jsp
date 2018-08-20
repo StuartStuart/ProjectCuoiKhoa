@@ -30,12 +30,12 @@
 					<td class="lbl_left">アカウント名:</td>
 					<td align="left"><input class="txBox" type="text"
 						name="loginId"
-						value=<%// tương tự message
+						value="<%// tương tự message
 			String loginId = (String) request.getAttribute("loginId");
 			if (loginId != null && !"".equals(loginId)) {%>
 						<%-- loginId ko null và đã được nhập --%>
 							<%=loginId%> <%-- display loginId on textbox [login] --%>
-						<%} else {%>""<%}%>
+						<%} else {%>""<%}%>"
 						size="20" onfocus="this.style.borderColor='#0066ff';"
 						onblur="this.style.borderColor='#aaaaaa';" /></td>
 				</tr>
