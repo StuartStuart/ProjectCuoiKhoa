@@ -25,7 +25,7 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		if (null == ((HttpServletRequest) request).getSession().getAttribute("isLogin")) { // chưa login
-			((HttpServletResponse) response).sendRedirect("jsp/ADM001.jsp"); // chuyển đến ADM001
+			((HttpServletResponse) response).sendRedirect("ADM001.jsp"); // chuyển đến ADM001
 		} else {
 			chain.doFilter(request, response); // pass the request along the filter chain
 		}
