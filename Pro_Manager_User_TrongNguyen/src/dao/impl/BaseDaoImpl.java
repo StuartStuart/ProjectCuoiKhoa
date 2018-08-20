@@ -41,68 +41,64 @@ public class BaseDaoImpl implements BaseDao {
 				// tên db đang được sử dụng
 				final String nameDB = DatabaseProperties.getValue("dbname");
 
-				// rsDB chứa tên các DB
-				ResultSet rsDataBases = conn
-						.prepareStatement("Select DISTINCT(TABLE_SCHEMA) From INFORMATION_SCHEMA.COLUMNS;")
-						.executeQuery();
-				while (rsDataBases.next()) {
-					// db tồn tại
-					if (nameDB.equals(rsDataBases.getString("TABLE_SCHEMA"))) {
+				/*
+				 * thêm tên các trường vào listDBFieldName
+				 */
+				// rsTable chứa tên các Table thuộc DB đang xét
+				ResultSet rsTables = conn.getMetaData().getTables(null, null, null, new String[] { "TABLE" });
+				while (rsTables.next()) {
+					/*
+					 * list tên trường thuộc 1 table sẽ đổ dữ liệu đã qua xử lý
+					 * vào listDBFieldName
+					 */
+					ArrayList<String> listTableFieldName = new ArrayList<>();
+
+					String nameTable = rsTables.getString("TABLE_NAME");
+
+					/*
+					 * lấy tên tất cả các trường trong table
+					 */
+					ResultSet rsFields = conn.getMetaData().getColumns(null, nameDB, nameTable, null);
+					while (rsFields.next()) {
 						/*
-						 * thêm tên các trường vào listDBFieldName
+						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì
+						 * thêm vào listTableFieldName
 						 */
-						// rsTable chứa tên các Table thuộc DB đang xét
-						ResultSet rsTables = conn.prepareStatement(
-								"Select DISTINCT(TABLE_NAME) From INFORMATION_SCHEMA.COLUMNS Where TABLE_SCHEMA = '"
-										+ nameDB + "';")
-								.executeQuery();
-						while (rsTables.next()) {
+						String nameField = rsFields.getString("COLUMN_NAME");
+
+						if (0 == listDBFieldName.size()) {
+							listTableFieldName.add(nameTable + "." + nameField);
+						} else {
 							/*
-							 * list tên trường thuộc 1 table sẽ đổ dữ liệu đã
-							 * qua xử lý vào listDBFieldName
+							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì
+							 * thêm vào listTableFieldName
 							 */
-							ArrayList<String> listTableFieldName = new ArrayList<>();
-
-							String nameTable = rsTables.getString("TABLE_NAME");
-
-							/*
-							 * lấy tên tất cả các trường trong table
-							 */
-							ResultSet rsFields = conn.prepareStatement("Select DISTINCT(COLUMN_NAME) "
-									+ "From INFORMATION_SCHEMA.COLUMNS " + "Where TABLE_SCHEMA = '" + nameDB
-									+ "' AND TABLE_NAME = '" + nameTable + "';").executeQuery();
-							while (rsFields.next()) {
-								/*
-								 * kiểm tra tên trường đã tồn tại hay chưa, nếu
-								 * chưa thì thêm vào listTableFieldName
-								 */
-								String nameField = rsFields.getString("COLUMN_NAME");
-
-								if (0 == listDBFieldName.size()) {
+							for (final String oldColName : listDBFieldName) {
+								// không tồn tại trong listDBFieldName
+								if (!oldColName.matches(".*" + nameField + "$")) {
 									listTableFieldName.add(nameTable + "." + nameField);
-								} else {
-									/*
-									 * kiểm tra nameField đã tồn tại chưa nếu
-									 * chưa thì thêm vào listTableFieldName
-									 */
-									for (final String oldColName : listDBFieldName) {
-										// không tồn tại trong listDBFieldName
-										if (!oldColName.matches(".*" + nameField + "$")) {
-											listTableFieldName.add(nameTable + "." + nameField);
-											break;
-										}
-									}
+									break;
 								}
 							}
-							// đổ dữ liệu listTableFieldName vào listDBFieldName
-							listDBFieldName.addAll(listTableFieldName);
 						}
 					}
+					// đổ dữ liệu listTableFieldName vào listDBFieldName
+					listDBFieldName.addAll(listTableFieldName);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw e;
 			}
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		BaseDaoImpl bdi = new BaseDaoImpl();
+		bdi.openConnection();
+		bdi.initListDBFieldName();
+		bdi.closeConnection();
+		for (String str : listDBFieldName) {
+			System.out.println(str);
 		}
 	}
 
