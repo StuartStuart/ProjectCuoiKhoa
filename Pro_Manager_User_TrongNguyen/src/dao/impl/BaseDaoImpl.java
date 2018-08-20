@@ -47,12 +47,6 @@ public class BaseDaoImpl implements BaseDao {
 				// rsTable chứa tên các Table thuộc DB đang xét
 				ResultSet rsTables = conn.getMetaData().getTables(null, null, null, new String[] { "TABLE" });
 				while (rsTables.next()) {
-					/*
-					 * list tên trường thuộc 1 table sẽ đổ dữ liệu đã qua xử lý
-					 * vào listDBFieldName
-					 */
-					ArrayList<String> listTableFieldName = new ArrayList<>();
-
 					String nameTable = rsTables.getString("TABLE_NAME");
 
 					/*
@@ -67,7 +61,7 @@ public class BaseDaoImpl implements BaseDao {
 						String nameField = rsFields.getString("COLUMN_NAME");
 
 						if (0 == listDBFieldName.size()) {
-							listTableFieldName.add(nameTable + "." + nameField);
+							listDBFieldName.add(nameTable + "." + nameField);
 						} else {
 							/*
 							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì
@@ -76,29 +70,17 @@ public class BaseDaoImpl implements BaseDao {
 							for (final String oldColName : listDBFieldName) {
 								// không tồn tại trong listDBFieldName
 								if (!oldColName.matches(".*" + nameField + "$")) {
-									listTableFieldName.add(nameTable + "." + nameField);
+									listDBFieldName.add(nameTable + "." + nameField);
 									break;
 								}
 							}
 						}
 					}
-					// đổ dữ liệu listTableFieldName vào listDBFieldName
-					listDBFieldName.addAll(listTableFieldName);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw e;
 			}
-		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		BaseDaoImpl bdi = new BaseDaoImpl();
-		bdi.openConnection();
-		bdi.initListDBFieldName();
-		bdi.closeConnection();
-		for (String str : listDBFieldName) {
-			System.out.println(str);
 		}
 	}
 
