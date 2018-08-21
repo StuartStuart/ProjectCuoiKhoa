@@ -22,6 +22,10 @@ public class ConstantUtil {
 	 */
 	public static final String CONFIG = "Config.properties";
 	/*
+	 * user có category = 1
+	 */
+	public static final int USER_CATEGORY = 1;
+	/*
 	 * sắp xếp tăng
 	 */
 	public static final String ADM002_SX_TANG = "ASC";

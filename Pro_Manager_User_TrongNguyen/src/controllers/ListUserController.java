@@ -118,14 +118,7 @@ public class ListUserController extends HttpServlet {
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
 
 					// xác định priorityType
-					String sortTypeUrl = request.getParameter("priority");
-					for (int i = 0; i < amountSortType; i++) {
-						if (ConstantUtil.ADM002_SORT_TYPE_URL[i].equals(sortTypeUrl)) {
-							// xác định loại sắp xếp được ưu tiên
-							sortType = BaseDaoImpl.WHITE_LIST[i];
-							break;
-						}
-					}
+					sortType = request.getParameter("priority");
 					// lưu session
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 					break;

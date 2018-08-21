@@ -1,10 +1,5 @@
 ADM002:
 	- Bỏ convertSymbol() -> gt;
 Check:
-	- Không fit 1 vào listUser ở category = 1;
-	- sửa whitelist có sortType không thuộc các bảng đã inner join
-	- sắp xếp Việt: collate utf8_unicode_ci
 	- sửa filter load lại màn hình ADM001
 	- đổi selected từ controller sang view
-	- sửa whitelist trong BaseDao
-	- bỏ đoạn code 

@@ -32,9 +32,10 @@ public class BaseDaoImpl implements BaseDao {
 	public static final String[] WHITE_LIST = { "tbl_user.full_name", "mst_japan.code_level",
 			"tbl_detail_user_japan.end_date" };
 
-	/* (non-Javadoc)
-	 * @see dao.BaseDao#initListDBFieldName()
-	 * khởi tạo whitelist
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#initListDBFieldName() khởi tạo whitelist
 	 */
 	@Override
 	public void initListDBFieldName() throws Exception {
@@ -61,8 +62,8 @@ public class BaseDaoImpl implements BaseDao {
 					ResultSet rsFields = conn.getMetaData().getColumns(null, nameDB, nameTable, null);
 					while (rsFields.next()) {
 						/*
-						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì
-						 * thêm vào listTableFieldName
+						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì thêm vào
+						 * listTableFieldName
 						 */
 						String nameField = rsFields.getString("COLUMN_NAME");
 
@@ -70,8 +71,7 @@ public class BaseDaoImpl implements BaseDao {
 							listDBFieldName.add(nameTable + "." + nameField);
 						} else {
 							/*
-							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì
-							 * thêm vào listTableFieldName
+							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì thêm vào listTableFieldName
 							 */
 							for (final String oldColName : listDBFieldName) {
 								// không tồn tại trong listDBFieldName
@@ -161,17 +161,24 @@ public class BaseDaoImpl implements BaseDao {
 	 */
 	@Override
 	public boolean isExistColName(String nameField) throws Exception {
-		try {
-			this.initListDBFieldName();
-			for (final String nameDBField : listDBFieldName) {
-				if (nameDBField.matches(".*" + nameField + "$")) {
-					return true;
-				}
+//		try {
+//			this.initListDBFieldName();
+//			for (final String nameDBField : listDBFieldName) {
+//				if (nameDBField.matches(".*" + nameField + "$")) {
+//					return true;
+//				}
+//			}
+//			return false;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw e;
+//		}
+		for (String colName : WHITE_LIST) {
+			if (colName.equals(nameField)) {
+				return true;
 			}
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
 		}
+
+		return false;
 	}
 }

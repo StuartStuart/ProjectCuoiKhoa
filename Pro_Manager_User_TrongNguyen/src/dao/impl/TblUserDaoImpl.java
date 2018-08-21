@@ -138,7 +138,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append(" ON tbl_user.user_id = tbl_detail_user_japan.user_id");
 
 			// thêm điều kiện tìm kiếm
-			query.append("\nWHERE category = 1");
+			query.append("\nWHERE category = ");
+			query.append(ConstantUtil.USER_CATEGORY);
 			if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
 				query.append(" AND tbl_user.group_id = ?");
 			}
@@ -152,37 +153,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
-
-			StringBuilder queryTail = new StringBuilder("");
-			/*
-			 * các kiểu sắp xếp tương ứng với loại sắp xếp
-			 */
-			String[] sortingWays = { sortByFullName, sortByCodeLevel, sortByEndDate };
-			int lengthSortTypes = WHITE_LIST.length;
-			/*
-			 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
-			 */
-			if (!this.isExistColName(sortType)) { // be hacked
-				sortType = WHITE_LIST[0];
-			}
-
-			String cachSapXepCuaKieuUuTien = "";
-			for (int i = 0; i < lengthSortTypes; i++) {
-				if (!WHITE_LIST[i].equals(sortType)) {
-					queryTail.append(", " + WHITE_LIST[i]);
-					if (sortingWays.length > i) {
-						queryTail.append(" " + sortingWays[i]);
-					} else { // Khi có kiểu sắp xếp với cách sắp được ngầm
-								// định
-						queryTail.append(" " + ConstantUtil.ADM002_SX_TANG);
-					}
-				} else {
-					cachSapXepCuaKieuUuTien = sortingWays[i];
-				}
-			}
-			// nối queryTail vào đuôi query
-			query.append(sortType).append(" ").append(cachSapXepCuaKieuUuTien);
-			query.append(queryTail);
+			query.append(chuoiDieuKienSX(sortType, sortByFullName, sortByCodeLevel, sortByEndDate));
 			// thêm giời hạn số lượng bản ghi
 			query.append(" LIMIT " + limit);
 
@@ -232,5 +203,100 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		}
 
 		return listUser;
+	}
+
+	/**
+	 * xác đinh chuỗi điều kiện order by
+	 * 
+	 * @param sortType        loại sắp xếp
+	 * @param sortByFullName  kiểu sx của tên
+	 * @param sortByCodeLevel kiểu sx của codeLevel
+	 * @param sortByEndDate   kiểu sx của endDate
+	 * @return chuỗi điều kiện sx
+	 * @throws Exception
+	 */
+	private String chuoiDieuKienSX(String sortType, String sortByFullName, String sortByCodeLevel, String sortByEndDate)
+			throws Exception {
+		StringBuilder chuoiSX = new StringBuilder("");
+//		/*
+//		 * các kiểu sắp xếp tương ứng với loại sắp xếp
+//		 */
+//		String[] sortingWays = { sortByFullName, sortByCodeLevel, sortByEndDate };
+//		int lengthSortTypes = WHITE_LIST.length;
+//		/*
+//		 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
+//		 */
+//		if (!this.isExistColName(sortType)) { // be hacked
+//			sortType = WHITE_LIST[0];
+//		}
+//
+//		String cachSapXepCuaKieuUuTien = "";
+//		for (int i = 0; i < lengthSortTypes; i++) {
+//			if (!WHITE_LIST[i].equals(sortType)) {
+//				chuoiSX.append(", " + WHITE_LIST[i]);
+//				if (sortingWays.length > i) {
+//					chuoiSX.append(" " + sortingWays[i]);
+//				} else { // Khi có kiểu sắp xếp với cách sắp được ngầm
+//							// định
+//					chuoiSX.append(" " + ConstantUtil.ADM002_SX_TANG);
+//				}
+//			} else {
+//				cachSapXepCuaKieuUuTien = sortingWays[i];
+//			}
+//		}
+//		// nối queryTail vào đuôi query
+//		return sortType + " " + cachSapXepCuaKieuUuTien + " " + chuoiSX.toString();
+
+		try {
+			/*
+			 * sortType tại trong WhiteList và không phải fullName
+			 */
+			if (isExistColName(sortType) && !WHITE_LIST[0].equals(sortType)) {
+				chuoiSX.append(sortType);
+				if (WHITE_LIST[1].equals(sortType)) { // codeLevel
+					chuoiSX.append(" " + sortByCodeLevel);
+					/*
+					 * Sắp xếp theo default
+					 */
+					// theo tên
+					chuoiSX.append(", " + WHITE_LIST[0]);
+					chuoiSX.append(" COLLATE utf8_unicode_ci");
+					chuoiSX.append(" " + sortByFullName);
+					// theo endDate
+					chuoiSX.append(", " + WHITE_LIST[2]);
+					chuoiSX.append(" " + sortByEndDate);
+				} else if (WHITE_LIST[2].equals(sortType)) { // endDate
+					chuoiSX.append(" " + sortByEndDate);
+					/*
+					 * Sắp xếp theo default
+					 */
+					// theo tên
+					chuoiSX.append(", " + WHITE_LIST[0]);
+					chuoiSX.append(" COLLATE utf8_unicode_ci");
+					chuoiSX.append(" " + sortByFullName);
+					// theo codeLevel
+					chuoiSX.append(", " + WHITE_LIST[1]);
+					chuoiSX.append(" " + sortByCodeLevel);
+				}
+			} else {
+				/*
+				 * Sắp xếp theo default
+				 */
+				// theo tên
+				chuoiSX.append(WHITE_LIST[0]);
+				chuoiSX.append(" COLLATE utf8_unicode_ci");
+				chuoiSX.append(" " + sortByFullName);
+				// theo codeLevel
+				chuoiSX.append(", " + WHITE_LIST[1]);
+				chuoiSX.append(" " + sortByCodeLevel);
+				// theo endDate
+				chuoiSX.append(", " + WHITE_LIST[2]);
+				chuoiSX.append(" " + sortByEndDate);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return chuoiSX.toString();
 	}
 }
