@@ -29,6 +29,8 @@ public class BaseDaoImpl implements BaseDao {
 	protected String query;
 
 	protected static ArrayList<String> listDBFieldName;
+	public static final String[] WHITE_LIST = { "tbl_user.full_name", "mst_japan.code_level",
+			"tbl_detail_user_japan.end_date" };
 
 	/* (non-Javadoc)
 	 * @see dao.BaseDao#initListDBFieldName()

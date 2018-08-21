@@ -148,8 +148,8 @@ public class CommonUtil {
 	 */
 	public static String convertSymbol(String sortSymbol) {
 		try {
-			return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol)) ? ConstantUtil.ADM002_TANG
-					: ConstantUtil.ADM002_GIAM;
+			return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol)) ? ConstantUtil.ADM002_SX_TANG
+					: ConstantUtil.ADM002_SX_GIAM;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

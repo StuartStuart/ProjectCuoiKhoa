@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.impl.BaseDaoImpl;
 import entities.TblMstGroupEntity;
+import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
@@ -58,7 +60,7 @@ public class ListUserController extends HttpServlet {
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_GroupId"), groupId);
 
 				// đổi lại sortType
-				sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
+				sortType = BaseDaoImpl.WHITE_LIST[0];
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 
 				// đổi lại sortSymbol
@@ -107,7 +109,7 @@ public class ListUserController extends HttpServlet {
 					break;
 				case ConstantUtil.ADM002_SORT:
 					// xác định kiểu sortSymbol
-					if (ConstantUtil.ADM002_TANG.equals(request.getParameter("sort"))) {
+					if (ConstantUtil.ADM002_SX_TANG.equals(request.getParameter("sort"))) {
 						sortSymbol = ConfigProperties.getValue("ADM002_DESCSymbol");
 					} else {
 						sortSymbol = ConfigProperties.getValue("ADM002_ASCSymbol");
@@ -120,7 +122,7 @@ public class ListUserController extends HttpServlet {
 					for (int i = 0; i < amountSortType; i++) {
 						if (ConstantUtil.ADM002_SORT_TYPE_URL[i].equals(sortTypeUrl)) {
 							// xác định loại sắp xếp được ưu tiên
-							sortType = ConstantUtil.CAC_LOAI_SAP_XEP[i];
+							sortType = BaseDaoImpl.WHITE_LIST[i];
 							break;
 						}
 					}
@@ -159,7 +161,7 @@ public class ListUserController extends HttpServlet {
 			 * chuyển các symbol về chính xác
 			 */
 			for (int i = 0; i < amountSortType; i++) {
-				if (ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
+				if (BaseDaoImpl.WHITE_LIST[i].equals(sortType)) {
 					defaultSortSymbolOrders[i] = sortSymbol;
 					break;
 				}
@@ -170,7 +172,7 @@ public class ListUserController extends HttpServlet {
 			request.setAttribute("symbolEndDate", defaultSortSymbolOrders[2]);
 
 			// used for send userInfors List and build paging
-			TblUserLogicImpl tblUserLogic = new TblUserLogicImpl();
+			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
 							sortType, CommonUtil.convertSymbol(defaultSortSymbolOrders[0]),

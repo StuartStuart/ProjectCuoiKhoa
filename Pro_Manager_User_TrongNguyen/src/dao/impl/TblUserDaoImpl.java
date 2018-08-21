@@ -21,12 +21,17 @@ import utils.ConstantUtil;
  *
  */
 public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
+	/*
+	 * các thông tin cần lấy của user
+	 */
+	private static final String[] userInfors = { "tbl_user.user_id", "tbl_user.full_name", "tbl_user.birthday",
+			"mst_group.group_name", "tbl_user.email", "tbl_user.tel", "mst_japan.name_level",
+			"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
 
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName
-	 *            tên đăng nhập
+	 * @param userName tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -53,7 +58,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				tblU.setBirthDay(rs.getString("tbl_user.birthday"));
 				tblU.setSalt(rs.getString("tbl_user.salt"));
 				tblU.setCategory(rs.getInt("tbl_user.category"));
-				
+
 				return tblU;
 			}
 		} catch (Exception e) {
@@ -119,7 +124,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 			// thêm các trường thông tin cần lấy của User
 			StringBuilder query = new StringBuilder("SELECT");
-			for (String infor : ConstantUtil.USER_INFORMATIONS) {
+			for (String infor : userInfors) {
 				query.append(" " + infor + ",");
 			}
 			query.deleteCharAt(query.length() - 1);
@@ -142,8 +147,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 
 			/*
-			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
-			 * thì thực hiện bình thường
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không thì thực hiện
+			 * bình thường
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
@@ -153,23 +158,23 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			 * các kiểu sắp xếp tương ứng với loại sắp xếp
 			 */
 			String[] sortingWays = { sortByFullName, sortByCodeLevel, sortByEndDate };
-			int lengthSortTypes = ConstantUtil.CAC_LOAI_SAP_XEP.length;
+			int lengthSortTypes = WHITE_LIST.length;
 			/*
 			 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
 			 */
 			if (!this.isExistColName(sortType)) { // be hacked
-				sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
+				sortType = WHITE_LIST[0];
 			}
 
 			String cachSapXepCuaKieuUuTien = "";
 			for (int i = 0; i < lengthSortTypes; i++) {
-				if (!ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
-					queryTail.append(", " + ConstantUtil.CAC_LOAI_SAP_XEP[i]);
+				if (!WHITE_LIST[i].equals(sortType)) {
+					queryTail.append(", " + WHITE_LIST[i]);
 					if (sortingWays.length > i) {
 						queryTail.append(" " + sortingWays[i]);
 					} else { // Khi có kiểu sắp xếp với cách sắp được ngầm
 								// định
-						queryTail.append(" " + ConstantUtil.SAP_XEP_MAC_DINH);
+						queryTail.append(" " + ConstantUtil.ADM002_SX_TANG);
 					}
 				} else {
 					cachSapXepCuaKieuUuTien = sortingWays[i];

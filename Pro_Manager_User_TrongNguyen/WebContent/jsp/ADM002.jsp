@@ -1,3 +1,4 @@
+<%@page import="dao.impl.BaseDaoImpl"%>
 <%@page import="utils.CommonUtil"%>
 <%@page import="utils.ConstantUtil"%>
 <%@page import="properties.ConfigProperties"%>
@@ -37,18 +38,16 @@
 						<tr>
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
-								name="adm002fullname"
-								value="${fn:escapeXml(ADM002_Textbox) }" size="20"
-								onfocus="this.style.borderColor='#0066ff';"
+								name="adm002fullname" value="${fn:escapeXml(ADM002_Textbox) }"
+								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="lbl_left">グループ:</td>
-							<td align="left" width="80px"><select
-								name="adm002groupid">
+							<td align="left" width="80px"><select name="adm002groupid">
 									<c:forEach items="${adm002groupid }" var="group">
-										<option value="${group.groupId }">${group.groupName }
+										<option value="${group.groupId }">${fn:escapeXml(group.groupName) }
 										</option>
 									</c:forEach>
 							</select></td>
@@ -71,7 +70,7 @@
 					<th align="center" width="20px">ID</th>
 					<th align="left">氏名 <a
 						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ ConstantUtil.ADM002_SORT_TYPE_URL[0] + "&sort="
+							+ BaseDaoImpl.WHITE_LIST[0] + "&sort="
 							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
 							<%=request.getAttribute("symbolFullName")%></a>
 					</th>
@@ -81,13 +80,13 @@
 					<th align="left" width="70px">電話番号</th>
 					<th align="left">日本語能力 <a
 						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ ConstantUtil.ADM002_SORT_TYPE_URL[1] + "&sort="
+							+ BaseDaoImpl.WHITE_LIST[1] + "&sort="
 							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolCodeLevel"))%>>
 							<%=request.getAttribute("symbolCodeLevel")%></a>
 					</th>
 					<th align="left">失効日 <a
 						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ ConstantUtil.ADM002_SORT_TYPE_URL[2] + "&sort="
+							+ BaseDaoImpl.WHITE_LIST[2] + "&sort="
 							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
 							<%=request.getAttribute("symbolEndDate")%></a>
 					</th>
@@ -96,12 +95,12 @@
 				<c:forEach items="${userInfors}" var="userInfors">
 					<tr>
 						<td align="right"><a href="#">${userInfors.userId}</a></td>
-						<td>${userInfors.fullName}</td>
+						<td>${fn: escapeXml(userInfors.fullName)}</td>
 						<td align="center">${userInfors.birthDay}</td>
-						<td>${userInfors.groupName}</td>
-						<td>${userInfors.email}</td>
+						<td>${fn: escapeXml(userInfors.groupName)}</td>
+						<td>${fn: escapeXml(userInfors.email)}</td>
 						<td>${userInfors.tel}</td>
-						<td>${userInfors.nameLevel}</td>
+						<td>${fn: escapeXml(userInfors.nameLevel)}</td>
 						<td align="center">${userInfors.endDate}</td>
 						<td align="right">${userInfors.total}</td>
 					</tr>
@@ -119,19 +118,13 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<%-- <td class="lbl_paging"><c:forEach items="${adm002paging}"
-					var="adm002paging">
-				${adm002paging}
-			</c:forEach></td> --%>
-			<c:forEach items="${adm002paging}" var="page">
-				<c:if test="${adm002paging[0] > limitPage}">
+			<td><c:if test="${adm002paging[0] > limitPage}">
 					<a href="ListUser.do?type=paging&page=pageback"><<</a>&nbsp;
-			</c:if>
-				<a href="ListUser.do?type=paging&page=${page }">${page}</a>&nbsp;
-			<c:if test="${adm002paging[0]*limitPage < totalPage}">
+			</c:if> <c:forEach items="${adm002paging}" var="page">
+					<a href="ListUser.do?type=paging&page=${page }">${page}</a>&nbsp;
+			</c:forEach> <c:if test="${adm002paging[0]*limitPage < totalPage}">
 					<a href="ListUser.do?type=paging&page=pagenext">>></a>&nbsp;
-			</c:if>
-			</c:forEach>
+			</c:if></td>
 		</tr>
 	</table>
 	<!-- End vung paging -->
