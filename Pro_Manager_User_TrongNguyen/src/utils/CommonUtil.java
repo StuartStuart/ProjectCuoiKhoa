@@ -4,6 +4,8 @@
  */
 package utils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import properties.ConfigProperties;
@@ -16,10 +18,38 @@ import properties.ConfigProperties;
  */
 public class CommonUtil {
 	/**
+	 * mã hóa chuỗi pass + salt sang SHA1
+	 * 
+	 * @param pass
+	 *            mật khẩu
+	 * @param salt
+	 *            chuỗi gây nhiễu
+	 * @return chuỗi đã mã hóa
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static String encodeMatKhau(String pass, String salt) throws NoSuchAlgorithmException {
+		MessageDigest mDigest;
+		try {
+			mDigest = MessageDigest.getInstance("SHA1");
+			byte[] result = mDigest.digest((pass + salt).getBytes());
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < result.length; i++) {
+				sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
 	 * lấy thứ tự của User đầu tiên sẽ hiển thị trên page
 	 * 
-	 * @param pageNumber trang sẽ hiển thị UserInfor
-	 * @param limit      số user tôi đa sẽ được hiển thị page
+	 * @param pageNumber
+	 *            trang sẽ hiển thị UserInfor
+	 * @param limit
+	 *            số user tôi đa sẽ được hiển thị page
 	 * @return thứ tự đầu tiên
 	 */
 	public static int getOffSet(Integer pageNumber, int limit) {
@@ -29,7 +59,8 @@ public class CommonUtil {
 	/**
 	 * tránh lỗi wild card trong sql
 	 * 
-	 * @param text chuỗi cần chuyển wild card
+	 * @param text
+	 *            chuỗi cần chuyển wild card
 	 * @return chuỗi đã được chuyển
 	 */
 	public static String convertWildCard(String text) {
@@ -42,9 +73,12 @@ public class CommonUtil {
 	/**
 	 * lấy danh sách số thứ tự của các trang để được hiển thị trên web browser
 	 * 
-	 * @param totalUser   tổng số user tìm được
-	 * @param limit       số lượng tối đa user trên 1 web browser
-	 * @param currentPage trang hiện thời
+	 * @param totalUser
+	 *            tổng số user tìm được
+	 * @param limit
+	 *            số lượng tối đa user trên 1 web browser
+	 * @param currentPage
+	 *            trang hiện thời
 	 * @return danh sách có nhiều nhất limit trang
 	 * @throws Exception
 	 */
@@ -59,8 +93,7 @@ public class CommonUtil {
 			// thứ tự bắt đầu thêm vào list dựa vào currentPage
 			int offsetNumber = (currentPage - 1) / pageLimit * pageLimit;
 			// thêm vào list
-			while (listPaging.size() < pageLimit && offsetNumber < totalPage) { // còn nhỏ hơn số trang tối đa
-				// browser
+			while (listPaging.size() < pageLimit && offsetNumber < totalPage) { 
 				listPaging.add(++offsetNumber);
 			}
 		} catch (NumberFormatException e) {
@@ -87,8 +120,10 @@ public class CommonUtil {
 	/**
 	 * tính tổng số trang sẽ được hiển thị
 	 * 
-	 * @param totalUser tổng số user
-	 * @param limit     giới hạn user trên 1 web browser
+	 * @param totalUser
+	 *            tổng số user
+	 * @param limit
+	 *            giới hạn user trên 1 web browser
 	 * @return
 	 */
 	public static int getTotalPage(int totalUser, int limit) {
@@ -106,7 +141,8 @@ public class CommonUtil {
 	/**
 	 * chuyển kiểu sắp xếp từ icon sang dạng db
 	 * 
-	 * @param firstSortSymbol biểu tượng cần chuyển
+	 * @param firstSortSymbol
+	 *            biểu tượng cần chuyển
 	 * @return ASC hoặc DESC
 	 * @throws Exception
 	 */

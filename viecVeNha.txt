@@ -1,17 +1,11 @@
-﻿ADM002:
-	- chuyển method="post" sang "get"
-	- đổi fix cứng tên attribute "adm002paging" sang ConfigProperties.getValue()
-Database:
-	- Đổi tên user về mặc định
-Project:
-	- xóa method doPost()
-	- Sửa tên biến phù hợp Requirement
-Properties:
-	- sửa tên viết hoa và tương ứng trong project
-Servlet - ListUser: 
-	- sort không lưu value của parameter
-Hỏi chị Hương WhileList
-BaseDao:
-	- thêm static lấy danh sách các trường
-ADM003:
-	- Gắn URL cho button[Back]
+ADM002:
+	- Bỏ convertSymbol() -> gt;
+Check:
+	- Dao = Impl;
+	- fn:escapeXml(str);
+	- Không fit 1 vào listUser ở category = 1;
+	- sửa whitelist có sortType không thuộc các bảng đã inner join
+	- sắp xếp Việt: collate utf8_unicode_ci
+	- sửa filter load lại màn hình ADM001
+	- đổi selected từ controller sang view
+	- sửa whitelist trong BaseDao

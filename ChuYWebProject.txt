@@ -34,3 +34,5 @@ Kiểm tra equals() luôn để sau null
 Luôn để e.printStackTrace() để kiểm soát lỗi lặt vặt
 
 Submit(get) -> Request -> không lưu được type -> URL không thêm tham số
+
+Biểu thức 3 biến

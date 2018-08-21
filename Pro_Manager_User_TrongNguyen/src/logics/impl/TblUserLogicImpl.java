@@ -4,14 +4,13 @@
  */
 package logics.impl;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import dao.impl.TblUserDaoImpl;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
 import logics.TblUserLogic;
+import utils.CommonUtil;
 
 /**
  * Ä‘á»‘i tÆ°á»£ng TblUserLogic
@@ -67,7 +66,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			if (null == adminAccount) { // tài khoản không tồn tại
 				return true;
 			} else { // tài khoản tồn tại
-				String encodedPass = encodeMatKhau(pass, adminAccount.getSalt());
+				String encodedPass = CommonUtil.encodeMatKhau(pass, adminAccount.getSalt());
 //				System.out.println(encodedPass);
 				boolean isTrungMatKhau = adminAccount.getPassword().equals(encodedPass);
 				if (!isTrungMatKhau) { // 2 pass không trung nhau
@@ -77,30 +76,6 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 
 			return false;
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * mã hóa chuỗi pass + salt sang SHA1
-	 * 
-	 * @param pass mật khẩu
-	 * @param salt chuỗi gây nhiễu
-	 * @return chuỗi đã mã hóa
-	 * @throws NoSuchAlgorithmException
-	 */
-	private String encodeMatKhau(String pass, String salt) throws NoSuchAlgorithmException {
-		MessageDigest mDigest;
-		try {
-			mDigest = MessageDigest.getInstance("SHA1");
-			byte[] result = mDigest.digest((pass + salt).getBytes());
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < result.length; i++) {
-				sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-			}
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			throw e;
 		}

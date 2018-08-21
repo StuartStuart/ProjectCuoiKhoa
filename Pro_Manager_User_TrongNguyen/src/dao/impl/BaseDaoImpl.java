@@ -30,6 +30,10 @@ public class BaseDaoImpl implements BaseDao {
 
 	protected static ArrayList<String> listDBFieldName;
 
+	/* (non-Javadoc)
+	 * @see dao.BaseDao#initListDBFieldName()
+	 * khởi tạo whitelist
+	 */
 	@Override
 	public void initListDBFieldName() throws Exception {
 		if (null == listDBFieldName) {

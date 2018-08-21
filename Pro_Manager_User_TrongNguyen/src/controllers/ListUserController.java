@@ -46,13 +46,13 @@ public class ListUserController extends HttpServlet {
 			 */
 			String type = request.getParameter("type");
 			if (null == type || ConstantUtil.ADM002_SEARCH.equals(type)) {
-				fullName = request.getParameter(ConfigProperties.getValue("ADM002_Textbox"));
+				fullName = request.getParameter("adm002fullname");
 				fullName = (null == fullName) ? "" : fullName;
 				// lưu session
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_Textbox"), fullName);
 
 				// nhận groupId
-				String groupType = request.getParameter((ConfigProperties.getValue("ADM002_GroupId")));
+				String groupType = request.getParameter("adm002groupid");
 				groupId = Integer.parseInt((null == groupType) ? "0" : groupType);
 				// lưu session
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_GroupId"), groupId);
@@ -133,25 +133,27 @@ public class ListUserController extends HttpServlet {
 			}
 
 			/*
-			 * xây dựng htmlGroupId
+			 * xây dựng groupId
 			 */
 			// tạo danh sách group mặc định
+			ArrayList<TblMstGroupEntity> optionGroup = new ArrayList<>();
+			// thêm các group còn lại
+			optionGroup.addAll(new MstGroupLogicImpl().getAllMstGroup());
+			// tạo group total
 			TblMstGroupEntity totalGroup = new TblMstGroupEntity();
 			totalGroup.setGroupId(0);
 			totalGroup.setGroupName("全て");
-			ArrayList<TblMstGroupEntity> optionGroup = new ArrayList<>();
-			optionGroup.add(totalGroup);
-			optionGroup.addAll(new MstGroupLogicImpl().getAllMstGroup());
-			// lấy tại groupId A
-			TblMstGroupEntity selectedGroup = optionGroup.get(groupId);
-			// xóa tại 0
-			optionGroup.remove(0);
-			// thêm A tại 0
+			// điều chỉnh vị trí các phần tử
+			TblMstGroupEntity selectedGroup;
+			if (groupId != 0) {
+				selectedGroup = optionGroup.remove((int) groupId - 1);
+				optionGroup.add(totalGroup);
+			} else {
+				// thêm total vào vị trí đâu tiên
+				selectedGroup = totalGroup;
+			}
 			optionGroup.add(0, selectedGroup);
-			// xóa tại groupId
-			optionGroup.remove((int) groupId);
-			// thêm totalGroup tại groupId
-			optionGroup.add(groupId, totalGroup);
+			// gửi session
 			request.setAttribute("adm002groupid", optionGroup);
 			/*
 			 * chuyển các symbol về chính xác
@@ -167,7 +169,7 @@ public class ListUserController extends HttpServlet {
 			request.setAttribute("symbolCodeLevel", defaultSortSymbolOrders[1]);
 			request.setAttribute("symbolEndDate", defaultSortSymbolOrders[2]);
 
-			// used for send userInfors List and build htmlPaging
+			// used for send userInfors List and build paging
 			TblUserLogicImpl tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
@@ -175,13 +177,13 @@ public class ListUserController extends HttpServlet {
 							CommonUtil.convertSymbol(defaultSortSymbolOrders[1]),
 							CommonUtil.convertSymbol(defaultSortSymbolOrders[2])));
 			/*
-			 * build htmlPaging
+			 * build paging
 			 */
 			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
 			request.setAttribute("adm002paging", CommonUtil.getListPaging(totalUser, userLimit, currentPage));
 			request.setAttribute("totalPage", CommonUtil.getTotalPage(totalUser, userLimit));
 			request.setAttribute("limitPage", ConfigProperties.getValue("Paging_Limit"));
-			
+
 			// request đến ADM002
 			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
 		} catch (Exception e) {

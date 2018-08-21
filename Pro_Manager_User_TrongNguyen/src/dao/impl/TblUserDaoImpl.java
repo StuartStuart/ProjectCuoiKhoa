@@ -32,7 +32,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 */
 	@Override
 	public TblUserEntity getAdminAccount(String userName) throws Exception {
-		TblUserEntity tblU = new TblUserEntity();
 		try {
 			this.openConnection(); // mở kết nối
 			query = "select * from tbl_user where `login_name` = ?;";
@@ -40,26 +39,29 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			ps.setString(1, userName);
 
 			ResultSet rs = ps.executeQuery(); // nháº­n vá»� cÃ¡c báº£n ghi
-			rs.next();
-
-			// lưu thông tin vào đối tượng
-			tblU.setUserId(rs.getInt("tbl_user.user_id"));
-			tblU.setGroupId(rs.getInt("tbl_user.group_id"));
-			tblU.setLoginName(rs.getString("tbl_user.login_name"));
-			tblU.setPassword(rs.getString("tbl_user.password"));
-			tblU.setFullName(rs.getString("tbl_user.full_name"));
-			tblU.setFullNameKana(rs.getString("tbl_user.full_name_kana"));
-			tblU.setEmail(rs.getString("tbl_user.email"));
-			tblU.setTel(rs.getString("tbl_user.tel"));
-			tblU.setBirthDay(rs.getString("tbl_user.birthday"));
-			tblU.setSalt(rs.getString("tbl_user.salt"));
-			tblU.setCategory(rs.getInt("tbl_user.category"));
+			if (rs.next()) {
+				TblUserEntity tblU = new TblUserEntity();
+				// lưu thông tin vào đối tượng
+				tblU.setUserId(rs.getInt("tbl_user.user_id"));
+				tblU.setGroupId(rs.getInt("tbl_user.group_id"));
+				tblU.setLoginName(rs.getString("tbl_user.login_name"));
+				tblU.setPassword(rs.getString("tbl_user.password"));
+				tblU.setFullName(rs.getString("tbl_user.full_name"));
+				tblU.setFullNameKana(rs.getString("tbl_user.full_name_kana"));
+				tblU.setEmail(rs.getString("tbl_user.email"));
+				tblU.setTel(rs.getString("tbl_user.tel"));
+				tblU.setBirthDay(rs.getString("tbl_user.birthday"));
+				tblU.setSalt(rs.getString("tbl_user.salt"));
+				tblU.setCategory(rs.getInt("tbl_user.category"));
+				
+				return tblU;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			this.closeConnection(); // đóng kết nối
 		}
-		return tblU;
+		return null;
 	}
 
 	/*
@@ -126,8 +128,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			// đó
 			query.append("\nFROM");
 			query.append(" tbl_user INNER JOIN mst_group ON tbl_user.group_id = mst_group.group_id");
-			query.append(" LEFT JOIN tbl_detail_user_japan ON tbl_user.user_id = tbl_detail_user_japan.user_id");
-			query.append(" LEFT JOIN mst_japan ON tbl_detail_user_japan.code_level = mst_japan.code_level");
+			query.append(" LEFT JOIN (tbl_detail_user_japan");
+			query.append(" INNER JOIN mst_japan ON tbl_detail_user_japan.code_level = mst_japan.code_level)");
+			query.append(" ON tbl_user.user_id = tbl_detail_user_japan.user_id");
 
 			// thêm điều kiện tìm kiếm
 			query.append("\nWHERE category = 1");
@@ -157,7 +160,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			if (!this.isExistColName(sortType)) { // be hacked
 				sortType = ConstantUtil.CAC_LOAI_SAP_XEP[0];
 			}
-			
+
 			String cachSapXepCuaKieuUuTien = "";
 			for (int i = 0; i < lengthSortTypes; i++) {
 				if (!ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {

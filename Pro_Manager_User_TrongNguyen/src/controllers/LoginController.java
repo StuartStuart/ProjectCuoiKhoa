@@ -33,8 +33,8 @@ public class LoginController extends HttpServlet {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			// nhận về chuỗi đã nhập trong textbox [login]
-			String loginId = new String(request.getParameter("loginId"));
-			String password = new String(request.getParameter("password"));
+			String loginId = new String(request.getParameter("adm001loginid"));
+			String password = new String(request.getParameter("adm001password"));
 
 			// nhận thông báo tương ứng với textbox [login] và [password] đã nhập
 			ArrayList<String> listMessage = new LoginValidate().getListMessage(loginId, password);
@@ -44,9 +44,9 @@ public class LoginController extends HttpServlet {
 				response.sendRedirect("ListUser.do?type=" + ConstantUtil.ADM002_SEARCH);
 //				request.getRequestDispatcher("ListUser.do").forward(request, response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
-				request.setAttribute("message", listMessage); // gửi message đến ADM001
-				request.setAttribute("loginId", loginId); // gửi loginId đến ADM001
-				request.setAttribute("password", password); // gửi pass đến ADM001
+				request.setAttribute("adm001message", listMessage); // gửi message đến ADM001
+				request.setAttribute("adm001loginid", loginId); // gửi loginId đến ADM001
+				request.setAttribute("adm001password", password); // gửi pass đến ADM001
 				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response); // chuyển đến trang tương ứng
 			}
 		} catch (Exception e) {
