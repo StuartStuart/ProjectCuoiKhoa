@@ -38,7 +38,7 @@
 						<tr>
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
-								name="adm002fullname" value="${fn:escapeXml(ADM002_Textbox) }"
+								name="adm002fullname" value="${fn:escapeXml(adm002tbfullname) }"
 								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
@@ -46,11 +46,10 @@
 						<tr>
 							<td class="lbl_left">グループ:</td>
 							<td align="left" width="80px"><select name="adm002groupid">
-									<option value="0">全て</option>
 									<c:forEach items="${adm002groupid }" var="group">
 										<option value="${group.groupId}"
-											selected="${group.groupId == ADM002_GroupId? 'selected' : '' }">
-											${fn:escapeXml(group.groupName) }</option>
+											selected="${(adm002cbbgroupid == group.groupId)?'selected':'' }">
+											${fn:escapeXml(group.groupName) } </option>
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
