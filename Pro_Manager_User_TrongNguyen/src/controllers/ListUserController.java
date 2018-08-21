@@ -28,6 +28,7 @@ public class ListUserController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		try {
 			request.setCharacterEncoding("UTF-8");
 			// Khởi tạo các biến sẽ sử dụng
@@ -134,27 +135,27 @@ public class ListUserController extends HttpServlet {
 			/*
 			 * xây dựng htmlGroupId
 			 */
-			ArrayList<String> groupHTMLs = new ArrayList<>();
-			for (TblMstGroupEntity group : new MstGroupLogicImpl().getAllMstGroup()) {
-				// tạo html
-				StringBuilder groupHTML = new StringBuilder("");
-				groupHTML.append("<option value='");
-				groupHTML.append(group.getGroupId() + "'");
-				// thêm điều kiện selected vào đây
-				if (group.getGroupId() == groupId) {
-					groupHTML.append(" selected");
-				}
-				// thêm đoạn html còn lại
-				groupHTML.append(">");
-				groupHTML.append(group.getGroupName());
-				groupHTML.append("</option>");
-
-				// thêm vào list
-				groupHTMLs.add(groupHTML.toString());
-			}
-			request.setAttribute("groupHTML", groupHTMLs); // gửi
-															// combobox[groupId]
-			// chuyển các symbol về chính xác
+			// tạo danh sách group mặc định
+			TblMstGroupEntity totalGroup = new TblMstGroupEntity();
+			totalGroup.setGroupId(0);
+			totalGroup.setGroupName("全て");
+			ArrayList<TblMstGroupEntity> optionGroup = new ArrayList<>();
+			optionGroup.add(totalGroup);
+			optionGroup.addAll(new MstGroupLogicImpl().getAllMstGroup());
+			// lấy tại groupId A
+			TblMstGroupEntity selectedGroup = optionGroup.get(groupId);
+			// xóa tại 0
+			optionGroup.remove(0);
+			// thêm A tại 0
+			optionGroup.add(0, selectedGroup);
+			// xóa tại groupId
+			optionGroup.remove((int) groupId);
+			// thêm totalGroup tại groupId
+			optionGroup.add(groupId, totalGroup);
+			request.setAttribute("adm002groupid", optionGroup);
+			/*
+			 * chuyển các symbol về chính xác
+			 */
 			for (int i = 0; i < amountSortType; i++) {
 				if (ConstantUtil.CAC_LOAI_SAP_XEP[i].equals(sortType)) {
 					defaultSortSymbolOrders[i] = sortSymbol;
@@ -177,28 +178,10 @@ public class ListUserController extends HttpServlet {
 			 * build htmlPaging
 			 */
 			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
-			ArrayList<String> pagingHTMLs = new ArrayList<>();
-			ArrayList<Integer> listPageNum = CommonUtil.getListPaging(totalUser, userLimit, currentPage);
-			if (0 != listPageNum.size()) {
-				// thêm paging <<
-				if (1 != listPageNum.get(0)) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
-							+ ConstantUtil.ADM002_PAGE_BACK + "'><<</a> " + "&nbsp;");
-				}
-				// thêm paging N
-				for (Integer pageNums : listPageNum) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page=" + pageNums
-							+ "'>" + pageNums + "</a>" + " &nbsp;");
-				}
-				// thêm paging >>
-				int lastPageNum = listPageNum.get(listPageNum.size() - 1);
-				if (lastPageNum * userLimit < totalUser) {
-					pagingHTMLs.add("<a href='ListUser.do?type=" + ConstantUtil.ADM002_PAGING + "&page="
-							+ ConstantUtil.ADM002_PAGE_NEXT + "'>>></a> " + "&nbsp;");
-				}
-			}
-			request.setAttribute("adm002paging", pagingHTMLs); // gửi htmlPaging
-
+			request.setAttribute("adm002paging", CommonUtil.getListPaging(totalUser, userLimit, currentPage));
+			request.setAttribute("totalPage", CommonUtil.getTotalPage(totalUser, userLimit));
+			request.setAttribute("limitPage", ConfigProperties.getValue("Paging_Limit"));
+			
 			// request đến ADM002
 			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
 		} catch (Exception e) {
@@ -207,14 +190,4 @@ public class ListUserController extends HttpServlet {
 			response.sendRedirect("jsp/System_Error.jsp");
 		}
 	}
-
-	// /**
-	// * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	// * response)
-	// */
-	// protected void doPost(HttpServletRequest request, HttpServletResponse
-	// response)
-	// throws ServletException, IOException {
-	// doGet(request, response);
-	// }
 }

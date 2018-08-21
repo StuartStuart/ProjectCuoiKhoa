@@ -3,7 +3,7 @@
 <%@page import="properties.ConfigProperties"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,15 +13,14 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 	function addNewUser() {
-		window.location="${pageContext.request.contextPath}/jsp/ADM003.jsp";
+		window.location = "${pageContext.request.contextPath}/jsp/ADM003.jsp";
 	}
 </script>
 </head>
 <body>
 	<%@ include file="header.jsp"%>
 	<!-- Begin vung dieu kien tim kiem -->
-	<form
-		action="${pageContext.request.contextPath}/ListUser.do"
+	<form action="${pageContext.request.contextPath}/ListUser.do"
 		method="get" name="mainform">
 		<table class="tbl_input" border="0" width="90%" cellpadding="0"
 			cellspacing="0">
@@ -47,13 +46,14 @@
 							<td class="lbl_left">グループ:</td>
 							<td align="left" width="80px"><select
 								name=<%=ConfigProperties.getValue("ADM002_GroupId")%>>
-									<option value="0">全て</option>
-									<c:forEach items="${groupHTML}" var="groupHTML">
-										${groupHTML}
+									<c:forEach items="${adm002groupid }" var="group">
+										<option value="${group.groupId }">${group.groupName }
+										</option>
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
-								<input class="btn" type="button" value="新規追加" onclick="addNewUser()"/></td>
+								<input class="btn" type="button" value="新規追加"
+								onclick="addNewUser()" /></td>
 						</tr>
 					</table>
 				</td>
@@ -69,7 +69,7 @@
 			<th align="center" width="20px">ID</th>
 			<th align="left">氏名 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_SORT_TYPE_URL[0]
-					+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
 					<%=request.getAttribute("symbolFullName")%></a>
 			</th>
 			<th align="left">生年月日</th>
@@ -83,7 +83,7 @@
 			</th>
 			<th align="left">失効日 <a
 				href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + ConstantUtil.ADM002_SORT_TYPE_URL[2]
-					+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
 					<%=request.getAttribute("symbolEndDate")%></a>
 			</th>
 			<th align="left">点数</th>
@@ -107,10 +107,19 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td class="lbl_paging"><c:forEach items="${adm002paging}"
+			<%-- <td class="lbl_paging"><c:forEach items="${adm002paging}"
 					var="adm002paging">
 				${adm002paging}
-			</c:forEach></td>
+			</c:forEach></td> --%>
+			<c:forEach items="${adm002paging}" var="page">
+				<c:if test="${adm002paging[0] > limitPage}">
+					<a href="ListUser.do?type=paging&page=pageback"><<</a>&nbsp;
+			</c:if>
+				<a href="ListUser.do?type=paging&page=${page }">${page}</a>&nbsp;
+			<c:if test="${adm002paging[0]*limitPage < totalPage}">
+					<a href="ListUser.do?type=paging&page=pagenext">>></a>&nbsp;
+			</c:if>
+			</c:forEach>
 		</tr>
 	</table>
 	<!-- End vung paging -->
