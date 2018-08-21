@@ -134,22 +134,9 @@ public class ListUserController extends HttpServlet {
 			ArrayList<TblMstGroupEntity> optionGroup = new ArrayList<>();
 			// thêm các group còn lại
 			optionGroup.addAll(new MstGroupLogicImpl().getAllMstGroup());
-			// tạo group total
-			TblMstGroupEntity totalGroup = new TblMstGroupEntity();
-			totalGroup.setGroupId(0);
-			totalGroup.setGroupName("全て");
-			// điều chỉnh vị trí các phần tử
-			TblMstGroupEntity selectedGroup;
-			if (groupId != 0) {
-				selectedGroup = optionGroup.remove((int) groupId - 1);
-				optionGroup.add(totalGroup);
-			} else {
-				// thêm total vào vị trí đâu tiên
-				selectedGroup = totalGroup;
-			}
-			optionGroup.add(0, selectedGroup);
 			// gửi session
 			request.setAttribute("adm002groupid", optionGroup);
+
 			/*
 			 * chuyển các symbol về chính xác
 			 */
@@ -186,5 +173,9 @@ public class ListUserController extends HttpServlet {
 			// chuyển đến màn hình Error
 			response.sendRedirect("jsp/System_Error.jsp");
 		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println((1==1)?"OK":"");
 	}
 }

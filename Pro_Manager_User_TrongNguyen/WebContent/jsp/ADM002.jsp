@@ -46,9 +46,11 @@
 						<tr>
 							<td class="lbl_left">グループ:</td>
 							<td align="left" width="80px"><select name="adm002groupid">
+									<option value="0">全て</option>
 									<c:forEach items="${adm002groupid }" var="group">
-										<option value="${group.groupId }">${fn:escapeXml(group.groupName) }
-										</option>
+										<option value="${group.groupId}"
+											selected="${group.groupId == ADM002_GroupId? 'selected' : '' }">
+											${fn:escapeXml(group.groupName) }</option>
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
@@ -69,9 +71,8 @@
 				<tr class="tr2">
 					<th align="center" width="20px">ID</th>
 					<th align="left">氏名 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ BaseDaoImpl.WHITE_LIST[0] + "&sort="
-							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
+						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[0]
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
 							<%=request.getAttribute("symbolFullName")%></a>
 					</th>
 					<th align="left">生年月日</th>
@@ -79,15 +80,13 @@
 					<th align="left">メールアドレス</th>
 					<th align="left" width="70px">電話番号</th>
 					<th align="left">日本語能力 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ BaseDaoImpl.WHITE_LIST[1] + "&sort="
-							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolCodeLevel"))%>>
+						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[1]
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolCodeLevel"))%>>
 							<%=request.getAttribute("symbolCodeLevel")%></a>
 					</th>
 					<th align="left">失効日 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority="
-							+ BaseDaoImpl.WHITE_LIST[2] + "&sort="
-							+ CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
+						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[2]
+							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
 							<%=request.getAttribute("symbolEndDate")%></a>
 					</th>
 					<th align="left">点数</th>

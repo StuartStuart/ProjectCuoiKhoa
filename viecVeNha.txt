@@ -2,4 +2,3 @@ ADM002:
 	- Bỏ convertSymbol() -> gt;
 Check:
 	- sửa filter load lại màn hình ADM001
-	- đổi selected từ controller sang view
