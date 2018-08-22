@@ -48,7 +48,7 @@
 							<td align="left" width="80px"><select name="adm002groupid">
 									<c:forEach items="${adm002groupid }" var="group">
 										<option value="${group.groupId}"
-											selected="${(adm002cbbgroupid == group.groupId)?'selected':'' }">
+											${(adm002cbbgroupid == group.groupId)?'selected="selected"':'' }>
 											${fn:escapeXml(group.groupName) } </option>
 									</c:forEach>
 							</select></td>
