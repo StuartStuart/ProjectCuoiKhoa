@@ -2,3 +2,6 @@ ADM002:
 	- Bỏ convertSymbol() -> gt;
 Check:
 	- sửa filter load lại màn hình ADM001
+
++ đang ở page nào thì disable page đó
++ nếu chỉ có 1 page thì ko hiển thị 1

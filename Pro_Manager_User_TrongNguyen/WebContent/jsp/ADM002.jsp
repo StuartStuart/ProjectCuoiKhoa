@@ -49,7 +49,7 @@
 									<c:forEach items="${adm002groupid }" var="group">
 										<option value="${group.groupId}"
 											${(adm002cbbgroupid == group.groupId)?'selected="selected"':'' }>
-											${fn:escapeXml(group.groupName) } </option>
+											${fn:escapeXml(group.groupName) }</option>
 									</c:forEach>
 							</select></td>
 							<td align="left"><input class="btn" type="submit" value="検索" />
@@ -70,23 +70,26 @@
 				<tr class="tr2">
 					<th align="center" width="20px">ID</th>
 					<th align="left">氏名 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[0]
-							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolFullName"))%>>
-							<%=request.getAttribute("symbolFullName")%></a>
+						href="ListUser.do?type=sort&priority=tbl_user.full_name&sort=${wayFullName}">
+							<c:if test="${wayFullName eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
+								test="${wayFullName eq 'DESC'}">&Delta;&#9660;</c:if>
+					</a>
 					</th>
 					<th align="left">生年月日</th>
 					<th align="left">グループ</th>
 					<th align="left">メールアドレス</th>
 					<th align="left" width="70px">電話番号</th>
 					<th align="left">日本語能力 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[1]
-							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolCodeLevel"))%>>
-							<%=request.getAttribute("symbolCodeLevel")%></a>
+						href="ListUser.do?type=sort&priority=mst_japan.code_level&sort=${wayCodeLevel}">
+							<c:if test="${wayCodeLevel eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
+								test="${wayCodeLevel eq 'DESC'}">&Delta;&#9660;</c:if>
+					</a>
 					</th>
 					<th align="left">失効日 <a
-						href=<%="ListUser.do?type=" + ConstantUtil.ADM002_SORT + "&priority=" + BaseDaoImpl.WHITE_LIST[2]
-							+ "&sort=" + CommonUtil.convertSymbol((String) request.getAttribute("symbolEndDate"))%>>
-							<%=request.getAttribute("symbolEndDate")%></a>
+						href="ListUser.do?type=sort&priority=tbl_detail_user_japan.end_date&sort=${wayEndDate}">
+							<c:if test="${wayEndDate eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
+								test="${wayEndDate eq 'DESC'}">&Delta;&#9660;</c:if>
+					</a>
 					</th>
 					<th align="left">点数</th>
 				</tr>
@@ -116,13 +119,21 @@
 	<!-- Begin vung paging -->
 	<table>
 		<tr>
-			<td><c:if test="${adm002paging[0] > limitPage}">
-					<a href="ListUser.do?type=paging&page=pageback"><<</a>&nbsp;
-			</c:if> <c:forEach items="${adm002paging}" var="page">
-					<a href="ListUser.do?type=paging&page=${page }">${page}</a>&nbsp;
-			</c:forEach> <c:if test="${adm002paging[0]*limitPage < totalPage}">
-					<a href="ListUser.do?type=paging&page=pagenext">>></a>&nbsp;
-			</c:if></td>
+			<td><c:if test="${totalPage > 1}">
+					<c:if test="${adm002paging[0] > limitPage}">
+						<a href="ListUser.do?type=paging&page=pageback">&lt;&lt;</a>|
+					</c:if>
+
+					<c:forEach items="${adm002paging}" var="page">
+						<a href="ListUser.do?type=paging&page=${page }"
+							${(adm002currentpage eq page)?'disabled="disable" style="text-decoration: none";':'' }>${page}</a>
+						<c:if test="${page != totalPage}">|</c:if>
+					</c:forEach>
+
+					<c:if test="${adm002paging[0]*limitPage < totalPage}">
+						<a href="ListUser.do?type=paging&page=pagenext">&gt;&gt;</a>
+					</c:if>
+				</c:if></td>
 		</tr>
 	</table>
 	<!-- End vung paging -->

@@ -23,6 +23,18 @@ import validates.LoginValidate;
 @SuppressWarnings("serial")
 @WebServlet(description = "LoginController", urlPatterns = { "/Login" })
 public class LoginController extends HttpServlet {
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.
+	 * HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doPost(req, resp);
+	}
+
 	/**
 	 * di toi ADM002 hoac o lai ADM001 kem thong bao
 	 * 
@@ -36,23 +48,27 @@ public class LoginController extends HttpServlet {
 			String loginId = new String(request.getParameter("adm001loginid"));
 			String password = new String(request.getParameter("adm001password"));
 
-			// nhận thông báo tương ứng với textbox [login] và [password] đã nhập
+			// nhận thông báo tương ứng với textbox [login] và [password] đã
+			// nhập
 			ArrayList<String> listMessage = new LoginValidate().getListMessage(loginId, password);
 			if (0 == listMessage.size()) { // login thành công
 				HttpSession session = request.getSession(true); // tạo session
-				session.setAttribute("isLogin", true); // đánh dấu đăng nhập vào session
+				session.setAttribute("isLogin", true); // đánh dấu đăng nhập vào
+														// session
 				response.sendRedirect("ListUser.do?type=" + ConstantUtil.ADM002_SEARCH);
-//				request.getRequestDispatcher("ListUser.do").forward(request, response); // sẽ chuyển đến ADM001
+				// request.getRequestDispatcher("ListUser.do").forward(request,
+				// response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
-				request.setAttribute("adm001message", listMessage); // gửi message đến ADM001
-				request.setAttribute("adm001loginid", loginId); // gửi loginId đến ADM001
-				request.setAttribute("adm001password", password); // gửi pass đến ADM001
-				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response); // chuyển đến trang tương ứng
+				request.setAttribute("adm001message", listMessage); 
+				request.setAttribute("adm001loginid", loginId); 
+																
+				request.setAttribute("adm001password", password); 
+				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response); 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
-			response.sendRedirect("jsp/System_Error.jsp"); // sẽ chuyển đến system_error
+			response.sendRedirect("jsp/System_Error.jsp");
 		}
 
 	}

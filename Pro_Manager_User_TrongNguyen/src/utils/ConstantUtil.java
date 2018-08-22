@@ -45,6 +45,10 @@ public class ConstantUtil {
 	 * các kiểu sắp xếp
 	 */
 	public static final String ADM002_SORT_TYPE_URL[] = { "fullname", "codelevel", "enddate" };
+	/* 
+	 * danh sách sắp xếp default
+	 */
+	public static final String DEFAULT_WAYS[] = { "ASC", "ASC", "DESC" };
 	/*
 	 * kiểu sắp xếp mặc đinh theo thứ tự ưu tiên
 	 */

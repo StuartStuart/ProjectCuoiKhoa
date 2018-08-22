@@ -30,19 +30,17 @@ public class ListUserController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		try {
 			request.setCharacterEncoding("UTF-8");
 			// Khởi tạo các biến sẽ sử dụng
 			String fullName;
 			Integer groupId;
 			String sortType;
-			String sortSymbol;
+			String sortWay;
 			Integer currentPage;
-			String defaultSortSymbolOrders[] = { ConfigProperties.getValue("ADM002_ASCSymbol"),
-					ConfigProperties.getValue("ADM002_ASCSymbol"), ConfigProperties.getValue("ADM002_DESCSymbol") };
 			int userLimit = CommonUtil.getLimit();
-			int amountSortType = defaultSortSymbolOrders.length;
+			int amountSortType = ConstantUtil.DEFAULT_WAYS.length;
+			String[] displaySX = { "ASC", "ASC", "DESC" };
 			/*
 			 * Các loại vào ADM002
 			 */
@@ -64,8 +62,8 @@ public class ListUserController extends HttpServlet {
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 
 				// đổi lại sortSymbol
-				sortSymbol = ConfigProperties.getValue("ADM002_ASCSymbol");
-				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
+				sortWay = ConstantUtil.DEFAULT_WAYS[0];
+				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
 
 				// đổi lại currentPage
 				currentPage = 1;
@@ -78,7 +76,7 @@ public class ListUserController extends HttpServlet {
 				// get old status sortType
 				sortType = (String) request.getSession().getAttribute(ConfigProperties.getValue("ADM002_SortType"));
 				// get old status sortWay
-				sortSymbol = (String) request.getSession().getAttribute(ConfigProperties.getValue("ADM002_SortSymbol"));
+				sortWay = (String) request.getSession().getAttribute(ConfigProperties.getValue("ADM002_SortSymbol"));
 				// get old status pageNum
 				currentPage = (Integer) request.getSession()
 						.getAttribute(ConfigProperties.getValue("ADM002_CurrentPage"));
@@ -109,13 +107,13 @@ public class ListUserController extends HttpServlet {
 					break;
 				case ConstantUtil.ADM002_SORT:
 					// xác định kiểu sortSymbol
-					if (ConstantUtil.ADM002_SX_TANG.equals(request.getParameter("sort"))) {
-						sortSymbol = ConfigProperties.getValue("ADM002_DESCSymbol");
+					if ("ASC".equals(sortWay)) {
+						sortWay = "DESC";
 					} else {
-						sortSymbol = ConfigProperties.getValue("ADM002_ASCSymbol");
+						sortWay = "ASC";
 					}
 					// lưu session
-					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortSymbol);
+					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
 
 					// xác định priorityType
 					sortType = request.getParameter("priority");
@@ -132,7 +130,7 @@ public class ListUserController extends HttpServlet {
 			 */
 			// tạo danh sách group mặc định
 			ArrayList<TblMstGroupEntity> optionGroup = new ArrayList<>();
-			TblMstGroupEntity totalGroup=new TblMstGroupEntity();
+			TblMstGroupEntity totalGroup = new TblMstGroupEntity();
 			totalGroup.setGroupId(0);
 			totalGroup.setGroupName("全て");
 			// thêm các group còn lại
@@ -146,22 +144,20 @@ public class ListUserController extends HttpServlet {
 			 */
 			for (int i = 0; i < amountSortType; i++) {
 				if (BaseDaoImpl.WHITE_LIST[i].equals(sortType)) {
-					defaultSortSymbolOrders[i] = sortSymbol;
+					displaySX[i] = sortWay;
 					break;
 				}
 			}
 			// gửi symbols
-			request.setAttribute("symbolFullName", defaultSortSymbolOrders[0]);
-			request.setAttribute("symbolCodeLevel", defaultSortSymbolOrders[1]);
-			request.setAttribute("symbolEndDate", defaultSortSymbolOrders[2]);
+			request.setAttribute("wayFullName", displaySX[0]);
+			request.setAttribute("wayCodeLevel", displaySX[1]);
+			request.setAttribute("wayEndDate", displaySX[2]);
 
 			// used for send userInfors List and build paging
 			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
-							sortType, CommonUtil.convertSymbol(defaultSortSymbolOrders[0]),
-							CommonUtil.convertSymbol(defaultSortSymbolOrders[1]),
-							CommonUtil.convertSymbol(defaultSortSymbolOrders[2])));
+							sortType, displaySX[0], displaySX[1], displaySX[2]));
 			/*
 			 * build paging
 			 */
