@@ -101,20 +101,25 @@ public class ListUserController extends HttpServlet {
 						break;
 					default:
 						// xác định currentPage
-						currentPage = Integer.parseInt(page);
+						currentPage = CommonUtil.convertStrToInt(page);
+						currentPage = (currentPage < 1) ? 1 : currentPage;
 						request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 						break;
 					}
 					break;
 				case ConstantUtil.ADM002_SORT:
-					// xác định kiểu sortSymbol
-
-					if (sortWay.equals("ASC")) {
+					// xác định priorityType
+					sortType = request.getParameter("priority");
+					// lưu session
+					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
+					// get old status sortWay
+					sortWay = (String) request.getParameter("sort");
+					if ("ASC".equals(sortWay)) {
 						sortWay = "DESC";
-					} else if (sortWay.equals("DESC")) {
+					} else if ("DESC".equals(sortWay)) {
 						sortWay = "ASC";
 					} else {
-						if (request.getAttribute("priority").equals(BaseDaoImpl.WHITE_LIST[2])) {
+						if (BaseDaoImpl.WHITE_LIST[2].equals(sortType)) {
 							sortWay = "DESC";
 						} else {
 							sortWay = "ASC";
@@ -122,11 +127,6 @@ public class ListUserController extends HttpServlet {
 					}
 					// lưu session
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
-
-					// xác định priorityType
-					sortType = request.getParameter("priority");
-					// lưu session
-					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 					break;
 				default:
 					break;
@@ -150,22 +150,26 @@ public class ListUserController extends HttpServlet {
 			/*
 			 * chuyển các symbol về chính xác
 			 */
-			for (int i = 0; i < amountSortType; i++) {
-				if (BaseDaoImpl.WHITE_LIST[i].equals(sortType)) {
-					displaySX[i] = sortWay;
+			int index = 0;
+			while (index < amountSortType) {
+				if (BaseDaoImpl.WHITE_LIST[index].equals(sortType)) {
+					displaySX[index] = sortWay;
 					break;
 				}
+				index++;
 			}
 			// gửi symbols
-			request.setAttribute("wayFullName", displaySX[0]);
-			request.setAttribute("wayCodeLevel", displaySX[1]);
-			request.setAttribute("wayEndDate", displaySX[2]);
+			index = 0;
+			request.setAttribute("wayFullName", displaySX[index++]);
+			request.setAttribute("wayCodeLevel", displaySX[index++]);
+			request.setAttribute("wayEndDate", displaySX[index++]);
 
 			// used for send userInfors List and build paging
+			index = 0;
 			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
-							sortType, displaySX[0], displaySX[1], displaySX[2]));
+							sortType, displaySX[index++], displaySX[index++], displaySX[index++]));
 			/*
 			 * build paging
 			 */

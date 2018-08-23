@@ -71,8 +71,8 @@
 					<th align="center" width="20px">ID</th>
 					<th align="left">氏名 <a
 						href="ListUser.do?type=sort&priority=tbl_user.full_name&sort=${wayFullName}">
-							<c:if test="${wayFullName eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
-								test="${wayFullName eq 'DESC'}">&Delta;&#9660;</c:if>
+							<c:if test="${wayFullName eq 'ASC'}">&#9650;&nabla;</c:if> 
+							<c:if test="${wayFullName eq 'DESC'}">&Delta;&#9660;</c:if>
 					</a>
 					</th>
 					<th align="left">生年月日</th>
