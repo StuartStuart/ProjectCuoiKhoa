@@ -15,9 +15,9 @@
 					<td width="80%"><img src="${pageContext.request.contextPath}/images/logo-manager-user.gif"
 						alt="Luvina" />
 					<td>
-					<td align="left"><a href="${pageContext.request.contextPath}/Logout">ログアウト</a> 
+					<td align="left"><a href="${pageContext.request.contextPath}/logout.do">ログアウト</a> 
 					&nbsp; 
-					<a href="${pageContext.request.contextPath}/ListUser.do?type=<%=ConstantUtil.ADM002_SEARCH %> ">トップ</a>
+					<a href="${pageContext.request.contextPath}/ListUser.do">トップ</a>
 					<td>
 				</tr>
 			</table>

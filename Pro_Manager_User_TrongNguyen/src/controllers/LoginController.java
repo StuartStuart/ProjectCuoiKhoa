@@ -21,7 +21,7 @@ import validates.LoginValidate;
  * Servlet implementation class LoginController
  */
 @SuppressWarnings("serial")
-@WebServlet(description = "LoginController", urlPatterns = { "/Login" })
+@WebServlet(description = "LoginController", urlPatterns = { "/login.do" })
 public class LoginController extends HttpServlet {
 
 	/*
@@ -48,22 +48,19 @@ public class LoginController extends HttpServlet {
 			String loginId = new String(request.getParameter("adm001loginid"));
 			String password = new String(request.getParameter("adm001password"));
 
-			// nhận thông báo tương ứng với textbox [login] và [password] đã
-			// nhập
+			// nhận thông báo tương ứng với textbox [login] và [password] đã nhập
 			ArrayList<String> listMessage = new LoginValidate().getListMessage(loginId, password);
 			if (0 == listMessage.size()) { // login thành công
-				HttpSession session = request.getSession(true); // tạo session
-				session.setAttribute("isLogin", true); // đánh dấu đăng nhập vào
-														// session
-				response.sendRedirect("ListUser.do?type=" + ConstantUtil.ADM002_SEARCH);
+				request.getSession().setAttribute("isLogin", true); // đánh dấu đăng nhập vào
+				// session
+				response.sendRedirect("ListUser.do");
 				// request.getRequestDispatcher("ListUser.do").forward(request,
 				// response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
-				request.setAttribute("adm001message", listMessage); 
-				request.setAttribute("adm001loginid", loginId); 
-																
-				request.setAttribute("adm001password", password); 
-				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response); 
+				request.setAttribute("adm001message", listMessage);
+				request.setAttribute("adm001loginid", loginId);
+				request.setAttribute("adm001password", password);
+				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -11,7 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/Login" method="post">
+	<form action="${pageContext.request.contextPath}/login.do" method="post">
 		<center>
 			<table class="tbl_input" cellpadding="4" cellspacing="0"
 				width="400px">

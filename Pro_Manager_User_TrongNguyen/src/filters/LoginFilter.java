@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-// @WebFilter("/*")
-@WebFilter(description = "LoginFilter", urlPatterns = { "*.do", "*.jsp" })
+@WebFilter(description = "LoginFilter", urlPatterns = { "*.do" })
 public class LoginFilter implements Filter {
 	/**
 	 * Kiểm tra session có tồn tại hay ko Nếu ko thì trở về ADM001
@@ -27,23 +26,33 @@ public class LoginFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		System.out.println(req.getContextPath());
+		String webURI = req.getRequestURI();
 
+		System.out.println(req.getRequestURI());
 		// điều kiện URL trỏ đến ADM001
-		boolean dkADM001 = ((req.getContextPath() + "/").equalsIgnoreCase(req.getRequestURI())
-				|| (req.getContextPath() + "/jsp/ADM001.jsp").equalsIgnoreCase(req.getRequestURI()));
-
-		if (null == req.getSession().getAttribute("isLogin") && dkADM001) {
-			// chưa login và ở ADM001
-			chain.doFilter(request, response);
-		} else if (null == req.getSession().getAttribute("isLogin")) {
-			// chưa login nhưng ko ở ADM001
-			res.sendRedirect(req.getContextPath() + "/jsp/ADM001.jsp");
-		} else if (null != req.getSession().getAttribute("isLogin") && dkADM001) {
-			// đã login và ở ADM001
+		boolean inLogin = (req.getContextPath() + "/login.do").equalsIgnoreCase(webURI)
+				|| (req.getContextPath() + "/").equalsIgnoreCase(webURI);
+		boolean isLogin = null != req.getSession().getAttribute("isLogin");
+		if (inLogin && !isLogin) {
+			// đường dẫn là login
+			if (null == req.getSession(false)) {
+				// chưa vào lần nào
+				req.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response);
+			} else if (null == request.getParameter("adm001loginid")) {
+				// đã vào và cố tình vào lại
+				req.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response);
+			} else {
+				// click button
+				chain.doFilter(request, response);
+			}
+		} else if (isLogin && inLogin) {
+			// đã login nhưng vào ADM001
 			res.sendRedirect(req.getContextPath() + "/ListUser.do");
+		} else if (!isLogin && !inLogin) {
+			// ko ở ADM001 và chưa login
+			res.sendRedirect(req.getContextPath() + "/login.do");
 		} else {
-			// đã login vào ko ở ADM001
+			// ko ở ADM001 và đã login
 			chain.doFilter(request, response);
 		}
 	}

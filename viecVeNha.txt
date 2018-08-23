@@ -1,7 +1,13 @@
-ADM002:
-	- Bỏ convertSymbol() -> gt;
 Check:
-	- sửa filter load lại màn hình ADM001
-
-+ đang ở page nào thì disable page đó
-+ nếu chỉ có 1 page thì ko hiển thị 1
+- Lỗi cấu hình:
++ Login phải là login
+- Lỗi Filter | LoginController:
+	+ Đường dẫn [contextPath/Login]
+	enter => Đường dẫn [contextPath/jsp/ADM001.jsp] (đúng là [contextPath/login])
+- Lỗi Filter:
+	+ Đường dẫn [contextPath/[linh tinh]]
+	+ enter => 404 error (đúng là trở về trang báo lỗi)
+- Filter:
+	+ Đường dẫn [contextPath]
+	+ enter
+	+ enter => lỗi. Nguyên nhân là do đã tạo session lần 1 nhưng

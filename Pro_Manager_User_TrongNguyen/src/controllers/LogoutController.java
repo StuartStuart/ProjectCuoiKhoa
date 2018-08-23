@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
  * 
  * Điều khiển logout tài khoản Servlet implementation class LogoutController
  */
-@WebServlet(description = "LogoutController", urlPatterns = { "/Logout" })
+@WebServlet(description = "LogoutController", urlPatterns = { "/logout.do" })
 public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -26,6 +26,7 @@ public class LogoutController extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.removeAttribute("isLogin");
 		session.invalidate(); // xóa session
-		response.sendRedirect("jsp/ADM001.jsp"); // chuyển đến ADM001
+		System.out.println(request.getSession(false));
+		response.sendRedirect(request.getContextPath() + "/login.do");
 	}
 }
