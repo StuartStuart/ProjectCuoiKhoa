@@ -48,7 +48,7 @@ public class DatabaseProperties {
 	 * @return value tÆ°Æ¡ng á»©ng vá»›i key
 	 * @throws IOException
 	 */
-	public static String getValue(String key) throws Exception {
+	public static String getValue(String key) throws IOException {
 		return keyValuePartners.get(key);
 	}
 }

@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<td align="center" colspan="2">
-				<font color = "red">Hiện thị câu thông báo lỗi ở đây.</font>
+				<font color = "red">{systemerrormessage}</font>
 			</td>
 		</tr>
 		<tr>

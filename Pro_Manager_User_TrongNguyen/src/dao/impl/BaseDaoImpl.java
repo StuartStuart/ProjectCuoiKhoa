@@ -62,8 +62,8 @@ public class BaseDaoImpl implements BaseDao {
 					ResultSet rsFields = conn.getMetaData().getColumns(null, nameDB, nameTable, null);
 					while (rsFields.next()) {
 						/*
-						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì thêm vào
-						 * listTableFieldName
+						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì
+						 * thêm vào listTableFieldName
 						 */
 						String nameField = rsFields.getString("COLUMN_NAME");
 
@@ -71,7 +71,8 @@ public class BaseDaoImpl implements BaseDao {
 							listDBFieldName.add(nameTable + "." + nameField);
 						} else {
 							/*
-							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì thêm vào listTableFieldName
+							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì
+							 * thêm vào listTableFieldName
 							 */
 							for (final String oldColName : listDBFieldName) {
 								// không tồn tại trong listDBFieldName
@@ -98,36 +99,25 @@ public class BaseDaoImpl implements BaseDao {
 	 * @throws IOException
 	 */
 	@Override
-	public void openConnection() throws Exception {
-		String className;
-		// nháº­n vá»� className
+	public void openConnection() {
 		try {
+			String className, url, user, pass;
+			// nháº­n vá»� className
 			className = DatabaseProperties.getValue("className");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-
-		// káº¿t ná»‘i Ä‘áº¿n Class
-		try {
+			url = DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname");
+			user = DatabaseProperties.getValue("user");
+			pass = DatabaseProperties.getValue("pass");
+			// káº¿t ná»‘i Ä‘áº¿n Class
 			Class.forName(className);
-		} catch (ClassNotFoundException e) {
+			// má»Ÿ káº¿t ná»‘i Ä‘áº¿n cÆ¡ sá»Ÿ dá»¯ liá»‡u
+			if (conn == null) {
+				// thiáº¿t láº­p káº¿t ná»‘i
+				conn = DriverManager.getConnection(url, user, pass);
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
-			throw e;
 		}
 
-		// má»Ÿ káº¿t ná»‘i Ä‘áº¿n cÆ¡ sá»Ÿ dá»¯ liá»‡u
-		if (conn == null) {
-			try {
-				// thiáº¿t láº­p káº¿t ná»‘i
-				conn = DriverManager.getConnection(
-						DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname"),
-						DatabaseProperties.getValue("user"), DatabaseProperties.getValue("pass"));
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw e;
-			}
-		}
 	}
 
 	/**
@@ -161,20 +151,21 @@ public class BaseDaoImpl implements BaseDao {
 	 */
 	@Override
 	public boolean isExistColName(String nameField) throws Exception {
-//		try {
-//			this.initListDBFieldName();
-//			for (final String nameDBField : listDBFieldName) {
-//				if (nameDBField.matches(".*" + nameField + "$")) {
-//					return true;
-//				}
-//			}
-//			return false;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		}
+		// try {
+		// this.initListDBFieldName();
+		// for (final String nameDBField : listDBFieldName) {
+		// if (nameDBField.matches(".*" + nameField + "$")) {
+		// return true;
+		// }
+		// }
+		// return false;
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// throw e;
+		// }
 		for (String colName : WHITE_LIST) {
 			if (colName.equals(nameField)) {
+				// trong white list
 				return true;
 			}
 		}

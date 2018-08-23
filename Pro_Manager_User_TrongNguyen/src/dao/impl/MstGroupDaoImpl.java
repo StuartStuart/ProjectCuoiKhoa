@@ -36,14 +36,10 @@ public class MstGroupDaoImpl extends BaseDaoImpl implements MstGroupDao {
 
 			// nhận các thông tin từ db
 			while (rs.next()) {
-				int i = 1;
-				int groupId = rs.getInt(i++);
-				String groupName = rs.getString(i++);
-
 				// lưu thông tin vào đối tượng
 				TblMstGroupEntity tblMstGroupEntity = new TblMstGroupEntity();
-				tblMstGroupEntity.setGroupId(groupId);
-				tblMstGroupEntity.setGroupName(groupName);
+				tblMstGroupEntity.setGroupId(rs.getInt("group_id"));
+				tblMstGroupEntity.setGroupName(rs.getString("group_name"));
 
 				listAllMstGroup.add(tblMstGroupEntity);
 			}

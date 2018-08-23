@@ -34,17 +34,17 @@ public class LoginValidate {
 	 * @return thông báo lỗi dẫn đến không đăng nhập được
 	 * @throws Exception
 	 */
-	public ArrayList<String> getListMessage(String userName, String pass) throws Exception {
+	public ArrayList<String> validate(String userName, String pass) throws Exception {
 		ArrayList<String> listMessage = new ArrayList<>();
 
 		try {
-			if (tblUserLogicImpl.isTenNguoiDungRong(userName)) { // username ko được nhập
+			if (userName.isEmpty()) { // username ko được nhập
 				listMessage.add(MessageErrorProperties.getValue("Error001_UserName"));
 			}
-			if (tblUserLogicImpl.isMatKhauRong(pass)) { // username ko được nhập
+			if (pass.isEmpty()) { // username ko được nhập
 				listMessage.add(MessageErrorProperties.getValue("Error001_Password"));
 			}
-			if (0 == listMessage.size() && tblUserLogicImpl.isSaiTaiKhoan(userName, pass)) { // tài khoản không tồn tại
+			if (0 == listMessage.size() && tblUserLogicImpl.checkExist(userName, pass)) { // tài khoản không tồn tại
 				listMessage.add(MessageErrorProperties.getValue("Error016"));
 			}
 		} catch (Exception e) {

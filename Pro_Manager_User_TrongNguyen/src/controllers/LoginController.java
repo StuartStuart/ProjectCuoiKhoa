@@ -12,9 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import utils.ConstantUtil;
+import properties.MessageErrorProperties;
 import validates.LoginValidate;
 
 /**
@@ -32,7 +31,7 @@ public class LoginController extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doPost(req, resp);
+		req.getRequestDispatcher("jsp/ADM001.jsp").forward(req, resp);
 	}
 
 	/**
@@ -49,23 +48,25 @@ public class LoginController extends HttpServlet {
 			String password = new String(request.getParameter("adm001password"));
 
 			// nhận thông báo tương ứng với textbox [login] và [password] đã nhập
-			ArrayList<String> listMessage = new LoginValidate().getListMessage(loginId, password);
+			ArrayList<String> listMessage = new LoginValidate().validate(loginId, password);
 			if (0 == listMessage.size()) { // login thành công
 				request.getSession().setAttribute("isLogin", true); // đánh dấu đăng nhập vào
-				// session
 				response.sendRedirect("ListUser.do");
-				// request.getRequestDispatcher("ListUser.do").forward(request,
-				// response); // sẽ chuyển đến ADM001
 			} else { // login không thành công
 				request.setAttribute("adm001message", listMessage);
 				request.setAttribute("adm001loginid", loginId);
-				request.setAttribute("adm001password", password);
 				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
-			response.sendRedirect("jsp/System_Error.jsp");
+			try {
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
+				request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}

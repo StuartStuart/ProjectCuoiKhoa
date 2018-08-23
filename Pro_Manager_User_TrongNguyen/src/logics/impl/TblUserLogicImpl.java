@@ -31,43 +31,21 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 		tblUserDaoImpl = new TblUserDaoImpl();
 	}
 
-	/**
-	 * kiểm tra username có được nhập hay không
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param userName tên đăng nhập
-	 * @return true (đã được nhập) hoặc false (chưa được nhập)
+	 * @see logics.TblUserLogic#checkExist(java.lang.String, java.lang.String)
 	 */
-	public boolean isTenNguoiDungRong(String userName) {
-		return "".equals(userName);
-	}
-
-	/**
-	 * kiểm tra mật khẩu có rỗng hay không
-	 * 
-	 * @param pass mật khẩu
-	 * @return true (đã được nhập) hoặc false (chưa được nhập)
-	 */
-	public boolean isMatKhauRong(String pass) {
-		return "".equals(pass);
-	}
-
-	/**
-	 * kiểm tra tài khoản có tồn tại trong database hay ko
-	 * 
-	 * @param userName tên đăng nhập
-	 * @param pass     mật khẩu
-	 * @return true (tài khoản không tồn tại) hoặc false (tài khoản tồn tại)
-	 * @throws Exception
-	 */
-	public boolean isSaiTaiKhoan(String userName, String pass) throws Exception {
+	@Override
+	public boolean checkExist(String userName, String pass) throws Exception {
 		try {
 			// mỗi tài khoản có username duy nhất
-			TblUserEntity adminAccount = tblUserDaoImpl.getAdminAccount(userName);
+			TblUserEntity adminAccount = tblUserDaoImpl.getLoginUser(userName);
 			if (null == adminAccount) { // tài khoản không tồn tại
 				return true;
 			} else { // tài khoản tồn tại
 				String encodedPass = CommonUtil.encodeMatKhau(pass, adminAccount.getSalt());
-//				System.out.println(encodedPass);
+				// System.out.println(encodedPass);
 				boolean isTrungMatKhau = adminAccount.getPassword().equals(encodedPass);
 				if (!isTrungMatKhau) { // 2 pass không trung nhau
 					return true;

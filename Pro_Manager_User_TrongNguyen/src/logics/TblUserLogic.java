@@ -16,6 +16,18 @@ import entities.UserInforEntity;
  */
 public interface TblUserLogic {
 	/**
+	 * kiểm tra tài khoản có tồn tại trong database hay ko
+	 * 
+	 * @param userName
+	 *            tên đăng nhập
+	 * @param pass
+	 *            mật khẩu
+	 * @return true (tài khoản không tồn tại) hoặc false (tài khoản tồn tại)
+	 * @throws Exception
+	 */
+	public boolean checkExist(String userName, String pass) throws Exception;
+
+	/**
 	 * nhận về tổng số User có group_id và full_name tương ứng
 	 * 
 	 * @param groupId

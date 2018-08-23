@@ -36,7 +36,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @throws Exception
 	 */
 	@Override
-	public TblUserEntity getAdminAccount(String userName) throws Exception {
+	public TblUserEntity getLoginUser(String userName) throws Exception {
 		try {
 			this.openConnection(); // mở kết nối
 			query = "select * from tbl_user where `login_name` = ?;";

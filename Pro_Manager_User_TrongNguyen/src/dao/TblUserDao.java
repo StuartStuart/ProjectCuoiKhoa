@@ -24,7 +24,7 @@ public interface TblUserDao {
 	 * @return 1 admin account
 	 * @throws Exception
 	 */
-	TblUserEntity getAdminAccount(String userName) throws Exception;
+	TblUserEntity getLoginUser(String userName) throws Exception;
 
 	/**
 	 * nhận về tổng số user trong db theo groupId và fullName

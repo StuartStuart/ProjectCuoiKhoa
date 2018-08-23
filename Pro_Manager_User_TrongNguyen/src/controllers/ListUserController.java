@@ -15,6 +15,7 @@ import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
+import properties.MessageErrorProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 
@@ -53,7 +54,7 @@ public class ListUserController extends HttpServlet {
 
 				// nhận groupId
 				String groupType = request.getParameter("adm002groupid");
-				groupId = Integer.parseInt((null == groupType) ? "0" : groupType);
+				groupId = CommonUtil.convertStrToInt(groupType);
 				// lưu session
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_GroupId"), groupId);
 
@@ -107,10 +108,17 @@ public class ListUserController extends HttpServlet {
 					break;
 				case ConstantUtil.ADM002_SORT:
 					// xác định kiểu sortSymbol
-					if ("ASC".equals(sortWay)) {
+
+					if (sortWay.equals("ASC")) {
 						sortWay = "DESC";
-					} else {
+					} else if (sortWay.equals("DESC")) {
 						sortWay = "ASC";
+					} else {
+						if (request.getAttribute("priority").equals(BaseDaoImpl.WHITE_LIST[2])) {
+							sortWay = "DESC";
+						} else {
+							sortWay = "ASC";
+						}
 					}
 					// lưu session
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
@@ -171,7 +179,13 @@ public class ListUserController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
-			response.sendRedirect("jsp/System_Error.jsp");
+			try {
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
+				request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 }

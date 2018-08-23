@@ -9,23 +9,23 @@ package entities;
  *
  */
 public class MstJapanEntity {
-	private String code_level;
-	private String name_level;
+	private String codeLevel;
+	private String nameLevel;
 
-	public String getCode_level() {
-		return code_level;
+	public String getCodeLevel() {
+		return codeLevel;
 	}
 
-	public void setCode_level(String code_level) {
-		this.code_level = code_level;
+	public void setCodeLevel(String code_level) {
+		this.codeLevel = code_level;
 	}
 
-	public String getName_level() {
-		return name_level;
+	public String getNameLevel() {
+		return nameLevel;
 	}
 
-	public void setName_level(String name_level) {
-		this.name_level = name_level;
+	public void setNameLevel(String name_level) {
+		this.nameLevel = name_level;
 	}
 
 }

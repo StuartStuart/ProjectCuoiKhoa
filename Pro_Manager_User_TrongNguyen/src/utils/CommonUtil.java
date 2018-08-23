@@ -17,6 +17,19 @@ import properties.ConfigProperties;
  *
  */
 public class CommonUtil {
+	/*
+	 * chuyển từ chuỗi sang số
+	 * 
+	 */
+	public static int convertStrToInt(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (NumberFormatException e) {
+			// str không là số
+			return 0;
+		}
+	}
+
 	/**
 	 * mã hóa chuỗi pass + salt sang SHA1
 	 * 
@@ -93,7 +106,7 @@ public class CommonUtil {
 			// thứ tự bắt đầu thêm vào list dựa vào currentPage
 			int offsetNumber = (currentPage - 1) / pageLimit * pageLimit;
 			// thêm vào list
-			while (listPaging.size() < pageLimit && offsetNumber < totalPage) { 
+			while (listPaging.size() < pageLimit && offsetNumber < totalPage) {
 				listPaging.add(++offsetNumber);
 			}
 		} catch (NumberFormatException e) {
