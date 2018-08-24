@@ -1,6 +1,10 @@
 package controllers;
 
 import java.io.IOException;
+import java.time.Year;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.MstJapanLogicImpl;
 import properties.MessageErrorProperties;
+import utils.CommonUtil;
+import utils.ConstantUtil;
 
 /**
  * Servlet implementation class AddUserInputController
@@ -25,9 +31,12 @@ public class AddUserInputController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			// set các thông tin trong combobox lên request
 			setDataLogic(request, response);
-//			setDefaultValue(request,response);
-			request.getRequestDispatcher("/jsp/ADM003.jsp");
+			// xác định type để xử lý getDefaultLogic
+			
+
+			request.getRequestDispatcher("/jsp/ADM003.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
@@ -39,8 +48,6 @@ public class AddUserInputController extends HttpServlet {
 				e1.printStackTrace();
 			}
 		}
-		// setDefaultValue(request, response);
-
 	}
 
 	/**
@@ -52,10 +59,21 @@ public class AddUserInputController extends HttpServlet {
 	 */
 	private void setDataLogic(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
-			// gửi giá trị cho
-			request.setAttribute("adm003groups", new MstGroupLogicImpl().getAllMstGroup());
-			request.setAttribute("adm003japanlevels", new MstJapanLogicImpl().getAllMstJapan());
-			
+			// gửi giá trị listMstGroup
+			request.setAttribute("groups", new MstGroupLogicImpl().getAllMstGroup());
+			// gửi giá trị listMstJapan
+			request.setAttribute("japanlevels", new MstJapanLogicImpl().getAllMstJapan());
+			// thêm thời gian vào các combobox
+			// gửi giá trị listBirthYears
+			request.setAttribute("birthyears", CommonUtil.getListYears(ConstantUtil.ADM003_START_YEAR));
+			// gửi giá trị listStartYears
+			request.setAttribute("startyears", CommonUtil.getListYears(ConstantUtil.ADM003_START_YEAR));
+			// gửi giá trị listEndYears
+			request.setAttribute("endyears", CommonUtil.getListYears(ConstantUtil.ADM003_START_YEAR));
+			// gửi giá trị listMonths
+			request.setAttribute("months", CommonUtil.getListMonths());
+			// gửi giá trị listDays
+			request.setAttribute("dates", CommonUtil.getListMonths());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

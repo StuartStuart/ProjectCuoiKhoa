@@ -2,7 +2,7 @@
  * trở lại màn hình ADM002
  */
 function backADM002() {
-	window.location = "${pageContext.request.contextPath}/ListUser.do?type=back"
+	window.location = "../ListUser.do?type=back";
 }
 
 /*

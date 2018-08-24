@@ -1,13 +1,7 @@
-Check:
-- Lỗi cấu hình:
-+ Login phải là login
-- Lỗi Filter | LoginController:
-	+ Đường dẫn [contextPath/Login]
-	enter => Đường dẫn [contextPath/jsp/ADM001.jsp] (đúng là [contextPath/login])
-- Lỗi Filter:
-	+ Đường dẫn [contextPath/[linh tinh]]
-	+ enter => 404 error (đúng là trở về trang báo lỗi)
-- Filter:
-	+ Đường dẫn [contextPath]
-	+ enter
-	+ enter => lỗi. Nguyên nhân là do đã tạo session lần 1 nhưng
+﻿ADM002: check testcase
+
+ADM003: setDefaultValue -> getDefaultValue: sẽ lưu lên session, kể cả chuỗi Date trong SQL bởi vì có JSTL xử lý chuỗi Date đó
+		-> setDataLogic: set lên Request 7 giá trị: groups, japanlevels, birthyears, startyears, endyears, months (dùng chung), dates(dùng chung)
+		getListYear(startYear, endYear): endYear có phải luôn là năm hiện tại ? nếu phải thì bỏ tham số endYear có được ko?
+		getListMonth();
+		có 28 validate

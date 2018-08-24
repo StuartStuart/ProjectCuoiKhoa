@@ -15,7 +15,7 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 	function addNewUser() {
-		window.location = "${pageContext.request.contextPath}/jsp/ADM003.jsp";
+		window.location = "${pageContext.request.contextPath}/AddUserInput.do";
 	}
 </script>
 </head>

@@ -65,4 +65,8 @@ public class ConstantUtil {
 	 * chỉ định cho >>
 	 */
 	public static final String ADM002_PAGE_NEXT = "pagenext";
+	/*
+	 * giới hạn dưới của năm
+	 */
+	public static final int ADM003_START_YEAR = 1980;
 }

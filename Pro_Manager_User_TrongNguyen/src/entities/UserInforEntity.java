@@ -18,8 +18,38 @@ public class UserInforEntity {
 	private String email;
 	private String tel;
 	private String nameLevel;
+	private MstJapanEntity mstJapan;
+	private String startDate;
 	private String endDate;
 	private int total;
+
+	/**
+	 * @return the mstJapan
+	 */
+	public MstJapanEntity getMstJapan() {
+		return mstJapan;
+	}
+
+	/**
+	 * @param mstJapan the mstJapan to set
+	 */
+	public void setMstJapan(MstJapanEntity mstJapan) {
+		this.mstJapan = mstJapan;
+	}
+
+	/**
+	 * @return the startDate
+	 */
+	public String getStartDate() {
+		return startDate;
+	}
+
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
 
 	public int getUserId() {
 		return userId;

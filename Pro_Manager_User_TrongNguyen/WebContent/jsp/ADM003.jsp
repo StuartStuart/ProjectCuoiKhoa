@@ -16,11 +16,10 @@
 <body>
 	<!-- Begin vung header -->
 	<%@ include file="header.jsp"%>
-
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="ADM004.html" method="post" name="inputform">
+	<form action="#" method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -30,7 +29,7 @@
 			</tr>
 			<tr>
 				<td class="errMsg">
-					<div style="padding-left: 120px">&nbsp;</div>
+					<div style="padding-left: 120px">${adm003errmsg}</div>
 				</td>
 			</tr>
 			<tr>
@@ -49,7 +48,7 @@
 								<td class="lbl_left"><font color="red">*</font> グループ:</td>
 								<td align="left"><select name="group_id">
 										<option value="0">選択してください</option>
-										<c:forEach items="${adm003groups}" var="group">
+										<c:forEach items="${groups}" var="group">
 											<option value="${group.groupId}"
 												${(adm003userinfor.groupId == group.groupId)?'selected="selected"':'' }>
 												${fn:escapeXml(group.groupName) }</option>
@@ -72,20 +71,30 @@
 							</tr>
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 生年月日:</td>
-								<td align="left"><select>
+								<%-- convert userBirthDay sang dạng chung --%>
+								<fmt:parseDate value="${adm003userinfor.birthDay}"
+									pattern="yyyy-MM-dd" var="birthDay" />
+								<td align="left">
+									<%-- convert tham số tạm birthDay sang year --%> <fmt:formatDate
+										value="${birthDay}" pattern="y" var="birthYear" /> <select>
 										<c:forEach items="${birthyears }" var="birthyear">
 											<option value="${birthyear}"
-												${(adm003userinfor.groupId == group.groupId)?'selected="selected"':'' }>${birthyear}</option>
+												${(birthyear==birthYear)?'selected="selected"':'' }>${birthyear}</option>
 										</c:forEach>
-								</select>年 <select>
-										<c:forEach items="${birthmonths }" var="birthmonth">
-											<option value="">${birthmonth}</option>
+								</select>年 <%-- convert tham số tạm birthDay sang month --%> <fmt:formatDate
+										value="${birthDay}" pattern="M" var="birthMonth" /> <select>
+										<c:forEach items="${months }" var="month">
+											<option value="${birthmonth}"
+												${(month==birthMonth)?'selected="selected"':'' }>${month}</option>
 										</c:forEach>
-								</select>月 <select>
-										<c:forEach items="${birthdates }" var="birthdate">
-											<option value="">${birthdate}</option>
+								</select>月 <%-- convert tham số tạm birthDay sang date --%> <fmt:formatDate
+										value="${birthDay}" pattern="d" var="birthDate" /> <select>
+										<c:forEach items="${dates }" var="date">
+											<option value="${date}"
+												${(date==birthDate)?'selected="selected"':'' }>${date}</option>
 										</c:forEach>
-								</select>日</td>
+								</select>日
+								</td>
 							</tr>
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> メールアドレス:</td>
@@ -104,14 +113,14 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> パスワード:</td>
 								<td align="left"><input class="txBox" type="password"
-									name="" value="" size="30"
+									name="pass" value="" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left">パスワード（確認）:</td>
 								<td align="left"><input class="txBox" type="password"
-									name="" value="" size="30"
+									name="repass" value="" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
@@ -124,134 +133,68 @@
 									<td class="lbl_left">資格:</td>
 									<td align="left"><select name="kyu_id">
 											<option value="0">選択してください</option>
-											<c:forEach items="${adm003mstjapans }" var="mstJapan">
-												<option value="">${mstJapan }</option>
+											<c:forEach items="${japanlevels }" var="mstJapan">
+												<option value="${mstJapan.codeLevel}"
+													${(mstJapan.codeLevel==adm003userinfor.mstJapan.codeLevel)?
+												'selected="selected"':'' }>
+
+													${mstJapan.nameLevel}</option>
 											</c:forEach>
 									</select></td>
 								</tr>
 								<tr>
 									<td class="lbl_left">資格交付日:</td>
-									<td align="left"><select>
-											<option value="2000">2000</option>
-											<option value="2001">2001</option>
-											<option value="2002">2002</option>
-											<option value="2003">2003</option>
-											<option value="2004">2004</option>
-											<option value="2005">2005</option>
-											<option value="2006">2006</option>
-											<option value="2007">2007</option>
-											<option value="2008">2008</option>
-											<option value="2009">2009</option>
-											<option value="2010" selected="selected">2010</option>
-											<option value="2011">2011</option>
-									</select>年 <select>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12" selected="selected">12</option>
-									</select>月 <select>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-											<option value="25">25</option>
-											<option value="26">26</option>
-											<option value="27">27</option>
-											<option value="28">28</option>
-											<option value="29">29</option>
-											<option value="30">30</option>
-											<option value="31" selected="selected">31</option>
-									</select>日</td>
+									<%-- convert userStartDate sang dạng chung --%>
+									<fmt:parseDate value="${adm003userinfor.startDate}"
+										pattern="yyyy-MM-dd" var="startDate" />
+									<td align="left">
+										<%-- convert tham số tạm startDate sang year --%> <fmt:formatDate
+											value="${startDate}" pattern="y" var="startYear" /> <select>
+											<c:forEach items="${startyears }" var="startyear">
+												<option value="${startyear}"
+													${(startyear==startYear)?'selected="selected"':'' }>${startyear}</option>
+											</c:forEach>
+									</select>年 <%-- convert tham số tạm startDate sang month --%> <fmt:formatDate
+											value="${startDate}" pattern="M" var="startMonth" /> <select>
+											<c:forEach items="${months }" var="month">
+												<option value="${month}"
+													${(month==startMonth)?'selected="selected"':'' }>${month}</option>
+											</c:forEach>
+									</select>月 <%-- convert tham số tạm startDate sang date --%> <fmt:formatDate
+											value="${startDate}" pattern="d" var="startDay" /> <select>
+											<c:forEach items="${dates }" var="date">
+												<option value="${date}"
+													${(date==startDay)?'selected="selected"':'' }>${date}</option>
+											</c:forEach>
+									</select>日
+									</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">失効日:</td>
-									<td align="left"><select>
-											<option value="2000">2000</option>
-											<option value="2001">2001</option>
-											<option value="2002">2002</option>
-											<option value="2003">2003</option>
-											<option value="2004">2004</option>
-											<option value="2005">2005</option>
-											<option value="2006">2006</option>
-											<option value="2007">2007</option>
-											<option value="2008">2008</option>
-											<option value="2009">2009</option>
-											<option value="2010" selected="selected">2010</option>
-											<option value="2011">2011</option>
-									</select>年 <select>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12" selected="selected">12</option>
-									</select>月 <select>
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-											<option value="25">25</option>
-											<option value="26">26</option>
-											<option value="27">27</option>
-											<option value="28">28</option>
-											<option value="29">29</option>
-											<option value="30">30</option>
-											<option value="31" selected="selected">31</option>
-									</select>日</td>
+									<%-- convert userStartDate sang dạng chung --%>
+									<fmt:parseDate value="${adm003userinfor.endDate}"
+										pattern="yyyy-MM-dd" var="endDate" />
+									<td align="left">
+										<%-- convert tham số tạm endDate sang year --%> <fmt:formatDate
+											value="${endDate}" pattern="y" var="endYear" /> <select>
+											<c:forEach items="${endyears }" var="endyear">
+												<option value="${endyear}"
+													${(endyear==endYear)?'selected="selected"':'' }>${endyear}</option>
+											</c:forEach>
+									</select>年 <%-- convert tham số tạm endDate sang month --%> <fmt:formatDate
+											value="${endDate}" pattern="M" var="endMonth" /> <select>
+											<c:forEach items="${months }" var="month">
+												<option value="${month}"
+													${(month==endMonth)?'selected="selected"':'' }>${month}</option>
+											</c:forEach>
+									</select>月 <%-- convert tham số tạm endDate sang date --%> <fmt:formatDate
+											value="${endDate}" pattern="d" var="endDay" /> <select>
+											<c:forEach items="${dates }" var="date">
+												<option value="${date}"
+													${(date==endDay)?'selected="selected"':'' }>${date}</option>
+											</c:forEach>
+									</select>日
+									</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">点数:</td>
