@@ -85,5 +85,21 @@ public class ConstantUtil {
 	 * giói hạn trên cộng thêm của năm, ví dụ là cho startDate và endDate
 	 */
 	public static final int ADM003_YEAR_ADDITION_VALUE = 1;
+	/*
+	 * giá trị mặc định của group
+	 */
+	public static final int ADM003_DEFAULT_GROUP = 0;
+	/*
+	 * giá trị total mặc định
+	 */
+	public static final int ADM003_DEFAULT_TOTAL = 0;
+	/*
+	 * đường dẫn đến servlet add user confirm
+	 */
+	public static final String ADD_USER_CONFIRM = "/AddUserConfirm.do";
+	/*
+	 * đường dẫn đến jsp ADM003
+	 */
+	public static final String ADM003_JSP = "/jsp/ADM003.jsp";
 	
 }

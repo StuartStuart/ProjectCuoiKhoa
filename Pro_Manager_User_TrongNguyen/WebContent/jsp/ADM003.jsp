@@ -19,7 +19,8 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="#" method="post" name="inputform">
+	<form action="${pageContext.request.contextPath }/AddUserInput.do"
+		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -28,9 +29,11 @@
 				</th>
 			</tr>
 			<tr>
-				<td class="errMsg">
-					<div style="padding-left: 120px">${adm003errmsg}</div>
-				</td>
+				<c:forEach items="${errmsg}" var="msg">
+					<td class="errMsg">
+						<div style="padding-left: 120px">${msg}</div>
+					</td>
+				</c:forEach>
 			</tr>
 			<tr>
 				<td align="left">
@@ -58,15 +61,15 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="name" value="${adm003userinfor.fullName }" size="30"
+									name="full_name" value="${adm003userinfor.fullName }" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left">カタカナ氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="name" value="${adm003userinfor.fullNameKana }" size="30"
-									onfocus="this.style.borderColor='#0066ff';"
+									name="full_name_kana" value="${adm003userinfor.fullNameKana }"
+									size="30" onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
@@ -76,19 +79,22 @@
 									pattern="yyyy-MM-dd" var="birthDay" />
 								<td align="left">
 									<%-- convert tham số tạm birthDay sang year --%> <fmt:formatDate
-										value="${birthDay}" pattern="y" var="birthYear" /> <select>
+										value="${birthDay}" pattern="y" var="birthYear" /> <select
+									name="birth_day">
 										<c:forEach items="${birthyears }" var="birthyear">
 											<option value="${birthyear}"
 												${(birthyear==birthYear)?'selected="selected"':'' }>${birthyear}</option>
 										</c:forEach>
 								</select>年 <%-- convert tham số tạm birthDay sang month --%> <fmt:formatDate
-										value="${birthDay}" pattern="M" var="birthMonth" /> <select>
+										value="${birthDay}" pattern="M" var="birthMonth" /> <select
+									name="birth_day">
 										<c:forEach items="${months }" var="month">
-											<option value="${birthmonth}"
+											<option value="${month}"
 												${(month==birthMonth)?'selected="selected"':'' }>${month}</option>
 										</c:forEach>
 								</select>月 <%-- convert tham số tạm birthDay sang date --%> <fmt:formatDate
-										value="${birthDay}" pattern="d" var="birthDate" /> <select>
+										value="${birthDay}" pattern="d" var="birthDate" /> <select
+									name="birth_day">
 										<c:forEach items="${dates }" var="date">
 											<option value="${date}"
 												${(date==birthDate)?'selected="selected"':'' }>${date}</option>
@@ -149,19 +155,22 @@
 										pattern="yyyy-MM-dd" var="startDate" />
 									<td align="left">
 										<%-- convert tham số tạm startDate sang year --%> <fmt:formatDate
-											value="${startDate}" pattern="y" var="startYear" /> <select>
+											value="${startDate}" pattern="y" var="startYear" /> <select
+										name="start_date">
 											<c:forEach items="${startyears }" var="startyear">
 												<option value="${startyear}"
 													${(startyear==startYear)?'selected="selected"':'' }>${startyear}</option>
 											</c:forEach>
 									</select>年 <%-- convert tham số tạm startDate sang month --%> <fmt:formatDate
-											value="${startDate}" pattern="M" var="startMonth" /> <select>
+											value="${startDate}" pattern="M" var="startMonth" /> <select
+										name="start_date">
 											<c:forEach items="${months }" var="month">
 												<option value="${month}"
 													${(month==startMonth)?'selected="selected"':'' }>${month}</option>
 											</c:forEach>
 									</select>月 <%-- convert tham số tạm startDate sang date --%> <fmt:formatDate
-											value="${startDate}" pattern="d" var="startDay" /> <select>
+											value="${startDate}" pattern="d" var="startDay" /> <select
+										name="start_date">
 											<c:forEach items="${dates }" var="date">
 												<option value="${date}"
 													${(date==startDay)?'selected="selected"':'' }>${date}</option>
@@ -176,19 +185,22 @@
 										pattern="yyyy-MM-dd" var="endDate" />
 									<td align="left">
 										<%-- convert tham số tạm endDate sang year --%> <fmt:formatDate
-											value="${endDate}" pattern="y" var="endYear" /> <select>
+											value="${endDate}" pattern="y" var="endYear" /> <select
+										name="end_date">
 											<c:forEach items="${endyears }" var="endyear">
 												<option value="${endyear}"
 													${(endyear==endYear)?'selected="selected"':'' }>${endyear}</option>
 											</c:forEach>
 									</select>年 <%-- convert tham số tạm endDate sang month --%> <fmt:formatDate
-											value="${endDate}" pattern="M" var="endMonth" /> <select>
+											value="${endDate}" pattern="M" var="endMonth" /> <select
+										name="end_date">
 											<c:forEach items="${months }" var="month">
 												<option value="${month}"
 													${(month==endMonth)?'selected="selected"':'' }>${month}</option>
 											</c:forEach>
 									</select>月 <%-- convert tham số tạm endDate sang date --%> <fmt:formatDate
-											value="${endDate}" pattern="d" var="endDay" /> <select>
+											value="${endDate}" pattern="d" var="endDay" /> <select
+										name="end_date">
 											<c:forEach items="${dates }" var="date">
 												<option value="${date}"
 													${(date==endDay)?'selected="selected"':'' }>${date}</option>
@@ -199,8 +211,9 @@
 								<tr>
 									<td class="lbl_left">点数:</td>
 									<td align="left"><input class="txBox" type="text"
-										name="total" value="${adm003userinfor.total>0?adm003userinfor.total:'' }" size="5"
-										onfocus="this.style.borderColor='#0066ff';"
+										name="total"
+										value="${adm003userinfor.total>0?adm003userinfor.total:'' }"
+										size="5" onfocus="this.style.borderColor='#0066ff';"
 										onblur="this.style.borderColor='#aaaaaa';" /></td>
 								</tr>
 							</tbody>

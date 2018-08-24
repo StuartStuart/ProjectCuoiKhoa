@@ -24,8 +24,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName
-	 *            tên đăng nhập
+	 * @param userName tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -145,8 +144,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 
 			/*
-			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
-			 * thì thực hiện bình thường
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không thì thực hiện
+			 * bình thường
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
@@ -205,14 +204,10 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xác đinh chuỗi điều kiện order by
 	 * 
-	 * @param sortType
-	 *            loại sắp xếp
-	 * @param sortByFullName
-	 *            kiểu sx của tên
-	 * @param sortByCodeLevel
-	 *            kiểu sx của codeLevel
-	 * @param sortByEndDate
-	 *            kiểu sx của endDate
+	 * @param sortType        loại sắp xếp
+	 * @param sortByFullName  kiểu sx của tên
+	 * @param sortByCodeLevel kiểu sx của codeLevel
+	 * @param sortByEndDate   kiểu sx của endDate
 	 * @return chuỗi điều kiện sx
 	 * @throws Exception
 	 */
@@ -332,22 +327,27 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append(" INNER JOIN mst_japan ON tbl_detail_user_japan.code_level = mst_japan.code_level)");
 			query.append(" ON tbl_user.user_id = tbl_detail_user_japan.user_id");
 
-			// thêm điều kiện tìm kiếm
+			// thêm điều kiện tìm kiếm category
 			query.append("\nWHERE category = ");
 			query.append(ConstantUtil.USER_CATEGORY);
-			// cho câu query vào preparedStatement
 
 			// thêm userId vào preparedStatement
+			query.append(" AND tbl_user.user_id = ?;");
+
+			// cho câu query vào preparedStatement
+			ps = conn.prepareStatement(query.toString());
 
 			// thực hiện truy vấn
-			ResultSet rs = ps.executeQuery(query.toString());
+			int i = 0;
+			ps.setInt(++i, userId);
+			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				// tồn tại đối tượng
 
 				// thì tạo đối tượng và set các thuộc tính
 				UserInforEntity userInfor = new UserInforEntity();
 
-				int i = 0;
+				i = 0;
 				userInfor.setLoginName(rs.getString(userInfors[i++]));
 				userInfor.setGroupId(rs.getInt(userInfors[i++]));
 				userInfor.setFullName(rs.getString(userInfors[i++]));

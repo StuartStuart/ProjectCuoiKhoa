@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.time.Year;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
+import validates.UserValidate;
 
 /**
  * Servlet implementation class AddUserInputController
@@ -35,8 +37,10 @@ public class AddUserInputController extends HttpServlet {
 			setDataLogic(request);
 			// nhận về 1 userInfor tùy thuộc từng điều kiện
 			UserInforEntity userInforDefault = getUserInforDefault(request, response);
+
 			// gửi userInforDefault lên request
 			request.setAttribute("adm003userinfor", userInforDefault);
+
 			request.getRequestDispatcher("/jsp/ADM003.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,52 +56,142 @@ public class AddUserInputController extends HttpServlet {
 	}
 
 	/**
-	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy
-	 * cập màn hình ADM003
+	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy cập
+	 * màn hình ADM003
 	 * 
 	 * @param request
 	 * @param response
 	 * @return 1 đối tượng UserInforEntity
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private UserInforEntity getUserInforDefault(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	private UserInforEntity getUserInforDefault(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		UserInforEntity userInforDefault = new UserInforEntity();
+		// khai báo các thuộc tính để set cho userinfor
+		String loginName;
+		int groupId;
+		String fullName;
+		String fullNameKana;
+		String birthDay;
+		String email;
+		String tel;
+		String pass;
+		String repass;
+		String codeLevel;
+		String startDate;
+		String endDate;
+		int total;
 		// nhận về loại đến ADM003 - type
 		try {
 			String type = request.getParameter("type");
 			// từ type, xác định cách set attribute cho userInfof - s-c
-			switch (type) {
 
-			case ConstantUtil.ADM003_BACK_TYPE:
-				// thêm các thông tin mặc định cho user từ session
-				return (UserInforEntity) request.getSession().getAttribute("adm003entityuserinfor");
-			case ConstantUtil.ADM003_EDIT_TYPE:
-				// thêm các thông tin mặc định cho user bằng các thông tin từ db
-				// phụ
-				// thuộc user_id
+			if (null == type) {
+				// là trường hợp ấn submit
 
-				// nhận user_id
-				int userId = (Integer) request.getAttribute("userid");
-				return new TblUserLogicImpl().getUserInfor(userId);
-			case ConstantUtil.ADM003_ADD_TYPE:
-			default: // cùng trường hợp với add type
-				UserInforEntity userInforDefault = new UserInforEntity();
-				String nowTime = CommonUtil.getNowTime();
-				// thêm các thông tin mặc định cho user, ví dụ startDate là ngày
-				// hiện tại
-				// set thuộc tính cho userInforDefault
-				userInforDefault.setLoginName("");
-				userInforDefault.setGroupId(0);
-				userInforDefault.setFullName("");
-				userInforDefault.setFullNameKana("");
-				userInforDefault.setBirthDay(nowTime);
-				userInforDefault.setEmail("");
-				userInforDefault.setTel("");
-				userInforDefault.setCodeLevel("");
-				userInforDefault.setStartDate(nowTime);
-				userInforDefault.setEndDate(nowTime);
-				userInforDefault.setTotal(0);
-				return userInforDefault;
+				// thì nhận về các thông tin đã nhập
+				loginName = (String) request.getAttribute("id");
+				groupId = CommonUtil.convertStrToInt((String) request.getAttribute("group_id"));
+				fullName = (String) request.getAttribute("full_name");
+				fullNameKana = (String) request.getAttribute("full_name_kana");
+				// birth_day trong tbl_user
+				String[] arrBirthDay = request.getParameterValues("birth_day");
+				birthDay = CommonUtil.ghepThoiGian(arrBirthDay[0], arrBirthDay[1], arrBirthDay[2]);
+				email = request.getParameter("email");
+				tel = request.getParameter("tel");
+				pass = request.getParameter("pass");
+				repass = request.getParameter("repass");
+				codeLevel = request.getParameter("kyu_id");
+				// start_date trong tbl_user
+				String[] arrStartDate = request.getParameterValues("start_date");
+				startDate = CommonUtil.ghepThoiGian(arrStartDate[0], arrStartDate[1], arrStartDate[2]);
+				// end_date trong tbl_user
+				String[] arrEndDate = request.getParameterValues("end_date");
+				endDate = CommonUtil.ghepThoiGian(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
+				total = CommonUtil.convertStrToInt(request.getParameter("total"));
+			} else {
+				// ko là trường hợp submit
+				switch (type) {
+
+				case ConstantUtil.ADM003_BACK_TYPE:
+					// thêm các thông tin mặc định cho user từ session
+					UserInforEntity sessionUser = (UserInforEntity) request.getSession()
+							.getAttribute("adm003entityuserinfor");
+
+					loginName = sessionUser.getLoginName();
+					groupId = sessionUser.getGroupId();
+					fullName = sessionUser.getFullName();
+					fullNameKana = sessionUser.getFullNameKana();
+					birthDay = sessionUser.getBirthDay();
+					email = sessionUser.getEmail();
+					tel = sessionUser.getTel();
+					pass = "";
+					repass = "";
+					codeLevel = sessionUser.getCodeLevel();
+					startDate = sessionUser.getStartDate();
+					endDate = sessionUser.getEndDate();
+					total = sessionUser.getTotal();
+					break;
+				case ConstantUtil.ADM003_EDIT_TYPE:
+					// thêm các thông tin mặc định cho user bằng các thông tin từ db
+					// phụ thuộc user_id
+
+					// nhận user_id
+					int userId = CommonUtil.convertStrToInt(request.getParameter("userid"));
+					UserInforEntity editionUser = new TblUserLogicImpl().getUserInfor(userId);
+
+					loginName = editionUser.getLoginName();
+					groupId = editionUser.getGroupId();
+					fullName = editionUser.getFullName();
+					fullNameKana = editionUser.getFullNameKana();
+					birthDay = editionUser.getBirthDay();
+					email = editionUser.getEmail();
+					tel = editionUser.getTel();
+					pass = "";
+					repass = "";
+					codeLevel = editionUser.getCodeLevel();
+					startDate = editionUser.getStartDate();
+					endDate = editionUser.getEndDate();
+					total = editionUser.getTotal();
+					break;
+				case ConstantUtil.ADM003_ADD_TYPE:
+				default: // cùng trường hợp với add type
+
+					String nowTime = CommonUtil.getNowTime();
+					// thêm các thông tin mặc định cho user, ví dụ startDate là ngày
+					// hiện tại
+					loginName = "";
+					groupId = ConstantUtil.ADM003_DEFAULT_GROUP;
+					fullName = "";
+					fullNameKana = "";
+					birthDay = nowTime;
+					email = "";
+					tel = "";
+					pass = "";
+					repass = "";
+					codeLevel = "";
+					startDate = nowTime;
+					endDate = nowTime;
+					total = ConstantUtil.ADM003_DEFAULT_TOTAL;
+					break;
+				}
 			}
+			// set thuộc tính cho userInforDefault
+			userInforDefault.setLoginName(loginName);
+			userInforDefault.setGroupId(groupId);
+			userInforDefault.setFullName(fullName);
+			userInforDefault.setFullNameKana(fullNameKana);
+			userInforDefault.setBirthDay(birthDay);
+			userInforDefault.setEmail(email);
+			userInforDefault.setTel(tel);
+			userInforDefault.setPass(pass);
+			userInforDefault.setRepass(repass);
+			userInforDefault.setCodeLevel(codeLevel);
+			userInforDefault.setStartDate(startDate);
+			userInforDefault.setEndDate(endDate);
+			userInforDefault.setTotal(total);
+
+			return userInforDefault;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -146,8 +240,41 @@ public class AddUserInputController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		try {
+			// cài đặt 7 combobox
+			setDataLogic(request);
+
+			// nhận về các thuộc tính trên request
+			UserInforEntity userInfor = getUserInforDefault(request, response);
+
+			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInfor);
+			if (0 != listErrMsg.size()) {
+				// kiểm tra thấy có lỗi
+
+				// thì set mảng lỗi lên request
+				request.setAttribute("errmsg", listErrMsg);
+				// set userinfor lên request
+				request.setAttribute("adm003userinfor", userInfor);
+				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+
+			} else {
+				// ko có lỗi
+
+				// thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
+				request.getSession().setAttribute("adm003entityuserinfor", userInfor);
+				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// chuyển đến màn hình Error
+			try {
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
+				request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }

@@ -20,11 +20,38 @@ public class UserInforEntity {
 	private String groupName;
 	private String email;
 	private String tel;
+	private String pass;
+	private String repass;
 	private String nameLevel;
 	private String codeLevel;
 	private String startDate;
 	private String endDate;
 	private int total;
+	
+	/**
+	 * @return the pass
+	 */
+	public String getPass() {
+		return pass;
+	}
+	/**
+	 * @param pass the pass to set
+	 */
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+	/**
+	 * @return the repass
+	 */
+	public String getRepass() {
+		return repass;
+	}
+	/**
+	 * @param repass the repass to set
+	 */
+	public void setRepass(String repass) {
+		this.repass = repass;
+	}
 	/**
 	 * @return the userId
 	 */
