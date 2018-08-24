@@ -7,3 +7,4 @@ ADM003: setDefaultValue -> getDefaultValue -> getUserInforDefault(): sẽ lưu l
 		getListMonth();
 		có 28 validate
 ADM003: bỏ response trong setData
+		thêm fn: escapeXml cho các vùng hiển thị
