@@ -45,7 +45,7 @@ public class ConstantUtil {
 	 * các kiểu sắp xếp
 	 */
 	public static final String ADM002_SORT_TYPE_URL[] = { "fullname", "codelevel", "enddate" };
-	/* 
+	/*
 	 * danh sách sắp xếp default
 	 */
 	public static final String DEFAULT_WAYS[] = { "ASC", "ASC", "DESC" };
@@ -69,4 +69,21 @@ public class ConstantUtil {
 	 * giới hạn dưới của năm
 	 */
 	public static final int ADM003_START_YEAR = 1980;
+	/*
+	 * truy cập đến ADM003 từ ADM002
+	 */
+	public static final String ADM003_ADD_TYPE = "add";
+	/*
+	 * truy cập đến ADM003 từ ADM004
+	 */
+	public static final String ADM003_BACK_TYPE = "back";
+	/*
+	 * truy cập đến ADM003 từ ADM005
+	 */
+	public static final String ADM003_EDIT_TYPE = "edit";
+	/*
+	 * giói hạn trên cộng thêm của năm, ví dụ là cho startDate và endDate
+	 */
+	public static final int ADM003_YEAR_ADDITION_VALUE = 1;
+	
 }

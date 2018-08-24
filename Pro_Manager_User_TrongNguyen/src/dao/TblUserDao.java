@@ -62,4 +62,13 @@ public interface TblUserDao {
 	 */
 	ArrayList<UserInforEntity> getListUser(int offSet, int limit, int groupId, String fullName, String sortType,
 			String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception;
+	
+	/**
+	 * lấy từ db các thông tin của user dựa vào userId
+	 * 
+	 * @param userId
+	 *            id của người dùng - là duy nhất
+	 * @return một đối tượng chứa thông tin của người dùng
+	 */
+	public UserInforEntity getUserInfor(int userId) throws Exception;
 }

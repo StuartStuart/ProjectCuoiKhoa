@@ -135,7 +135,7 @@
 											<option value="0">選択してください</option>
 											<c:forEach items="${japanlevels }" var="mstJapan">
 												<option value="${mstJapan.codeLevel}"
-													${(mstJapan.codeLevel==adm003userinfor.mstJapan.codeLevel)?
+													${(mstJapan.codeLevel==adm003userinfor.codeLevel)?
 												'selected="selected"':'' }>
 
 													${mstJapan.nameLevel}</option>
@@ -199,7 +199,7 @@
 								<tr>
 									<td class="lbl_left">点数:</td>
 									<td align="left"><input class="txBox" type="text"
-										name="total" value="" size="5"
+										name="total" value="${adm003userinfor.total>0?adm003userinfor.total:'' }" size="5"
 										onfocus="this.style.borderColor='#0066ff';"
 										onblur="this.style.borderColor='#aaaaaa';" /></td>
 								</tr>
@@ -217,7 +217,7 @@
 					<th width="200px" align="center">&nbsp;</th>
 					<td><input class="btn" type="submit" value="確認" /></td>
 					<td><input class="btn" type="button" value="戻る"
-						onclick="backADM002()" /></td>
+						onclick="window.location.href='${pageContext.request.contextPath }/ListUser.do?type=back'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->

@@ -21,17 +21,11 @@ import utils.ConstantUtil;
  *
  */
 public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
-	/*
-	 * các thông tin cần lấy của user
-	 */
-	private static final String[] userInfors = { "tbl_user.user_id", "tbl_user.full_name", "tbl_user.birthday",
-			"mst_group.group_name", "tbl_user.email", "tbl_user.tel", "mst_japan.name_level",
-			"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
-
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName tên đăng nhập
+	 * @param userName
+	 *            tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -39,6 +33,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	public TblUserEntity getLoginUser(String userName) throws Exception {
 		try {
 			this.openConnection(); // mở kết nối
+
 			query = "select * from tbl_user where `login_name` = ?;";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, userName);
@@ -121,7 +116,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		ArrayList<UserInforEntity> listUser = new ArrayList<>();
 		try {
 			this.openConnection();
-
+			String[] userInfors = { "tbl_user.user_id", "tbl_user.full_name", "tbl_user.birthday",
+					"mst_group.group_name", "tbl_user.email", "tbl_user.tel", "mst_japan.name_level",
+					"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
 			// thêm các trường thông tin cần lấy của User
 			StringBuilder query = new StringBuilder("SELECT");
 			for (String infor : userInfors) {
@@ -148,8 +145,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 
 			/*
-			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không thì thực hiện
-			 * bình thường
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
+			 * thì thực hiện bình thường
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
@@ -182,18 +179,18 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				// lưu thông tin vào đối tượng
-				UserInforEntity userInfors = new UserInforEntity();
-				userInfors.setUserId(rs.getInt("user_id"));
-				userInfors.setFullName(rs.getString("full_name"));
-				userInfors.setBirthDay(rs.getString("birthday"));
-				userInfors.setGroupName(rs.getString("group_name"));
-				userInfors.setEmail(rs.getString("email"));
-				userInfors.setTel(rs.getString("tel"));
-				userInfors.setNameLevel(rs.getString("name_level"));
-				userInfors.setEndDate(rs.getString("end_date"));
-				userInfors.setTotal(rs.getInt("total"));
+				UserInforEntity userInfor = new UserInforEntity();
+				userInfor.setUserId(rs.getInt("user_id"));
+				userInfor.setFullName(rs.getString("full_name"));
+				userInfor.setBirthDay(rs.getString("birthday"));
+				userInfor.setGroupName(rs.getString("group_name"));
+				userInfor.setEmail(rs.getString("email"));
+				userInfor.setTel(rs.getString("tel"));
+				userInfor.setNameLevel(rs.getString("name_level"));
+				userInfor.setEndDate(rs.getString("end_date"));
+				userInfor.setTotal(rs.getInt("total"));
 
-				listUser.add(userInfors);
+				listUser.add(userInfor);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -208,44 +205,50 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xác đinh chuỗi điều kiện order by
 	 * 
-	 * @param sortType        loại sắp xếp
-	 * @param sortByFullName  kiểu sx của tên
-	 * @param sortByCodeLevel kiểu sx của codeLevel
-	 * @param sortByEndDate   kiểu sx của endDate
+	 * @param sortType
+	 *            loại sắp xếp
+	 * @param sortByFullName
+	 *            kiểu sx của tên
+	 * @param sortByCodeLevel
+	 *            kiểu sx của codeLevel
+	 * @param sortByEndDate
+	 *            kiểu sx của endDate
 	 * @return chuỗi điều kiện sx
 	 * @throws Exception
 	 */
 	private String chuoiDieuKienSX(String sortType, String sortByFullName, String sortByCodeLevel, String sortByEndDate)
 			throws Exception {
 		StringBuilder chuoiSX = new StringBuilder("");
-//		/*
-//		 * các kiểu sắp xếp tương ứng với loại sắp xếp
-//		 */
-//		String[] sortingWays = { sortByFullName, sortByCodeLevel, sortByEndDate };
-//		int lengthSortTypes = WHITE_LIST.length;
-//		/*
-//		 * thêm loại và kiểu sắp xếp còn lại theo thứ tự
-//		 */
-//		if (!this.isExistColName(sortType)) { // be hacked
-//			sortType = WHITE_LIST[0];
-//		}
-//
-//		String cachSapXepCuaKieuUuTien = "";
-//		for (int i = 0; i < lengthSortTypes; i++) {
-//			if (!WHITE_LIST[i].equals(sortType)) {
-//				chuoiSX.append(", " + WHITE_LIST[i]);
-//				if (sortingWays.length > i) {
-//					chuoiSX.append(" " + sortingWays[i]);
-//				} else { // Khi có kiểu sắp xếp với cách sắp được ngầm
-//							// định
-//					chuoiSX.append(" " + ConstantUtil.ADM002_SX_TANG);
-//				}
-//			} else {
-//				cachSapXepCuaKieuUuTien = sortingWays[i];
-//			}
-//		}
-//		// nối queryTail vào đuôi query
-//		return sortType + " " + cachSapXepCuaKieuUuTien + " " + chuoiSX.toString();
+		// /*
+		// * các kiểu sắp xếp tương ứng với loại sắp xếp
+		// */
+		// String[] sortingWays = { sortByFullName, sortByCodeLevel,
+		// sortByEndDate };
+		// int lengthSortTypes = WHITE_LIST.length;
+		// /*
+		// * thêm loại và kiểu sắp xếp còn lại theo thứ tự
+		// */
+		// if (!this.isExistColName(sortType)) { // be hacked
+		// sortType = WHITE_LIST[0];
+		// }
+		//
+		// String cachSapXepCuaKieuUuTien = "";
+		// for (int i = 0; i < lengthSortTypes; i++) {
+		// if (!WHITE_LIST[i].equals(sortType)) {
+		// chuoiSX.append(", " + WHITE_LIST[i]);
+		// if (sortingWays.length > i) {
+		// chuoiSX.append(" " + sortingWays[i]);
+		// } else { // Khi có kiểu sắp xếp với cách sắp được ngầm
+		// // định
+		// chuoiSX.append(" " + ConstantUtil.ADM002_SX_TANG);
+		// }
+		// } else {
+		// cachSapXepCuaKieuUuTien = sortingWays[i];
+		// }
+		// }
+		// // nối queryTail vào đuôi query
+		// return sortType + " " + cachSapXepCuaKieuUuTien + " " +
+		// chuoiSX.toString();
 
 		try {
 			/*
@@ -298,5 +301,78 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			throw e;
 		}
 		return chuoiSX.toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#getUserInfor(int)
+	 */
+	@Override
+	public UserInforEntity getUserInfor(int userId) throws Exception {
+		try {
+			openConnection();
+			// viết câu query để lấy thông tin
+			String[] userInfors = { "tbl_user.login_name", "tbl_user.group_id", "tbl_user.full_name",
+					"tbl_user.full_name_kana", "tbl_user.birthday", "tbl_user.email", "tbl_user.tel",
+					"mst_japan.code_level", "tbl_detail_user_japan.start_date", "tbl_detail_user_japan.end_date",
+					"tbl_detail_user_japan.total" };
+			// thêm các trường thông tin cần lấy của User
+			StringBuilder query = new StringBuilder("SELECT");
+			for (String infor : userInfors) {
+				query.append(" " + infor + ",");
+			}
+			query.deleteCharAt(query.length() - 1);
+
+			// thêm bản ghi(đã được join với nhau) mà các thông tin được lấy từ
+			// đó
+			query.append("\nFROM");
+			query.append(" tbl_user INNER JOIN mst_group ON tbl_user.group_id = mst_group.group_id");
+			query.append(" LEFT JOIN (tbl_detail_user_japan");
+			query.append(" INNER JOIN mst_japan ON tbl_detail_user_japan.code_level = mst_japan.code_level)");
+			query.append(" ON tbl_user.user_id = tbl_detail_user_japan.user_id");
+
+			// thêm điều kiện tìm kiếm
+			query.append("\nWHERE category = ");
+			query.append(ConstantUtil.USER_CATEGORY);
+			// cho câu query vào preparedStatement
+
+			// thêm userId vào preparedStatement
+
+			// thực hiện truy vấn
+			ResultSet rs = ps.executeQuery(query.toString());
+			if (rs.next()) {
+				// tồn tại đối tượng
+
+				// thì tạo đối tượng và set các thuộc tính
+				UserInforEntity userInfor = new UserInforEntity();
+
+				int i = 0;
+				userInfor.setLoginName(rs.getString(userInfors[i++]));
+				userInfor.setGroupId(rs.getInt(userInfors[i++]));
+				userInfor.setFullName(rs.getString(userInfors[i++]));
+				userInfor.setFullNameKana(rs.getString(userInfors[i++]));
+				userInfor.setBirthDay(rs.getString(userInfors[i++]));
+				userInfor.setEmail(rs.getString(userInfors[i++]));
+				userInfor.setTel(rs.getString(userInfors[i++]));
+				userInfor.setCodeLevel(rs.getString(userInfors[i++]));
+				userInfor.setStartDate(rs.getString(userInfors[i++]));
+				userInfor.setEndDate(rs.getString(userInfors[i++]));
+				userInfor.setTotal(rs.getInt(userInfors[i++]));
+
+				return userInfor;
+			} else {
+				// không tồn tại đối tượng
+
+				// thì TO DO, tạm thời trả về null
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			closeConnection();
+		}
+
 	}
 }

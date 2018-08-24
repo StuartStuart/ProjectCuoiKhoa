@@ -6,7 +6,7 @@ package utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Year;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import properties.ConfigProperties;
@@ -34,8 +34,10 @@ public class CommonUtil {
 	/**
 	 * mã hóa chuỗi pass + salt sang SHA1
 	 * 
-	 * @param pass mật khẩu
-	 * @param salt chuỗi gây nhiễu
+	 * @param pass
+	 *            mật khẩu
+	 * @param salt
+	 *            chuỗi gây nhiễu
 	 * @return chuỗi đã mã hóa
 	 * @throws NoSuchAlgorithmException
 	 */
@@ -58,8 +60,10 @@ public class CommonUtil {
 	/**
 	 * lấy thứ tự của User đầu tiên sẽ hiển thị trên page
 	 * 
-	 * @param pageNumber trang sẽ hiển thị UserInfor
-	 * @param limit      số user tôi đa sẽ được hiển thị page
+	 * @param pageNumber
+	 *            trang sẽ hiển thị UserInfor
+	 * @param limit
+	 *            số user tôi đa sẽ được hiển thị page
 	 * @return thứ tự đầu tiên
 	 */
 	public static int getOffSet(Integer pageNumber, int limit) {
@@ -69,7 +73,8 @@ public class CommonUtil {
 	/**
 	 * tránh lỗi wild card trong sql
 	 * 
-	 * @param text chuỗi cần chuyển wild card
+	 * @param text
+	 *            chuỗi cần chuyển wild card
 	 * @return chuỗi đã được chuyển
 	 */
 	public static String convertWildCard(String text) {
@@ -82,9 +87,12 @@ public class CommonUtil {
 	/**
 	 * lấy danh sách số thứ tự của các trang để được hiển thị trên web browser
 	 * 
-	 * @param totalUser   tổng số user tìm được
-	 * @param limit       số lượng tối đa user trên 1 web browser
-	 * @param currentPage trang hiện thời
+	 * @param totalUser
+	 *            tổng số user tìm được
+	 * @param limit
+	 *            số lượng tối đa user trên 1 web browser
+	 * @param currentPage
+	 *            trang hiện thời
 	 * @return danh sách có nhiều nhất limit trang
 	 * @throws Exception
 	 */
@@ -126,8 +134,10 @@ public class CommonUtil {
 	/**
 	 * tính tổng số trang sẽ được hiển thị
 	 * 
-	 * @param totalUser tổng số user
-	 * @param limit     giới hạn user trên 1 web browser
+	 * @param totalUser
+	 *            tổng số user
+	 * @param limit
+	 *            giới hạn user trên 1 web browser
 	 * @return
 	 */
 	public static int getTotalPage(int totalUser, int limit) {
@@ -145,7 +155,8 @@ public class CommonUtil {
 	/**
 	 * chuyển kiểu sắp xếp từ icon sang dạng db
 	 * 
-	 * @param firstSortSymbol biểu tượng cần chuyển
+	 * @param firstSortSymbol
+	 *            biểu tượng cần chuyển
 	 * @return ASC hoặc DESC
 	 * @throws Exception
 	 */
@@ -162,24 +173,20 @@ public class CommonUtil {
 	/**
 	 * tạo danh sách các năm từ startYear đến năm hiện tại
 	 * 
-	 * @param startYear giới hạn dưới của năm
-	 * @param endYear   giới hạn trên của năm
+	 * @param startYear
+	 *            giới hạn dưới của năm
+	 * @param endYear
+	 *            giới hạn trên của năm
 	 * @return danh sách các năm từ startYear đến endYear
 	 */
-	public static ArrayList<Integer> getListYears(int startYear) throws Exception {
+	public static ArrayList<Integer> getListYears(int startYear, int endYear) throws Exception {
 		ArrayList<Integer> listYears = new ArrayList<>();
 
-		try {
-			int endYear = Integer.parseInt(Year.now().toString());
-			while (startYear <= endYear) {
-				// startYear chưa lớn hơn endYear
+		while (startYear <= endYear) {
+			// startYear chưa lớn hơn endYear
 
-				// thì thêm startYear vào danh sách và tăng startYear lên 1 đơn vị
-				listYears.add(startYear++);
-			}
-		} catch (NumberFormatException | NullPointerException e) {
-			e.printStackTrace();
-			throw e;
+			// thì thêm startYear vào danh sách và tăng startYear lên 1 đơn vị
+			listYears.add(startYear++);
 		}
 
 		return listYears;
@@ -202,7 +209,7 @@ public class CommonUtil {
 
 		return listMonths;
 	}
-	
+
 	/**
 	 * tạo danh sách các ngày trong tháng
 	 * 
@@ -219,5 +226,14 @@ public class CommonUtil {
 		}
 
 		return listDates;
+	}
+
+	/**
+	 * nhận thời gian hiện tại
+	 * 
+	 * @return chuỗi dạng yyyy-mm-dd
+	 */
+	public static String getNowTime() {
+		return new Date(System.currentTimeMillis()).toString();
 	}
 }

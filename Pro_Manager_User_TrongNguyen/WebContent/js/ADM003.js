@@ -1,10 +1,3 @@
-/**
- * trở lại màn hình ADM002
- */
-function backADM002() {
-	window.location = "../ListUser.do?type=back";
-}
-
 /*
  * show and hide vùng trình độ tiếng Nhật
  */

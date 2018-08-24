@@ -82,4 +82,14 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 		return this.tblUserDaoImpl.getListUser(offSet, limit, groupId, fullName, sortType, sortByFullName,
 				sortByCodeLevel, sortByEndDate);
 	}
+
+	/* (non-Javadoc)
+	 * @see logics.TblUserLogic#getUser(int)
+	 */
+	@Override
+	public UserInforEntity getUserInfor(int userId) throws Exception {
+		return new TblUserDaoImpl().getUserInfor(userId);
+	}
+
+	
 }
