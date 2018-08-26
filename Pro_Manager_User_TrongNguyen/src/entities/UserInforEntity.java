@@ -4,6 +4,8 @@
  */
 package entities;
 
+import java.util.Date;
+
 /**
  * Các thông tin cần thiết của 1 user trong db
  * 
@@ -16,7 +18,7 @@ public class UserInforEntity {
 	private String loginName;
 	private String fullName;
 	private String fullNameKana;
-	private String birthDay;
+	private Date birthDay;
 	private String groupName;
 	private String email;
 	private String tel;
@@ -24,8 +26,8 @@ public class UserInforEntity {
 	private String repass;
 	private String nameLevel;
 	private String codeLevel;
-	private String startDate;
-	private String endDate;
+	private Date startDate;
+	private Date endDate;
 	private int total;
 	
 	/**
@@ -115,13 +117,13 @@ public class UserInforEntity {
 	/**
 	 * @return the birthDay
 	 */
-	public String getBirthDay() {
+	public Date getBirthDay() {
 		return birthDay;
 	}
 	/**
 	 * @param birthDay the birthDay to set
 	 */
-	public void setBirthDay(String birthDay) {
+	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
 	}
 	/**
@@ -187,25 +189,25 @@ public class UserInforEntity {
 	/**
 	 * @return the startDate
 	 */
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 	/**
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 	/**
 	 * @return the endDate
 	 */
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	/**

@@ -42,17 +42,17 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			// mỗi tài khoản có username duy nhất
 			TblUserEntity adminAccount = tblUserDaoImpl.getLoginUser(userName);
 			if (null == adminAccount) { // tài khoản không tồn tại
-				return true;
+				return false;
 			} else { // tài khoản tồn tại
 				String encodedPass = CommonUtil.encodeMatKhau(pass, adminAccount.getSalt());
 				// System.out.println(encodedPass);
 				boolean isTrungMatKhau = adminAccount.getPassword().equals(encodedPass);
 				if (!isTrungMatKhau) { // 2 pass không trung nhau
-					return true;
+					return false;
 				}
 			}
 
-			return false;
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -83,13 +83,41 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 				sortByCodeLevel, sortByEndDate);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see logics.TblUserLogic#getUser(int)
 	 */
 	@Override
 	public UserInforEntity getUserInfor(int userId) throws Exception {
-		return new TblUserDaoImpl().getUserInfor(userId);
+		return tblUserDaoImpl.getUserInfor(userId);
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.TblUserLogic#checkExistedLoginName(java.lang.Integer,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean checkExistedLoginName(Integer userId, String loginName) throws Exception {
+		try {
+			return tblUserDaoImpl.checkExistedLoginName(userId, loginName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.TblUserLogic#checkExistedEmail(java.lang.Integer,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean checkExistedEmail(Integer userId, String email) throws Exception {
+		return tblUserDaoImpl.checkExistedEmail(userId, email);
+	}
+
 }

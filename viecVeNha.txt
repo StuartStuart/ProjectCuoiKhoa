@@ -1,10 +1,10 @@
 ﻿ADM002: check testcase
 		sửa getAllMstGroup chỉ get 4 nhóm, ko thêm phần tử mặc định
 
-ADM003: setDefaultValue -> getDefaultValue -> getUserInforDefault(): sẽ lưu lên session, kể cả chuỗi Date trong SQL bởi vì có JSTL xử lý chuỗi Date đó
-		-> setDataLogic: set lên Request 7 giá trị: groups, japanlevels, birthyears, startyears, endyears, months (dùng chung), dates(dùng chung)
-		getListYear(startYear, endYear): endYear có endYear không phải là năm hiện tại, start có thể thay đổi
-		getListMonth();
+ADM003: setDefaultValue -> getDefaultValue -> getUserInforDefault(): sẽ lưu lên session, kể cả chuỗi Date trong SQL bởi vì có JSTL xử lý chuỗi Date đó ?
 		có 28 validate
-ADM003: bỏ response trong setData
 		thêm fn: escapeXml cho các vùng hiển thị
+		checkExistedLoginName(): do LoginName là duy nhất nên ko cần user_id
+									kiểu trả về là TblUserEntity -> đổi tên là getUserByLoginName()
+		validate: checkMaxLength(): maxlength = ?
+		convertToDate(): sai

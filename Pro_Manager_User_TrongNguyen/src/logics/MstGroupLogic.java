@@ -10,9 +10,25 @@ import entities.TblMstGroupEntity;
 
 /**
  * đối tượng MstGroupLogic
+ * 
  * @author TrongNguyen
  *
  */
 public interface MstGroupLogic {
+	/**
+	 * nhận về danh sách các group có trong db
+	 * 
+	 * @return danh sách group
+	 * @throws Exception
+	 */
 	ArrayList<TblMstGroupEntity> getAllMstGroup() throws Exception;
+
+	/**
+	 * kiểm tra groupId có tồn tại trong db
+	 * 
+	 * @param groupId mã nhóm
+	 * @return true là có tồn tại
+	 * @throws Exception
+	 */
+	boolean checkExistedGroupId(final int groupId) throws Exception;
 }

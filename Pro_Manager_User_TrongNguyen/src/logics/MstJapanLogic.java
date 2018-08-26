@@ -22,4 +22,13 @@ public interface MstJapanLogic {
 	 * @throws Exception
 	 */
 	ArrayList<MstJapanEntity> getAllMstJapan() throws Exception;
+
+	/**
+	 * kiểm tra sự tồn tại cũa codeLevel trong db
+	 * 
+	 * @param codeLevel mã trình độ tiếng Nhật
+	 * @return true là tồn tại
+	 * @throws Exception
+	 */
+	boolean checkExistedCodeLevel(String codeLevel) throws Exception;
 }

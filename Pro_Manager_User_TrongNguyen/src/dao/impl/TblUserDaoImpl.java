@@ -6,6 +6,7 @@ package dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.TblUserDao;
@@ -95,8 +96,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 			// lấy về kết quả
 			ResultSet rs = ps.executeQuery();
-			rs.next();
-			totalUsers = rs.getInt("totalUsers");
+			if (rs.next()) {
+				totalUsers = rs.getInt("totalUsers");
+			}
 
 			return totalUsers;
 		} catch (Exception e) {
@@ -181,12 +183,12 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				UserInforEntity userInfor = new UserInforEntity();
 				userInfor.setUserId(rs.getInt("user_id"));
 				userInfor.setFullName(rs.getString("full_name"));
-				userInfor.setBirthDay(rs.getString("birthday"));
+				userInfor.setBirthDay(rs.getDate("birthday"));
 				userInfor.setGroupName(rs.getString("group_name"));
 				userInfor.setEmail(rs.getString("email"));
 				userInfor.setTel(rs.getString("tel"));
 				userInfor.setNameLevel(rs.getString("name_level"));
-				userInfor.setEndDate(rs.getString("end_date"));
+				userInfor.setEndDate(rs.getDate("end_date"));
 				userInfor.setTotal(rs.getInt("total"));
 
 				listUser.add(userInfor);
@@ -352,12 +354,12 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				userInfor.setGroupId(rs.getInt(userInfors[i++]));
 				userInfor.setFullName(rs.getString(userInfors[i++]));
 				userInfor.setFullNameKana(rs.getString(userInfors[i++]));
-				userInfor.setBirthDay(rs.getString(userInfors[i++]));
+				userInfor.setBirthDay(rs.getDate(userInfors[i++]));
 				userInfor.setEmail(rs.getString(userInfors[i++]));
 				userInfor.setTel(rs.getString(userInfors[i++]));
 				userInfor.setCodeLevel(rs.getString(userInfors[i++]));
-				userInfor.setStartDate(rs.getString(userInfors[i++]));
-				userInfor.setEndDate(rs.getString(userInfors[i++]));
+				userInfor.setStartDate(rs.getDate(userInfors[i++]));
+				userInfor.setEndDate(rs.getDate(userInfors[i++]));
 				userInfor.setTotal(rs.getInt(userInfors[i++]));
 
 				return userInfor;
@@ -374,5 +376,98 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			closeConnection();
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#checkExistedLoginName(java.lang.Integer,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean checkExistedLoginName(final Integer userId, final String loginName) throws Exception {
+		try {
+			openConnection();
+
+			// viết câu query
+			StringBuilder query = new StringBuilder("");
+			query.append(
+					"SELECT user_id, group_id, login_name, `password`, full_name, full_name_kana, email, tel, birthday, salt, category");
+			query.append(" FROM tbl_user");
+			query.append(" WHERE category = ?");
+			if (null != userId) {
+				query.append(" AND user_id = ?");
+			}
+			if (!loginName.isEmpty()) {
+				query.append(" AND login_name = ?");
+			}
+			query.append(";");
+			// hoàn thiện query
+			ps = conn.prepareStatement(query.toString());
+			int i = 0;
+			ps.setInt(++i, ConstantUtil.USER_CATEGORY);
+			if (null != userId) {
+				ps.setInt(++i, userId);
+			}
+			if (!loginName.isEmpty()) {
+				ps.setString(++i, loginName);
+			}
+			// thực hiện query
+			return ps.executeQuery().next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer, java.lang.String)
+	 */
+	@Override
+	public boolean checkExistedEmail(Integer userId, String email) throws Exception {
+		try {
+			openConnection();
+
+			// viết câu query
+			StringBuilder query = new StringBuilder("");
+			query.append(
+					"SELECT user_id, group_id, login_name, `password`, full_name, full_name_kana, email, tel, birthday, salt, category");
+			query.append(" FROM tbl_user");
+			query.append(" WHERE category = ?");
+			if (null != userId) {
+				query.append(" AND user_id = ?");
+			}
+			if (!email.isEmpty()) {
+				query.append(" AND email = ?");
+			}
+			query.append(";");
+			// hoàn thiện query
+			ps = conn.prepareStatement(query.toString());
+			int i = 0;
+			ps.setInt(++i, ConstantUtil.USER_CATEGORY);
+			if (null != userId) {
+				ps.setInt(++i, userId);
+			}
+			if (!email.isEmpty()) {
+				ps.setString(++i, email);
+			}
+			// thực hiện query
+			return ps.executeQuery().next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

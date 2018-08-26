@@ -75,8 +75,9 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 生年月日:</td>
 								<%-- convert userBirthDay sang dạng chung --%>
-								<fmt:parseDate value="${adm003userinfor.birthDay}"
-									pattern="yyyy-MM-dd" var="birthDay" />
+<%-- 								<fmt:parseDate value="${adm003userinfor.birthDay}"
+									pattern="yyyy-MM-dd" var="birthDay" /> --%>
+									<c:set value="${adm003userinfor.birthDay}" var="birthDay"></c:set>
 								<td align="left">
 									<%-- convert tham số tạm birthDay sang year --%> <fmt:formatDate
 										value="${birthDay}" pattern="y" var="birthYear" /> <select
@@ -138,7 +139,7 @@
 								<tr>
 									<td class="lbl_left">資格:</td>
 									<td align="left"><select name="kyu_id">
-											<option value="0">選択してください</option>
+											<option value="N0">選択してください</option>
 											<c:forEach items="${japanlevels }" var="mstJapan">
 												<option value="${mstJapan.codeLevel}"
 													${(mstJapan.codeLevel==adm003userinfor.codeLevel)?
@@ -151,8 +152,9 @@
 								<tr>
 									<td class="lbl_left">資格交付日:</td>
 									<%-- convert userStartDate sang dạng chung --%>
-									<fmt:parseDate value="${adm003userinfor.startDate}"
-										pattern="yyyy-MM-dd" var="startDate" />
+									<%-- <fmt:parseDate value="${adm003userinfor.startDate}"
+										pattern="yyyy-MM-dd" var="startDate" /> --%>
+										<c:set value="${adm003userinfor.startDate}" var="startDate"></c:set>
 									<td align="left">
 										<%-- convert tham số tạm startDate sang year --%> <fmt:formatDate
 											value="${startDate}" pattern="y" var="startYear" /> <select
@@ -181,8 +183,9 @@
 								<tr>
 									<td class="lbl_left">失効日:</td>
 									<%-- convert userStartDate sang dạng chung --%>
-									<fmt:parseDate value="${adm003userinfor.endDate}"
-										pattern="yyyy-MM-dd" var="endDate" />
+									<%-- <fmt:parseDate value="${adm003userinfor.endDate}"
+										pattern="yyyy-MM-dd" var="endDate" /> --%>
+										<c:set value="${adm003userinfor.endDate}" var="endDate"></c:set>
 									<td align="left">
 										<%-- convert tham số tạm endDate sang year --%> <fmt:formatDate
 											value="${endDate}" pattern="y" var="endYear" /> <select
@@ -212,7 +215,7 @@
 									<td class="lbl_left">点数:</td>
 									<td align="left"><input class="txBox" type="text"
 										name="total"
-										value="${adm003userinfor.total>0?adm003userinfor.total:'' }"
+										value="${adm003userinfor.total!=0?adm003userinfor.total:'' }"
 										size="5" onfocus="this.style.borderColor='#0066ff';"
 										onblur="this.style.borderColor='#aaaaaa';" /></td>
 								</tr>

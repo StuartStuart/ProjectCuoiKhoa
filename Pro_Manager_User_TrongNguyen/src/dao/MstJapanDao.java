@@ -10,14 +10,25 @@ import entities.MstJapanEntity;
 
 /**
  * đối tượng MstJapanDao
+ * 
  * @author TrongNguyen
  *
  */
-public interface MstJapanDao{
+public interface MstJapanDao {
 	/**
 	 * nhận về các trình độ tiếng Nhật
+	 * 
 	 * @return list trình độ tiếng Nhật
 	 * @throws Exception
 	 */
 	ArrayList<MstJapanEntity> getAllMstJapan() throws Exception;
+
+	/**
+	 * kiểm tra sự tồn tại của codelevel trong db
+	 * 
+	 * @param codeLevel mã trình đô tiếng Nhật
+	 * @return true là tồn tại
+	 * @throws Exception 
+	 */
+	boolean checkExistedCodeLevel(String codeLevel) throws Exception;
 }

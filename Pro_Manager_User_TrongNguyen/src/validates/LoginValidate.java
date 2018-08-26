@@ -44,7 +44,7 @@ public class LoginValidate {
 			if (pass.isEmpty()) { // username ko được nhập
 				listMessage.add(MessageErrorProperties.getValue("Error001_Password"));
 			}
-			if (0 == listMessage.size() && tblUserLogicImpl.checkExist(userName, pass)) { // tài khoản không tồn tại
+			if (0 == listMessage.size() && !tblUserLogicImpl.checkExist(userName, pass)) { // tài khoản không tồn tại
 				listMessage.add(MessageErrorProperties.getValue("Error016"));
 			}
 		} catch (Exception e) {

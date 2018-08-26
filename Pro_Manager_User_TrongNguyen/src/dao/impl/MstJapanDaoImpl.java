@@ -5,6 +5,7 @@
 package dao.impl;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.MstJapanDao;
@@ -18,7 +19,9 @@ import entities.MstJapanEntity;
  */
 public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see dao.MstJapanDao#getAllMstJapan()
 	 */
 	@Override
@@ -49,5 +52,46 @@ public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 		}
 
 		return listAllMstJapan;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.MstJapanDao#checkExistedCodeLevel(int)
+	 */
+	@Override
+	public boolean checkExistedCodeLevel(String codeLevel) throws SQLException {
+		try { // mở conn
+			openConnection();
+			// tạo query
+			StringBuilder query = new StringBuilder("");
+			query.append("SELECT COUNT(code_level)");
+			query.append(" FROM mst_japan");
+			query.append(" WHERE code_level = ?");
+			query.append(";");
+			// hoàn thiện query
+			ps = conn.prepareStatement(query.toString());
+			int i = 0;
+			ps.setString(++i, codeLevel);
+			// thực hiện query
+			ResultSet rs = ps.executeQuery();
+			// kiểm tra tồn tại
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			// đóng conn
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
 	}
 }

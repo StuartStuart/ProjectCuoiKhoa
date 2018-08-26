@@ -6,6 +6,7 @@ package logics.impl;
 
 import java.util.ArrayList;
 
+import dao.MstGroupDao;
 import dao.impl.MstGroupDaoImpl;
 import entities.TblMstGroupEntity;
 import logics.MstGroupLogic;
@@ -17,7 +18,7 @@ import logics.MstGroupLogic;
  *
  */
 public class MstGroupLogicImpl extends BaseLogicImpl implements MstGroupLogic {
-	private MstGroupDaoImpl mstGroupDaoImpl;
+	private MstGroupDao mstGroup;
 
 	/*
 	 * khởi tạo đối tượng mstGroupDao
@@ -26,7 +27,7 @@ public class MstGroupLogicImpl extends BaseLogicImpl implements MstGroupLogic {
 	 */
 	@Override
 	public void init() {
-		mstGroupDaoImpl = new MstGroupDaoImpl();
+		mstGroup = new MstGroupDaoImpl();
 	}
 
 	/*
@@ -36,7 +37,22 @@ public class MstGroupLogicImpl extends BaseLogicImpl implements MstGroupLogic {
 	 */
 	@Override
 	public ArrayList<TblMstGroupEntity> getAllMstGroup() throws Exception {
-		return mstGroupDaoImpl.getAllMstGroup();
+		return mstGroup.getAllMstGroup();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.MstGroupLogic#checkExistedGroupId(int)
+	 */
+	@Override
+	public boolean checkExistedGroupId(int groupId) throws Exception {
+		try {
+			return mstGroup.checkExistedGroupId(groupId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 }

@@ -5,10 +5,12 @@
 package dao.impl;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.MstGroupDao;
 import entities.TblMstGroupEntity;
+import utils.ConstantUtil;
 
 /**
  * đối tượng MstGroupDao
@@ -51,5 +53,36 @@ public class MstGroupDaoImpl extends BaseDaoImpl implements MstGroupDao {
 		}
 
 		return listAllMstGroup;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.MstGroupDao#checkExistedGroupId(int)
+	 */
+	@Override
+	public boolean checkExistedGroupId(int groupId) throws Exception {
+		try {
+			openConnection();
+			// tạo query
+			query = "SELECT COUNT(*) AS totalGroup FROM mst_group WHERE group_id = ?;";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setInt(++i, groupId);
+			// nhận về giá trị
+			return ps.executeQuery().next();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
 	}
 }

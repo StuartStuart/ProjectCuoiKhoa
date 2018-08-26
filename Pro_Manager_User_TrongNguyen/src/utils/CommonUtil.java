@@ -6,8 +6,10 @@ package utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import properties.ConfigProperties;
 
@@ -18,6 +20,16 @@ import properties.ConfigProperties;
  *
  */
 public class CommonUtil {
+	/**
+	 * kiểm tra total có là số nguyên dương ko
+	 * 
+	 * @param total điểm
+	 * @return true là total là số nguyên dương
+	 */
+	public static boolean checkHalfSizeNumber(int total) {
+		return (total + "").matches("[1-9][0-9]*");
+	}
+
 	/*
 	 * chuyển từ chuỗi sang số
 	 * 
@@ -220,8 +232,8 @@ public class CommonUtil {
 	 * 
 	 * @return chuỗi dạng yyyy-mm-dd
 	 */
-	public static String getNowTime() {
-		return new Date(System.currentTimeMillis()).toString();
+	public static Date getNowTime() {
+		return new Date(System.currentTimeMillis());
 	}
 
 	/**
@@ -231,8 +243,37 @@ public class CommonUtil {
 	 * @param month tháng
 	 * @param date  ngày
 	 * @return kiểu Date trong SQL
+	 * @throws Exception
 	 */
-	public static String ghepThoiGian(String year, String month, String date) {
-		return year + "-" + month + "-" + date;
+	public static Date convertToDate(String year, String month, String date) throws Exception {
+		try {
+			DateFormat df = new SimpleDateFormat("yy-MM-dd");
+			df.setLenient(false);
+
+			return df.parse(year + "-" + month + "-" + date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * kiểm tra login name có đúng định dạng là chỉ bao gồm a-z, A-Z,0-9, _, ko bắt
+	 * đầu bằng số
+	 * 
+	 * @param loginName tene đăng nhập
+	 * @return true là đúng định dạng
+	 */
+	public static boolean checkAccountFormat(String loginName) {
+		if ((loginName.charAt(0) + "").matches("[0-9]")) {
+			// ký tự đầu là số
+			return false;
+		}
+		if (!loginName.matches("\b")) {
+			// các ký tự ko chỉ bao gồm a-z, A-Z, 0-9, _
+			return false;
+		}
+
+		return true;
 	}
 }

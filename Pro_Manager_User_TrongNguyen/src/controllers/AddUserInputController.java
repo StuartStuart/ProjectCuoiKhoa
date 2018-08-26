@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -72,14 +73,14 @@ public class AddUserInputController extends HttpServlet {
 		int groupId;
 		String fullName;
 		String fullNameKana;
-		String birthDay;
+		Date birthDay;
 		String email;
 		String tel;
 		String pass;
 		String repass;
 		String codeLevel;
-		String startDate;
-		String endDate;
+		Date startDate;
+		Date endDate;
 		int total;
 		// nhận về loại đến ADM003 - type
 		try {
@@ -90,13 +91,13 @@ public class AddUserInputController extends HttpServlet {
 				// là trường hợp ấn submit
 
 				// thì nhận về các thông tin đã nhập
-				loginName = (String) request.getAttribute("id");
-				groupId = CommonUtil.convertStrToInt((String) request.getAttribute("group_id"));
-				fullName = (String) request.getAttribute("full_name");
-				fullNameKana = (String) request.getAttribute("full_name_kana");
+				loginName = (String) request.getParameter("id");
+				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
+				fullName = (String) request.getParameter("full_name");
+				fullNameKana = (String) request.getParameter("full_name_kana");
 				// birth_day trong tbl_user
 				String[] arrBirthDay = request.getParameterValues("birth_day");
-				birthDay = CommonUtil.ghepThoiGian(arrBirthDay[0], arrBirthDay[1], arrBirthDay[2]);
+				birthDay = CommonUtil.convertToDate(arrBirthDay[0], arrBirthDay[1], arrBirthDay[2]);
 				email = request.getParameter("email");
 				tel = request.getParameter("tel");
 				pass = request.getParameter("pass");
@@ -104,10 +105,10 @@ public class AddUserInputController extends HttpServlet {
 				codeLevel = request.getParameter("kyu_id");
 				// start_date trong tbl_user
 				String[] arrStartDate = request.getParameterValues("start_date");
-				startDate = CommonUtil.ghepThoiGian(arrStartDate[0], arrStartDate[1], arrStartDate[2]);
+				startDate = CommonUtil.convertToDate(arrStartDate[0], arrStartDate[1], arrStartDate[2]);
 				// end_date trong tbl_user
 				String[] arrEndDate = request.getParameterValues("end_date");
-				endDate = CommonUtil.ghepThoiGian(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
+				endDate = CommonUtil.convertToDate(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
 				total = CommonUtil.convertStrToInt(request.getParameter("total"));
 			} else {
 				// ko là trường hợp submit
@@ -157,7 +158,7 @@ public class AddUserInputController extends HttpServlet {
 				case ConstantUtil.ADM003_ADD_TYPE:
 				default: // cùng trường hợp với add type
 
-					String nowTime = CommonUtil.getNowTime();
+					Date nowTime = CommonUtil.getNowTime();
 					// thêm các thông tin mặc định cho user, ví dụ startDate là ngày
 					// hiện tại
 					loginName = "";
