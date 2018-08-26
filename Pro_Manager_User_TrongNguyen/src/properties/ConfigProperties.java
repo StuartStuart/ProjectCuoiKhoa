@@ -16,6 +16,7 @@ import utils.ConstantUtil;
  * @author TrongNguyen
  *
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ConfigProperties {
 	private static HashMap<String, String> keyValuePartners;
 

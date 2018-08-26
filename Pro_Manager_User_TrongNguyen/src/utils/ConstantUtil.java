@@ -101,5 +101,28 @@ public class ConstantUtil {
 	 * đường dẫn đến jsp ADM003
 	 */
 	public static final String ADM003_JSP = "/jsp/ADM003.jsp";
-	
+	/*
+	 * đường dẫn đến ADM004
+	 */
+	public static final String ADM004_JSP = "/jsp/ADM004.jsp";
+	/*
+	 * đường dẫn đến ADM006
+	 */
+	public static final String ADM006_JSP = "/jsp/ADM006.jsp";
+	/*
+	 * đường dẫn đến system error
+	 */
+	public static final String SYSTEM_ERROR_JSP = "/jsp/System_Error.jsp";
+	/*
+	 * đường dẫn đến successController
+	 */
+	public static final String SUCCESS = "/Success.do";
+	/*
+	 * gọi đến màn hình ADM006 ở trạng thái thành công
+	 */
+	public static final String ADM006_SUCCESS_TYPE = "success";
+	/*
+	 * gọi đến màn hình ADM006 ở trạng thái lỗi
+	 */
+	public static final String ADM006_ERROR_TYPE = "error";
 }

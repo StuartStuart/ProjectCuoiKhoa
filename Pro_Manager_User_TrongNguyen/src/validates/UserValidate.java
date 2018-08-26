@@ -33,24 +33,24 @@ public class UserValidate {
 		try {
 			// validate login name
 			{
-				// check ko nhập
 				if (userInfor.getLoginName().isEmpty()) {
+					// check ko nhập
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
-				}
-				// check đã tồn tại
-				if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(), userInfor.getLoginName())) {
+				} else if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(),
+						userInfor.getLoginName())) {
+					// check đã tồn tại
 					listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
-				}
-				// check độ dài trong khoảng
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"));
-				int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"));
-				int currentLengh = userInfor.getLoginName().length();
-				if (currentLengh < minLength || currentLengh > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
-				}
-				// check định dạng
-				if (CommonUtil.checkAccountFormat(userInfor.getLoginName())) {
+				} else if (CommonUtil.checkAccountFormat(userInfor.getLoginName())) {
+					// check định dạng
 					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
+				} else {
+					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"));
+					int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"));
+					int currentLengh = userInfor.getLoginName().length();
+					if (currentLengh < minLength || currentLengh > maxLength) {
+						// check độ dài trong khoảng
+						listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
+					}
 				}
 			}
 			// validate group
@@ -156,7 +156,7 @@ public class UserValidate {
 			// validate japan zone
 			if (!userInfor.getCodeLevel().equalsIgnoreCase("N0")) {
 				// đã select code level
-				
+
 				// thì
 				// validate japan level
 				{

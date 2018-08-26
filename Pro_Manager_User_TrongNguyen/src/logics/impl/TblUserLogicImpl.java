@@ -120,4 +120,18 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 		return tblUserDaoImpl.checkExistedEmail(userId, email);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.TblUserLogic#createUser(entities.UserInforEntity)
+	 */
+	@Override
+	public boolean createUser(UserInforEntity userInfor) throws Exception {
+		try {
+			return tblUserDaoImpl.createUser(userInfor);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

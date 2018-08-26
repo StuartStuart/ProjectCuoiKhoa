@@ -11,7 +11,7 @@
 	rel="stylesheet" type="text/css" />
 <title>Insert title here</title>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/js/ADM003.js"></script>
+	src="${pageContext.request.contextPath }/js/JapanZone.js"></script>
 </head>
 <body>
 	<!-- Begin vung header -->
@@ -135,7 +135,7 @@
 								<th align="left" colspan="2"><a href="#"
 									onclick="changeJapanZone()">日本語能力</a></th>
 							</tr>
-							<tbody style="display: none" id="adm003japanzone">
+							<tbody style="display: none" id="japanzone">
 								<tr>
 									<td class="lbl_left">資格:</td>
 									<td align="left"><select name="kyu_id">

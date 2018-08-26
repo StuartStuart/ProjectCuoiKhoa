@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entities.MstJapanEntity;
+import entities.TblMstGroupEntity;
 import entities.UserInforEntity;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.MstJapanLogicImpl;
@@ -71,6 +73,7 @@ public class AddUserInputController extends HttpServlet {
 		// khai báo các thuộc tính để set cho userinfor
 		String loginName;
 		int groupId;
+		TblMstGroupEntity mstGroup;
 		String fullName;
 		String fullNameKana;
 		Date birthDay;
@@ -79,6 +82,7 @@ public class AddUserInputController extends HttpServlet {
 		String pass;
 		String repass;
 		String codeLevel;
+		MstJapanEntity mstJapan;
 		Date startDate;
 		Date endDate;
 		int total;
@@ -93,6 +97,7 @@ public class AddUserInputController extends HttpServlet {
 				// thì nhận về các thông tin đã nhập
 				loginName = (String) request.getParameter("id");
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
+				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
 				fullNameKana = (String) request.getParameter("full_name_kana");
 				// birth_day trong tbl_user
@@ -103,6 +108,7 @@ public class AddUserInputController extends HttpServlet {
 				pass = request.getParameter("pass");
 				repass = request.getParameter("repass");
 				codeLevel = request.getParameter("kyu_id");
+				mstJapan = new MstJapanLogicImpl().getMstJapanByCodeLevel(codeLevel);
 				// start_date trong tbl_user
 				String[] arrStartDate = request.getParameterValues("start_date");
 				startDate = CommonUtil.convertToDate(arrStartDate[0], arrStartDate[1], arrStartDate[2]);
@@ -117,10 +123,11 @@ public class AddUserInputController extends HttpServlet {
 				case ConstantUtil.ADM003_BACK_TYPE:
 					// thêm các thông tin mặc định cho user từ session
 					UserInforEntity sessionUser = (UserInforEntity) request.getSession()
-							.getAttribute("adm003entityuserinfor");
+							.getAttribute("entityuserinfor");
 
 					loginName = sessionUser.getLoginName();
 					groupId = sessionUser.getGroupId();
+					mstGroup = sessionUser.getMstGroup();
 					fullName = sessionUser.getFullName();
 					fullNameKana = sessionUser.getFullNameKana();
 					birthDay = sessionUser.getBirthDay();
@@ -129,6 +136,7 @@ public class AddUserInputController extends HttpServlet {
 					pass = "";
 					repass = "";
 					codeLevel = sessionUser.getCodeLevel();
+					mstJapan = sessionUser.getMstJapan();
 					startDate = sessionUser.getStartDate();
 					endDate = sessionUser.getEndDate();
 					total = sessionUser.getTotal();
@@ -143,6 +151,7 @@ public class AddUserInputController extends HttpServlet {
 
 					loginName = editionUser.getLoginName();
 					groupId = editionUser.getGroupId();
+					mstGroup = editionUser.getMstGroup();
 					fullName = editionUser.getFullName();
 					fullNameKana = editionUser.getFullNameKana();
 					birthDay = editionUser.getBirthDay();
@@ -151,6 +160,7 @@ public class AddUserInputController extends HttpServlet {
 					pass = "";
 					repass = "";
 					codeLevel = editionUser.getCodeLevel();
+					mstJapan = editionUser.getMstJapan();
 					startDate = editionUser.getStartDate();
 					endDate = editionUser.getEndDate();
 					total = editionUser.getTotal();
@@ -163,6 +173,7 @@ public class AddUserInputController extends HttpServlet {
 					// hiện tại
 					loginName = "";
 					groupId = ConstantUtil.ADM003_DEFAULT_GROUP;
+					mstGroup=null;
 					fullName = "";
 					fullNameKana = "";
 					birthDay = nowTime;
@@ -171,6 +182,7 @@ public class AddUserInputController extends HttpServlet {
 					pass = "";
 					repass = "";
 					codeLevel = "";
+					mstJapan = null;
 					startDate = nowTime;
 					endDate = nowTime;
 					total = ConstantUtil.ADM003_DEFAULT_TOTAL;
@@ -180,6 +192,7 @@ public class AddUserInputController extends HttpServlet {
 			// set thuộc tính cho userInforDefault
 			userInforDefault.setLoginName(loginName);
 			userInforDefault.setGroupId(groupId);
+			userInforDefault.setMstGroup(mstGroup);
 			userInforDefault.setFullName(fullName);
 			userInforDefault.setFullNameKana(fullNameKana);
 			userInforDefault.setBirthDay(birthDay);
@@ -188,6 +201,7 @@ public class AddUserInputController extends HttpServlet {
 			userInforDefault.setPass(pass);
 			userInforDefault.setRepass(repass);
 			userInforDefault.setCodeLevel(codeLevel);
+			userInforDefault.setMstJapan(mstJapan);
 			userInforDefault.setStartDate(startDate);
 			userInforDefault.setEndDate(endDate);
 			userInforDefault.setTotal(total);
@@ -262,7 +276,7 @@ public class AddUserInputController extends HttpServlet {
 				// ko có lỗi
 
 				// thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
-				request.getSession().setAttribute("adm003entityuserinfor", userInfor);
+				request.getSession().setAttribute("entityuserinfor", userInfor);
 				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM);
 			}
 		} catch (Exception e) {

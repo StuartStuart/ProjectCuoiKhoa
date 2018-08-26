@@ -1,10 +1,7 @@
-﻿ADM002: check testcase
+ADM002: check testcase
 		sửa getAllMstGroup chỉ get 4 nhóm, ko thêm phần tử mặc định
 
 ADM003: setDefaultValue -> getDefaultValue -> getUserInforDefault(): sẽ lưu lên session, kể cả chuỗi Date trong SQL bởi vì có JSTL xử lý chuỗi Date đó ?
-		có 28 validate
 		thêm fn: escapeXml cho các vùng hiển thị
-		checkExistedLoginName(): do LoginName là duy nhất nên ko cần user_id
-									kiểu trả về là TblUserEntity -> đổi tên là getUserByLoginName()
 		validate: checkMaxLength(): maxlength = ?
-		convertToDate(): sai
+		vùng trình độ tiếng Nhật có thì mới có phần bên dưới

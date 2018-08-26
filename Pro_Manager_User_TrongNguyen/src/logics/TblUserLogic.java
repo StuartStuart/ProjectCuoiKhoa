@@ -79,4 +79,12 @@ public interface TblUserLogic {
 	 * @throws Exception
 	 */
 	public boolean checkExistedEmail(final Integer userId, final String email) throws Exception;
+	
+	/**
+	 * gọi đến phương thức tạo của dao
+	 * @param userInfor đối tượng cần tạo
+	 * @return true là tạo thành công
+	 * @throws Exception 
+	 */
+	public boolean createUser(UserInforEntity userInfor) throws Exception;
 }

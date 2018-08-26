@@ -426,7 +426,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer, java.lang.String)
 	 */
 	@Override
@@ -469,5 +471,52 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#createUser(entities.UserInforEntity)
+	 */
+	@Override
+	public boolean createUser(UserInforEntity userInfor) throws Exception {
+		
+		try {
+			// mở conn
+			openConnection();
+			// set commit
+			conn.setAutoCommit(false);
+			// tran 1
+			insertUser(userInfor);
+			// tran 2
+			new TblDetailUserJapanDaoImpl().insertUser(userInfor);
+			// commit
+			conn.commit();
+			// hoàn thành tất cả - trả về true
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			// roll back ve save point
+			conn.rollback();
+			// phải roll back - trả về false
+			return false;
+		} finally {
+			try {
+				// đóng conn
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see dao.TblUserDao#insertUser(entities.UserInforEntity)
+	 */
+	@Override
+	public void insertUser(UserInforEntity userInfor) throws Exception {
+		System.out.println("Đã chạy qua insertUser of tbl_user");
+		
 	}
 }

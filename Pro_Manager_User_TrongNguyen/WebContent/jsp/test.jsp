@@ -15,6 +15,8 @@
 	</p> --%>
 	
 	<fmt:parseDate value="2018-09-08" pattern="yyyy-MM-dd" var="pD"/>
+	<p><fmt:formatDate 
+         pattern="yyyy/MM/dd" value = "${pD}" /></p>
 	<fmt:formatDate value="${pD }" pattern="y"/>
 	<fmt:formatDate value="${pD }" pattern="M"/>
 	<fmt:formatDate value="${pD }" pattern="d"/>

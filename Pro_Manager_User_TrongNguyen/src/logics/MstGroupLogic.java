@@ -31,4 +31,13 @@ public interface MstGroupLogic {
 	 * @throws Exception
 	 */
 	boolean checkExistedGroupId(final int groupId) throws Exception;
+
+	/**
+	 * nhân về 1 record mst group từ dao
+	 * 
+	 * @param groupId
+	 * @return 1 đối tượng mst group
+	 * @throws Exception 
+	 */
+	TblMstGroupEntity getMstGroupByGroupId(final int groupId) throws Exception;
 }

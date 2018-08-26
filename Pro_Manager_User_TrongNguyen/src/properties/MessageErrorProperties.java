@@ -1,6 +1,6 @@
 /**
  * Copyright(C) 2018 	Luvina
- * MessageErrorProperties.java, Aug 15, 2018, LA-PM
+ * MessageErrorProperties.java, Aug 15, 2018, TrongNguyen
  */
 package properties;
 
@@ -13,9 +13,10 @@ import java.util.Properties;
 import utils.ConstantUtil;
 
 /**
- * @author LA-PM
+ * @author TrongNguyen
  *
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class MessageErrorProperties {
 	private static HashMap<String, String> keyValuePartners;
 

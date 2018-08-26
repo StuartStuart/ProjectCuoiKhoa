@@ -55,4 +55,17 @@ public class MstGroupLogicImpl extends BaseLogicImpl implements MstGroupLogic {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see logics.MstGroupLogic#getMstGroupByGroupId(int)
+	 */
+	@Override
+	public TblMstGroupEntity getMstGroupByGroupId(int groupId) throws Exception{
+		try {
+			return mstGroup.getMstGroupByGroupId(groupId);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 }

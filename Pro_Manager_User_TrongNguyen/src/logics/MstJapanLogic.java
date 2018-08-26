@@ -31,4 +31,13 @@ public interface MstJapanLogic {
 	 * @throws Exception
 	 */
 	boolean checkExistedCodeLevel(String codeLevel) throws Exception;
+
+	/**
+	 * lấy về đối tượng MstJapanEntity từ dao
+	 * 
+	 * @param codeLevel mã trình độ tiếng Nhật
+	 * @return đối tượng MstJapanEntity
+	 * @throws Exception
+	 */
+	MstJapanEntity getMstJapanByCodeLevel(final String codeLevel) throws Exception;
 }

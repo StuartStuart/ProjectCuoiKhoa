@@ -58,7 +58,7 @@ public interface TblUserDao {
 	 * @param userId id của người dùng - là duy nhất
 	 * @return một đối tượng chứa thông tin của người dùng
 	 */
-	public UserInforEntity getUserInfor(int userId) throws Exception;
+	UserInforEntity getUserInfor(int userId) throws Exception;
 
 	/**
 	 * nhận về từ db đối tượng thỏa mãn id và loginName
@@ -68,7 +68,7 @@ public interface TblUserDao {
 	 * @return một bản ghi có tên đăng nhập và id tương ứng hoặc null
 	 * @throws Exception
 	 */
-	public boolean checkExistedLoginName(final Integer userId, final String loginName) throws Exception;
+	boolean checkExistedLoginName(final Integer userId, final String loginName) throws Exception;
 
 	/**
 	 * xác định đối tượng với email có tồn tại hay không
@@ -78,5 +78,22 @@ public interface TblUserDao {
 	 * @return true là tồn tại
 	 * @throws Exception
 	 */
-	public boolean checkExistedEmail(final Integer userId, final String email) throws Exception;
+	boolean checkExistedEmail(final Integer userId, final String email) throws Exception;
+
+	/**
+	 * tạo 1 user trong db
+	 * 
+	 * @param userInfor đối tượng cần tạo
+	 * @return true là tạo thành công
+	 * @throws Exception
+	 */
+	boolean createUser(UserInforEntity userInfor) throws Exception;
+
+	/**
+	 * insert các thông tin vào bảng tbl_user
+	 * 
+	 * @param userInfor đối tượng chứa thông tin tbl_user va tbl_detail_japan
+	 * @throws Exception
+	 */
+	void insertUser(UserInforEntity userInfor) throws Exception;
 }

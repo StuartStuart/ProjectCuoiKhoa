@@ -19,6 +19,7 @@ import utils.ConstantUtil;
  * @author TrongNguyen
  *
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class DatabaseProperties {
 	private static HashMap<String, String> keyValuePartners;
 

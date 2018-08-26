@@ -94,4 +94,47 @@ public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 			}
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.MstJapanDao#getMstJapanByCodeLevel(java.lang.String)
+	 */
+	@Override
+	public MstJapanEntity getMstJapanByCodeLevel(String codeLevel) throws Exception {
+		try { // mở conn
+			openConnection();
+			// viết query
+			query = "SELECT * FROM mst_japan WHERE code_level = ?;";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setString(++i, codeLevel);
+			// thực hiện query
+			ResultSet rs = ps.executeQuery();
+			// trả về đối tượng
+			if(rs.next()) {
+				MstJapanEntity mstJapanByCodeLevel = new MstJapanEntity();
+				
+				mstJapanByCodeLevel.setCodeLevel(rs.getString("code_level"));
+				mstJapanByCodeLevel.setNameLevel(rs.getString("name_level"));
+				
+				return mstJapanByCodeLevel;
+			}else {
+				return null;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			// đóng conn
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
 }

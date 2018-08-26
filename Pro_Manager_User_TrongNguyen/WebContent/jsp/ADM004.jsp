@@ -1,118 +1,120 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/style.css"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/JapanZone.js"></script>
+</head>
 <title>Insert title here</title>
 </head>
 <body>
-	<!-- Begin vung header -->	
-		<div>			
-			<div>
-			<table>
+	<!-- Begin vung header -->
+	<%@ include file="header.jsp"%>
+
+	<!-- End vung header -->
+
+	<!-- Begin vung input-->
+	<form action="${pageContext.request.contextPath }/AddUserConfirm.do" method="post" name="inputform">
+		<table class="tbl_input" border="0" width="75%" cellpadding="0"
+			cellspacing="0">
 			<tr>
-			<td width = "80%"><img src="../images/logo-manager-user.gif" alt="Luvina" /><td>
-			<td align="left"><a href = "ADM001.html">ログアウト</a> &nbsp; <a href = "ADM002.html">トップ</a><td>
+				<th align="left">
+					<div style="padding-left: 100px;">
+						情報確認<br> 入力された情報をＯＫボタンクリックでＤＢへ保存してください
+					</div>
+					<div style="padding-left: 100px;">&nbsp;</div>
+				</th>
 			</tr>
-			</table>
-			</div>
-		</div>
-
-<!-- End vung header -->	
-
-<!-- Begin vung input-->	
-	<form action="ADM006.html" method="post" name="inputform">	
-	<table  class="tbl_input" border="0" width="75%"  cellpadding="0" cellspacing="0" >			
-		<tr>
-			<th align="left">
-				<div style="padding-left:100px;">
-					情報確認<br>
-					入力された情報をＯＫボタンクリックでＤＢへ保存してください
-				</div>
-				<div style="padding-left:100px;">&nbsp;</div>
-			</th>			
-		</tr>				
-		<tr>
-			<td align="left" >
-				<div style="padding-left:100px;">
-					<table border="1" width="70%" class="tbl_input" cellpadding="4" cellspacing="0" >					
-					<tr>
-						<td class="lbl_left">アカウント名:</td>
-						<td align="left">ntmhuong</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">グループ:</td>
-						<td align="left">Nhóm 1</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">氏名:</td>
-						<td align="left">Nguyễn Thị Mai Hương</td>
-					</tr>	
-					<tr>
-						<td class="lbl_left">カタカナ氏名:</td>
-						<td align="left">名カナ</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">生年月日:</td>
-						<td align="left">1983/07/08</td>
-					</tr>				
-					<tr>
-						<td class="lbl_left">メールアドレス:</td>
-						<td align="left">ntmhuong@luvina.net</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">電話番号:</td>
-						<td align="left">0914326386</td>
-					</tr>	
-					<tr>
-						<th colspan = "2"><a href = "#">日本語能力</a></th>
-					</tr>
-					<tr>
-						<td class="lbl_left">資格:</td>
-						<td align="left">Trình độ tiếng nhật cấp 1</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">資格交付日:</td>
-						<td align="left">2010/07/08</td>
-					</tr>
-					<tr>
-						<td class="lbl_left">失効日:</td>
-						<td align="left">2011/07/08</td>
-					</tr>	
-					<tr>
-						<td class="lbl_left">点数:</td>
-						<td align="left">290</td>
-					</tr>												
-				</table>
-				</div>				
-			</td>		
-		</tr>
-	</table>
-	<div style="padding-left:100px;">&nbsp;</div>
-		<!-- Begin vung button -->
-	<div style="padding-left:45px;">
-	<table border="0" cellpadding="4" cellspacing="0" width="300px">	
-		<tr>
-			<th width="200px" align="center">&nbsp;</th>
-				<td>
-					<input class="btn" type="submit" value="OK" />					
-				</td>	
-				<td>
-					<input class="btn" type="button" value="戻る" />						
+			<tr>
+				<td align="left">
+					<div style="padding-left: 100px;">
+						<table border="1" width="70%" class="tbl_input" cellpadding="4"
+							cellspacing="0">
+							<tr>
+								<td class="lbl_left">アカウント名:</td>
+								<td align="left">${entityuserinfor.loginName }</td>
+							</tr>
+							<tr>
+								<td class="lbl_left">グループ:</td>
+								<td align="left">${entityuserinfor.mstGroup.groupName }</td>
+							</tr>
+							<tr>
+								<td class="lbl_left">氏名:</td>
+								<td align="left">${entityuserinfor.fullName }</td>
+							</tr>
+							<tr>
+								<td class="lbl_left">カタカナ氏名:</td>
+								<td align="left">${entityuserinfor.fullNameKana }</td>
+							</tr>
+							<tr>
+								<td class="lbl_left">生年月日:</td>
+								<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
+										value="${entityuserinfor.birthDay }" /></td>
+							</tr>
+							<tr>
+								<td class="lbl_left">メールアドレス:</td>
+								<td align="left">${entityuserinfor.email }</td>
+							</tr>
+							<tr>
+								<td class="lbl_left">電話番号:</td>
+								<td align="left">${entityuserinfor.tel}</td>
+							</tr>
+							<tr>
+								<th colspan="2"><a href="#" onclick="changeJapanZone()">日本語能力</a></th>
+							</tr>
+							<tbody style="display: none" id="japanzone">
+								<tr>
+									<td class="lbl_left">資格:</td>
+									<c:set value="${entityuserinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
+									<td align="left">${nameLevel }</td>
+								</tr>
+								<tr>
+									<td class="lbl_left">資格交付日:</td>
+									<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
+											value="${entityuserinfor.startDate}" var="startDate" />
+										${(nameLevel == null)?'':startDate }</td>
+								</tr>
+								<tr>
+									<td class="lbl_left">失効日:</td>
+									<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
+											value="${entityuserinfor.endDate}" var="endDate" />
+										${(nameLevel == null)?'':endDate }</td>
+								</tr>
+								<tr>
+									<td class="lbl_left">点数:</td>
+									<c:set value="${entityuserinfor.total}" var="total"></c:set>
+									<td align="left">${(nameLevel == null)?'':total }</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</td>
-		</tr>		
-	</table>
-	<!-- End vung button -->	
-</form>
-<!-- End vung input -->
+			</tr>
+		</table>
+		<div style="padding-left: 100px;">&nbsp;</div>
+		<!-- Begin vung button -->
+		<div style="padding-left: 45px;">
+			<table border="0" cellpadding="4" cellspacing="0" width="300px">
+				<tr>
+					<th width="200px" align="center">&nbsp;</th>
+					<td><input class="btn" type="submit" value="OK" /></td>
+					<td><input class="btn" type="button" value="戻る" 
+					onclick="window.location.href='${pageContext.request.contextPath }/AddUserInput.do?type=back'"/></td>
+				</tr>
+			</table>
+			<!-- End vung button -->
+	</form>
+	<!-- End vung input -->
 
-<!-- Begin vung footer -->
-<div class = "lbl_footer">
-	<br><br><br><br>
-			Copyright ©　2010　ルビナソフトウエア株式会社. All rights reserved.
-</div>
-<!-- End vung footer -->
+	<!-- Begin vung footer -->
+	<%@ include file="footer.jsp"%>
+	<!-- End vung footer -->
 </body>
 </html>

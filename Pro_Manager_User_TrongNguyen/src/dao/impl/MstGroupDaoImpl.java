@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import dao.MstGroupDao;
 import entities.TblMstGroupEntity;
-import utils.ConstantUtil;
 
 /**
  * đối tượng MstGroupDao
@@ -65,13 +64,52 @@ public class MstGroupDaoImpl extends BaseDaoImpl implements MstGroupDao {
 		try {
 			openConnection();
 			// tạo query
-			query = "SELECT COUNT(*) AS totalGroup FROM mst_group WHERE group_id = ?;";
+			query = "SELECT COUNT(*) FROM mst_group WHERE group_id = ?;";
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
 			ps.setInt(++i, groupId);
 			// nhận về giá trị
 			return ps.executeQuery().next();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see dao.MstGroupDao#getMstGroupByGroupId(int)
+	 */
+	@Override
+	public TblMstGroupEntity getMstGroupByGroupId(int groupId) throws Exception {
+		try {
+			openConnection();
+			// tạo query
+			query = "SELECT * FROM mst_group WHERE group_id = ?;";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setInt(++i, groupId);
+			// nhận về giá trị
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				TblMstGroupEntity mstGroupByGroupId = new TblMstGroupEntity();
+				
+				mstGroupByGroupId.setGroupId(rs.getInt("group_id"));
+				mstGroupByGroupId.setGroupName(rs.getString("group_name"));
+				
+				return mstGroupByGroupId;
+			}else {
+				return null;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
