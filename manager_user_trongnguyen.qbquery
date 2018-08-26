@@ -87,13 +87,13 @@ INSERT INTO tbl_user(full_name, birthday, group_id, email, tel, category)
 VALUES ('Lê Phương Anh', '1983-07-08', 3, 'anhlp@luvina.net', '1234-5678-94', 1);
 
 INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
-VALUES (2, 'N4', '2011-07-08', 290);
+VALUES (2, 'N1', '2011-07-08', 290);
 
 INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
-VALUES (3, 'N4', '2011-07-08', 290);
+VALUES (3, 'N2', '2011-07-08', 290);
 
 INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
-VALUES (4, 'N4', '2011-07-08', 290);
+VALUES (4, 'N3', '2011-07-08', 290);
 
 INSERT INTO tbl_detail_user_japan(user_id, code_level, end_date, total)
 VALUES (5, 'N4', '2011-07-08', 290);

@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.TblUserDao;
 import entities.TblUserEntity;
@@ -480,7 +481,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 */
 	@Override
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
-		
+
 		try {
 			// mở conn
 			openConnection();
@@ -511,12 +512,68 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see dao.TblUserDao#insertUser(entities.UserInforEntity)
 	 */
 	@Override
 	public void insertUser(UserInforEntity userInfor) throws Exception {
-		System.out.println("Đã chạy qua insertUser of tbl_user");
-		
+		// viết query
+		StringBuilder query = new StringBuilder("");
+		query.append(
+				"INSERT INTO tbl_user(group_id, login_name, `password`, full_name, full_name_kana, email, tel, birthday, salt, category)");
+		query.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		// hoàn thiện query
+		ps = conn.prepareStatement(query.toString());
+		int i = 0;
+		ps.setInt(++i, userInfor.getGroupId());
+		ps.setString(++i, userInfor.getLoginName());
+		String salt = new Date().getTime() + "";
+		ps.setString(++i, CommonUtil.encodeMatKhau(userInfor.getPass(), salt));
+		ps.setString(++i, userInfor.getFullName());
+		ps.setString(++i, userInfor.getFullNameKana());
+		ps.setString(++i, userInfor.getEmail());
+		ps.setString(++i, userInfor.getTel());
+		ps.setDate(++i, new java.sql.Date(userInfor.getBirthDay().getTime()));
+		ps.setString(++i, salt);
+		ps.setInt(++i, ConstantUtil.USER_CATEGORY);
+		// thực hiện query
+		ps.executeUpdate();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#getUserIdByLoginName(java.lang.String)
+	 */
+	@Override
+	public Integer getUserIdByLoginName(String loginName) throws Exception {
+		Integer userId;
+		try {
+			boolean isExistedConnection = !(null == conn || conn.isClosed());
+			if (!isExistedConnection) {
+				openConnection();
+			}
+			// viết query
+			query = "SELECT user_id FROM tbl_user t ORDER BY t.user_id DESC LIMIT 1;";
+			ps = conn.prepareStatement(query);
+			// thực hiện query
+			ResultSet rs = ps.executeQuery();
+			// trả về kết quả
+			if (rs.next()) {
+				userId = rs.getInt("user_id");
+				System.out.println(userId);
+			} else {
+				userId = null;
+			}
+			if (isExistedConnection) {
+				closeConnection();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return userId;
 	}
 }

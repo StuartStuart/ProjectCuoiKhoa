@@ -37,6 +37,7 @@ public class AddUserConfirm extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			System.out.println(null == request.getSession().getAttribute("entityuserinfor"));
 			if (new TblUserLogicImpl()
 					.createUser((UserInforEntity) request.getSession().getAttribute("entityuserinfor"))) {
 				response.sendRedirect(

@@ -108,6 +108,7 @@ public class AddUserInputController extends HttpServlet {
 				pass = request.getParameter("pass");
 				repass = request.getParameter("repass");
 				codeLevel = request.getParameter("kyu_id");
+				System.out.println(codeLevel);
 				mstJapan = new MstJapanLogicImpl().getMstJapanByCodeLevel(codeLevel);
 				// start_date trong tbl_user
 				String[] arrStartDate = request.getParameterValues("start_date");

@@ -96,4 +96,11 @@ public interface TblUserDao {
 	 * @throws Exception
 	 */
 	void insertUser(UserInforEntity userInfor) throws Exception;
+	
+	/**
+	 * @param loginName
+	 * @return
+	 * @throws Exception
+	 */
+	Integer getUserIdByLoginName(final String loginName) throws Exception;
 }

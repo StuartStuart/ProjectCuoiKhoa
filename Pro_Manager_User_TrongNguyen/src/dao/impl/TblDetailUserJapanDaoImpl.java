@@ -15,13 +15,42 @@ import entities.UserInforEntity;
  */
 public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailUserJapanDao {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see dao.TblDetailUserJapanDao#insertUser(entities.UserInforEntity)
 	 */
 	@Override
 	public void insertUser(UserInforEntity userInfor) throws Exception {
-		System.out.println("Đã chạy qua insertUser of tbl_detail_user_japan!");
-		
+		try {
+			boolean isExistedConnection = !(null == conn || conn.isClosed());
+			if (!isExistedConnection) {
+				openConnection();
+			}
+			if (!userInfor.getCodeLevel().equalsIgnoreCase("N0")) {
+				// viết query
+				StringBuilder query = new StringBuilder("");
+				query.append("INSERT INTO tbl_detail_user_japan(user_id, code_level, start_date, end_date, total)");
+				query.append(" VALUES (?, ?, ?, ?, ?);");
+				// hoàn thiện query
+				ps = conn.prepareStatement(query.toString());
+				int i = 0;
+				ps.setInt(++i, new TblUserDaoImpl().getUserIdByLoginName(userInfor.getLoginName()));
+				ps.setString(++i, userInfor.getCodeLevel());
+				ps.setDate(++i, new java.sql.Date(userInfor.getStartDate().getTime()));
+				ps.setDate(++i, new java.sql.Date(userInfor.getEndDate().getTime()));
+				ps.setInt(++i, userInfor.getTotal());
+				// thực hiện query
+				ps.executeUpdate();
+			}
+
+			if (isExistedConnection) {
+				closeConnection();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 }
