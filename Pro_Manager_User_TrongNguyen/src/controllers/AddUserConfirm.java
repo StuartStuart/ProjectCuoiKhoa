@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import entities.UserInforEntity;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
+import properties.MessageProperties;
 import utils.ConstantUtil;
 
 /**
@@ -26,6 +27,8 @@ public class AddUserConfirm extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		UserInforEntity userInforEntity = (UserInforEntity)request.getSession().getAttribute("entityuserinfor");
+		request.setAttribute("userinfor", userInforEntity);
 		request.getRequestDispatcher(ConstantUtil.ADM004_JSP).forward(request, response);
 	}
 

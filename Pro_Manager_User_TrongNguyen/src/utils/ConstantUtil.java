@@ -22,6 +22,10 @@ public class ConstantUtil {
 	 */
 	public static final String CONFIG = "Config.properties";
 	/*
+	 * file chứa các cặp key - value liên quan đến Message Error
+	 */
+	public static final String MESSAGE = "Message.properties";
+	/*
 	 * user có category = 1
 	 */
 	public static final int USER_CATEGORY = 1;
@@ -126,11 +130,27 @@ public class ConstantUtil {
 	 */
 	public static final String ADM006_ERROR_TYPE = "error";
 	/*
-	 * ký  tự kana đầu tiên
+	 * ký tự kana đầu tiên
 	 */
 	public static final char FIRST_KANA = (char) 0x30a0;
 	/*
 	 * ký tự kana cuối cùng
 	 */
 	public static final char LAST_KANA = (char) 0x30ff;
+	/*
+	 * biểu thức chính quy của email
+	 */
+	public static final String EMAIL_REGREX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$";
+	/*
+	 * biểu thức chính quy của login name
+	 */
+	public static final String LOGIN_NAME_REGREX = "^[a-zA-Z]+[a-zA-Z0-9_]*";
+	/*
+	 * ký tự 1 byte đầu tiên
+	 */
+	public static final char FIRST_ONE_BYTE_CHAR = (char) 1;
+	/*
+	 * ký tự 1 byte cuối cùng
+	 */
+	public static final char LAST_ONE_BYTE_CHAR = (char) 255;
 }

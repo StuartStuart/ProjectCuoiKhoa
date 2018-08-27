@@ -85,7 +85,7 @@ public class AddUserInputController extends HttpServlet {
 		MstJapanEntity mstJapan;
 		Date startDate;
 		Date endDate;
-		int total;
+		Integer total;
 		// nhận về loại đến ADM003 - type
 		try {
 			String type = request.getParameter("type");
@@ -108,7 +108,6 @@ public class AddUserInputController extends HttpServlet {
 				pass = request.getParameter("pass");
 				repass = request.getParameter("repass");
 				codeLevel = request.getParameter("kyu_id");
-				System.out.println(codeLevel);
 				mstJapan = new MstJapanLogicImpl().getMstJapanByCodeLevel(codeLevel);
 				// start_date trong tbl_user
 				String[] arrStartDate = request.getParameterValues("start_date");
@@ -116,7 +115,7 @@ public class AddUserInputController extends HttpServlet {
 				// end_date trong tbl_user
 				String[] arrEndDate = request.getParameterValues("end_date");
 				endDate = CommonUtil.convertToDate(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
-				total = CommonUtil.convertStrToInt(request.getParameter("total"));
+				total = CommonUtil.getTotalFromTextbox(request.getParameter("total"));
 			} else {
 				// ko là trường hợp submit
 				switch (type) {

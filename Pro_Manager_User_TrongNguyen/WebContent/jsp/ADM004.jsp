@@ -39,32 +39,32 @@
 							cellspacing="0">
 							<tr>
 								<td class="lbl_left">アカウント名:</td>
-								<td align="left">${fn:escapeXml(entityuserinfor.loginName )}</td>
+								<td align="left">${fn:escapeXml(userinfor.loginName )}</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">グループ:</td>
-								<td align="left">${fn:escapeXml(entityuserinfor.mstGroup.groupName) }</td>
+								<td align="left">${fn:escapeXml(userinfor.mstGroup.groupName) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">氏名:</td>
-								<td align="left">${fn:escapeXml(entityuserinfor.fullName) }</td>
+								<td align="left">${fn:escapeXml(userinfor.fullName) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">カタカナ氏名:</td>
-								<td align="left">${fn:escapeXml(entityuserinfor.fullNameKana) }</td>
+								<td align="left">${fn:escapeXml(userinfor.fullNameKana) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">生年月日:</td>
 								<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
-										value="${entityuserinfor.birthDay }" /></td>
+										value="${userinfor.birthDay }" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left">メールアドレス:</td>
-								<td align="left">${fn:escapeXml(entityuserinfor.email) }</td>
+								<td align="left">${fn:escapeXml(userinfor.email) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">電話番号:</td>
-								<td align="left">${entityuserinfor.tel}</td>
+								<td align="left">${userinfor.tel}</td>
 							</tr>
 							<tr>
 								<th colspan="2"><a href="#" onclick="changeJapanZone()">日本語能力</a></th>
@@ -72,24 +72,24 @@
 							<tbody style="display: none" id="japanzone">
 								<tr>
 									<td class="lbl_left">資格:</td>
-									<c:set value="${entityuserinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
+									<c:set value="${userinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
 									<td align="left">${fn:escapeXml(nameLevel) }</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">資格交付日:</td>
 									<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
-											value="${entityuserinfor.startDate}" var="startDate" />
+											value="${userinfor.startDate}" var="startDate" />
 										${(nameLevel == null)?'':startDate }</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">失効日:</td>
 									<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
-											value="${entityuserinfor.endDate}" var="endDate" />
+											value="${userinfor.endDate}" var="endDate" />
 										${(nameLevel == null)?'':endDate }</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">点数:</td>
-									<c:set value="${entityuserinfor.total}" var="total"></c:set>
+									<c:set value="${userinfor.total}" var="total"></c:set>
 									<td align="left">${(nameLevel == null)?'':total }</td>
 								</tr>
 							</tbody>

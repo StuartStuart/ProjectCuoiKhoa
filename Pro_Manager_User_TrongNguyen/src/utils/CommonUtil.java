@@ -258,26 +258,6 @@ public class CommonUtil {
 	}
 
 	/**
-	 * kiểm tra login name có đúng định dạng là chỉ bao gồm a-z, A-Z,0-9, _, ko bắt
-	 * đầu bằng số
-	 * 
-	 * @param loginName tene đăng nhập
-	 * @return true là đúng định dạng
-	 */
-	public static boolean checkAccountFormat(String loginName) {
-		if ((loginName.charAt(0) + "").matches("[0-9]")) {
-			// ký tự đầu là số
-			return false;
-		}
-		if (!loginName.matches("\b")) {
-			// các ký tự ko chỉ bao gồm a-z, A-Z, 0-9, _
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * check các ký tự trong chuỗi có là ký tự kana ko
 	 * 
 	 * @param fullNameKana chuỗi cần check
@@ -299,23 +279,37 @@ public class CommonUtil {
 	}
 
 	/**
+	 * nhận total từ textbox
+	 * 
+	 * @param parameter chuỗi textbox
+	 * @return null là chuỗi ko phải số
+	 */
+	public static Integer getTotalFromTextbox(String parameter) {
+		try {
+			return Integer.parseInt(parameter);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
 	 * kiểm tra các ký tự trong chuỗi có là ký tự 1 byte ko
 	 * 
 	 * @param pass chuỗi cần check
 	 * @return true là chuỗi chỉ bao gồm các ký tự 1 byte
 	 */
-//	public static boolean checkOneByteString(String pass) {
-//		for (int i = 0; i < pass.length(); i++) {
-//			int so = (int) pass.charAt(i);
-//
-//			if ((int) ConstantUtil.FIRST_ONE_BYTE_CHAR > so || so > (int) ConstantUtil.LAST_ONE_BYTE_CHAR) {
-//				// ko là ký tự kana
-//
-//				// thì
-//				return false;
-//			}
-//		}
-//
-//		return true;
-//	}
+	public static boolean checkOneByteString(String pass) {
+		for (int i = 0; i < pass.length(); i++) {
+			int so = (int) pass.charAt(i);
+
+			if ((int) ConstantUtil.FIRST_ONE_BYTE_CHAR > so || so > (int) ConstantUtil.LAST_ONE_BYTE_CHAR) {
+				// ko là ký tự kana
+
+				// thì
+				return false;
+			}
+		}
+
+		return true;
+	}
 }

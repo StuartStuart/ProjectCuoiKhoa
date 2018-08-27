@@ -1,59 +1,47 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/style.css"
+	rel="stylesheet" type="text/css" />
 <title>Insert title here</title>
 </head>
 <body>
-	<!-- Begin vung header -->	
-		<div>			
-			<div>
-			<table>
+	<!-- Begin vung header -->
+	<%@ include file="header.jsp"%>
+
+	<!-- End vung header -->
+
+	<!-- Begin vung input-->
+	<form action="${pageContext.request.contextPath}/ListUser.do" method="get" name="inputform">
+		<table class="tbl_input" border="0" width="80%" cellpadding="0"
+			cellspacing="0">
 			<tr>
-			<td width = "80%"><img src="../images/logo-manager-user.gif" alt="Luvina" /><td>
-			<td align="left"><a href = "ADM001.html">ログアウト</a> &nbsp; <a href = "ADM002.html">トップ</a><td>
+				<td align="center" colspan="2">
+					<div style="height: 50px"></div>
+				</td>
 			</tr>
-			</table>
-			</div>
-		</div>
-
-<!-- End vung header -->	
-
-<!-- Begin vung input-->	
-	<form action="ADM002.html" method="post" name="inputform">
-	<table  class="tbl_input"   border="0" width="80%"  cellpadding="0" cellspacing="0" >	
-		<tr>
-			<td align="center" colspan="2">
-				<div style="height:50px"></div>
-			</td>
-		</tr>
-		<tr>
-			<td align="center" colspan="2">
-				ユーザの登録が完了しました。 or ユーザの更新が完了しました。 or ユーザの削除が完了しました。
-			</td>
-		</tr>
-		<tr>
-			<td align="center" colspan="2">
-				<div style="height:70px"></div>
-			</td>
-		</tr>
-		<tr>
-			<td align="center" colspan="2">
-				<input class="btn" type="submit" value="OK" onclick=""/>
-			</td>
-		</tr>
-	</table>
+			<tr>
+				<td align="center" colspan="2">${adm006msg}</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2">
+					<div style="height: 70px"></div>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2"><input class="btn" type="submit"
+					value="OK" onclick="" /></td>
+			</tr>
+		</table>
 	</form>
-<!-- End vung input -->
+	<!-- End vung input -->
 
-<!-- Begin vung footer -->
-<div class = "lbl_footer">
-	<br><br><br><br>
-			Copyright ©　2010　ルビナソフトウエア株式会社. All rights reserved.
-</div>
-<!-- End vung footer -->
+	<!-- Begin vung footer -->
+	<%@ include file="footer.jsp"%>
+	<!-- End vung footer -->
 </body>
 </html>

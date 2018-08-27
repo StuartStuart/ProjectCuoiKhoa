@@ -12,8 +12,8 @@ import logics.impl.MstJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
 import properties.MessageErrorProperties;
-import sun.swing.UIAction;
 import utils.CommonUtil;
+import utils.ConstantUtil;
 
 /**
  * @author TrongNguyen
@@ -37,21 +37,20 @@ public class UserValidate {
 				if (userInfor.getLoginName().isEmpty()) {
 					// check ko nhập
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
+				} else if (!userInfor.getLoginName().matches(ConstantUtil.LOGIN_NAME_REGREX)) {
+					// check định dạng
+					System.out.println("a".matches(ConstantUtil.LOGIN_NAME_REGREX));
+					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
+				} else if (userInfor.getLoginName().length() < CommonUtil
+						.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"))
+						|| userInfor.getLoginName().length() > CommonUtil
+								.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"))) {
+					// check độ dài trong khoảng
+					listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
 				} else if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(),
 						userInfor.getLoginName())) {
 					// check đã tồn tại
 					listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
-				} else if (CommonUtil.checkAccountFormat(userInfor.getLoginName())) {
-					// check định dạng
-					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
-				} else {
-					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"));
-					int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"));
-					int currentLengh = userInfor.getLoginName().length();
-					if (currentLengh < minLength || currentLengh > maxLength) {
-						// check độ dài trong khoảng
-						listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
-					}
 				}
 			}
 			// validate group
@@ -59,9 +58,8 @@ public class UserValidate {
 				// check ko chọn
 				if (0 == userInfor.getGroupId()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error002_Group"));
-				}
-				// check ko tồn tại
-				if (!new MstGroupLogicImpl().checkExistedGroupId(userInfor.getGroupId())) {
+				} else if (!new MstGroupLogicImpl().checkExistedGroupId(userInfor.getGroupId())) {
+					// check ko tồn tại
 					listErrMsg.add(MessageErrorProperties.getValue("Error004_Group"));
 				}
 			}
@@ -110,7 +108,9 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error003_Email"));
 				}
 				// check sai format
-//				ErrMsg.add(MessageErrorProperties.getValue("Error005_Email"));
+				if (!userInfor.getEmail().matches(ConstantUtil.EMAIL_REGREX)) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error005_Email"));
+				}
 				// check max length
 				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Email"));
 				int currentLength = userInfor.getEmail().length();
@@ -125,7 +125,7 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Tel"));
 				}
 				// check sai format
-				if (!userInfor.getTel().matches("0[0-9]-[0-9]{4}-[0-9]{4}")) {
+				if (!userInfor.getTel().matches("[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}")) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
 				}
 				// check maxlength
@@ -150,9 +150,9 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error007_Password"));
 				}
 				// check ký tự 1 byte
-//				if (!userInfor.getPass().matches( "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})")) {
-//					listErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
-//				}
+				if (!CommonUtil.checkOneByteString(userInfor.getPass())) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
+				}
 			}
 			// validate repass
 			{
@@ -194,14 +194,17 @@ public class UserValidate {
 				// validate total
 				{
 					// check ko nhập
-//					ErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
-					// check là số haffsize
-					if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
+					if (null == userInfor.getTotal()) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
+					} else if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
+						// check là số haffsize
 						listErrMsg.add(MessageErrorProperties.getValue("Error018_Total"));
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
@@ -210,7 +213,6 @@ public class UserValidate {
 	}
 
 	public static void main(String[] args) {
-		String str = "pes.ht5!";
-		System.out.println(str.matches(".*!$"));
+		System.out.println("a".matches("^[a-zA-Z]+[a-zA-Z0-9_]+$"));
 	}
 }

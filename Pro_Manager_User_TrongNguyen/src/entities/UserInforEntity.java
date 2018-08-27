@@ -30,7 +30,7 @@ public class UserInforEntity {
 	private MstJapanEntity mstJapan;
 	private Date startDate;
 	private Date endDate;
-	private int total;
+	private Integer total;
 
 	/**
 	 * @return the mstGroup
@@ -273,14 +273,14 @@ public class UserInforEntity {
 	/**
 	 * @return the total
 	 */
-	public int getTotal() {
+	public Integer getTotal() {
 		return total;
 	}
 
 	/**
 	 * @param total the total to set
 	 */
-	public void setTotal(int total) {
+	public void setTotal(Integer total) {
 		this.total = total;
 	}
 
