@@ -19,7 +19,7 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="${pageContext.request.contextPath }/AddUserInput.do"
+	<form action="${pageContext.request.contextPath }/AddUserValidate.do"
 		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
@@ -29,11 +29,9 @@
 				</th>
 			</tr>
 			<tr>
-				<c:forEach items="${errmsg}" var="msg">
-					<td class="errMsg">
+				<td class="errMsg"><c:forEach items="${errmsg}" var="msg">
 						<div style="padding-left: 120px">${msg}</div>
-					</td>
-				</c:forEach>
+					</c:forEach></td>
 			</tr>
 			<tr>
 				<td align="left">
@@ -61,23 +59,23 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="full_name" value="${adm003userinfor.fullName }" size="30"
+									name="full_name" value="${fn:escapeXml(adm003userinfor.fullName) }" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left">カタカナ氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="full_name_kana" value="${adm003userinfor.fullNameKana }"
+									name="full_name_kana" value="${fn:escapeXml(adm003userinfor.fullNameKana) }"
 									size="30" onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 生年月日:</td>
 								<%-- convert userBirthDay sang dạng chung --%>
-<%-- 								<fmt:parseDate value="${adm003userinfor.birthDay}"
+								<%-- 								<fmt:parseDate value="${adm003userinfor.birthDay}"
 									pattern="yyyy-MM-dd" var="birthDay" /> --%>
-									<c:set value="${adm003userinfor.birthDay}" var="birthDay"></c:set>
+								<c:set value="${adm003userinfor.birthDay}" var="birthDay"></c:set>
 								<td align="left">
 									<%-- convert tham số tạm birthDay sang year --%> <fmt:formatDate
 										value="${birthDay}" pattern="y" var="birthYear" /> <select
@@ -106,14 +104,14 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> メールアドレス:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="email" value="${adm003userinfor.email }" size="30"
+									name="email" value="${fn:escapeXml(adm003userinfor.email) }" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left"><font color="red">*</font>電話番号:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="tel" value="${adm003userinfor.tel }" size="30"
+									name="tel" value="${fn:escapeXml(adm003userinfor.tel) }" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
@@ -145,7 +143,7 @@
 													${(mstJapan.codeLevel==adm003userinfor.codeLevel)?
 												'selected="selected"':'' }>
 
-													${mstJapan.nameLevel}</option>
+													${fn:escapeXml(mstJapan.nameLevel)}</option>
 											</c:forEach>
 									</select></td>
 								</tr>
@@ -154,7 +152,7 @@
 									<%-- convert userStartDate sang dạng chung --%>
 									<%-- <fmt:parseDate value="${adm003userinfor.startDate}"
 										pattern="yyyy-MM-dd" var="startDate" /> --%>
-										<c:set value="${adm003userinfor.startDate}" var="startDate"></c:set>
+									<c:set value="${adm003userinfor.startDate}" var="startDate"></c:set>
 									<td align="left">
 										<%-- convert tham số tạm startDate sang year --%> <fmt:formatDate
 											value="${startDate}" pattern="y" var="startYear" /> <select
@@ -185,7 +183,7 @@
 									<%-- convert userStartDate sang dạng chung --%>
 									<%-- <fmt:parseDate value="${adm003userinfor.endDate}"
 										pattern="yyyy-MM-dd" var="endDate" /> --%>
-										<c:set value="${adm003userinfor.endDate}" var="endDate"></c:set>
+									<c:set value="${adm003userinfor.endDate}" var="endDate"></c:set>
 									<td align="left">
 										<%-- convert tham số tạm endDate sang year --%> <fmt:formatDate
 											value="${endDate}" pattern="y" var="endYear" /> <select

@@ -39,19 +39,19 @@
 							cellspacing="0">
 							<tr>
 								<td class="lbl_left">アカウント名:</td>
-								<td align="left">${entityuserinfor.loginName }</td>
+								<td align="left">${fn:escapeXml(entityuserinfor.loginName )}</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">グループ:</td>
-								<td align="left">${entityuserinfor.mstGroup.groupName }</td>
+								<td align="left">${fn:escapeXml(entityuserinfor.mstGroup.groupName) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">氏名:</td>
-								<td align="left">${entityuserinfor.fullName }</td>
+								<td align="left">${fn:escapeXml(entityuserinfor.fullName) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">カタカナ氏名:</td>
-								<td align="left">${entityuserinfor.fullNameKana }</td>
+								<td align="left">${fn:escapeXml(entityuserinfor.fullNameKana) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">生年月日:</td>
@@ -60,7 +60,7 @@
 							</tr>
 							<tr>
 								<td class="lbl_left">メールアドレス:</td>
-								<td align="left">${entityuserinfor.email }</td>
+								<td align="left">${fn:escapeXml(entityuserinfor.email) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">電話番号:</td>
@@ -73,7 +73,7 @@
 								<tr>
 									<td class="lbl_left">資格:</td>
 									<c:set value="${entityuserinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
-									<td align="left">${nameLevel }</td>
+									<td align="left">${fn:escapeXml(nameLevel) }</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">資格交付日:</td>

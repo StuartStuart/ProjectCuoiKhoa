@@ -125,4 +125,12 @@ public class ConstantUtil {
 	 * gọi đến màn hình ADM006 ở trạng thái lỗi
 	 */
 	public static final String ADM006_ERROR_TYPE = "error";
+	/*
+	 * ký  tự kana đầu tiên
+	 */
+	public static final char FIRST_KANA = (char) 0x30a0;
+	/*
+	 * ký tự kana cuối cùng
+	 */
+	public static final char LAST_KANA = (char) 0x30ff;
 }

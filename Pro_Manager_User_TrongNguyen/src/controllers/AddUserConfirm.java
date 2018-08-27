@@ -27,7 +27,6 @@ public class AddUserConfirm extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.getRequestDispatcher(ConstantUtil.ADM004_JSP).forward(request, response);
-		;
 	}
 
 	/**
@@ -37,12 +36,13 @@ public class AddUserConfirm extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			System.out.println(null == request.getSession().getAttribute("entityuserinfor"));
 			if (new TblUserLogicImpl()
 					.createUser((UserInforEntity) request.getSession().getAttribute("entityuserinfor"))) {
+				// tạo thành công user
 				response.sendRedirect(
 						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_SUCCESS_TYPE);
 			} else {
+				// không tạo thành công user
 				response.sendRedirect(
 						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
 			}

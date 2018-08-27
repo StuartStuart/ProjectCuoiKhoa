@@ -12,6 +12,7 @@ import logics.impl.MstJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.ConfigProperties;
 import properties.MessageErrorProperties;
+import sun.swing.UIAction;
 import utils.CommonUtil;
 
 /**
@@ -86,7 +87,10 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullNameKana"));
 				}
 				// check kana
-//				ErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
+				String chuoiKana = userInfor.getFullNameKana();
+				if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
+				}
 			}
 			// validate birthday
 			{
@@ -121,7 +125,9 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Tel"));
 				}
 				// check sai format
-//				ErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
+				if (!userInfor.getTel().matches("0[0-9]-[0-9]{4}-[0-9]{4}")) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
+				}
 				// check maxlength
 				// check max length
 				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Tel"));
@@ -144,7 +150,9 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error007_Password"));
 				}
 				// check ký tự 1 byte
-//				ErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
+//				if (!userInfor.getPass().matches( "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})")) {
+//					listErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
+//				}
 			}
 			// validate repass
 			{
@@ -201,4 +209,8 @@ public class UserValidate {
 		return listErrMsg;
 	}
 
+	public static void main(String[] args) {
+		String str = "pes.ht5!";
+		System.out.println(str.matches(".*!$"));
+	}
 }

@@ -5,3 +5,5 @@ ADM003: setDefaultValue -> getDefaultValue -> getUserInforDefault(): sẽ lưu l
 		thêm fn: escapeXml cho các vùng hiển thị
 		validate: checkMaxLength(): maxlength = ?
 		vùng trình độ tiếng Nhật có thì mới có phần bên dưới
+		thêm tên vào AddUserInput: AddUserValidate
+		AddUserConfirm lấy từ request -> 2 tab xung đột

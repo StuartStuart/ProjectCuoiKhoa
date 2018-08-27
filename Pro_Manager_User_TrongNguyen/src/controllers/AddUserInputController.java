@@ -25,7 +25,7 @@ import validates.UserValidate;
 /**
  * Servlet implementation class AddUserInputController
  */
-@WebServlet("/AddUserInput.do")
+@WebServlet(urlPatterns= {"/AddUserInput.do", "/AddUserValidate.do"})
 public class AddUserInputController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -257,9 +257,6 @@ public class AddUserInputController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// cài đặt 7 combobox
-			setDataLogic(request);
-
 			// nhận về các thuộc tính trên request
 			UserInforEntity userInfor = getUserInforDefault(request, response);
 
@@ -267,6 +264,8 @@ public class AddUserInputController extends HttpServlet {
 			if (0 != listErrMsg.size()) {
 				// kiểm tra thấy có lỗi
 
+				// cài đặt 7 combobox
+				setDataLogic(request);
 				// thì set mảng lỗi lên request
 				request.setAttribute("errmsg", listErrMsg);
 				// set userinfor lên request

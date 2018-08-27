@@ -7,6 +7,7 @@ package utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -245,14 +246,13 @@ public class CommonUtil {
 	 * @return kiểu Date trong SQL
 	 * @throws Exception
 	 */
-	public static Date convertToDate(String year, String month, String date) throws Exception {
+	public static Date convertToDate(String year, String month, String date) throws ParseException {
 		try {
-			DateFormat df = new SimpleDateFormat("yy-MM-dd");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			df.setLenient(false);
 
 			return df.parse(year + "-" + month + "-" + date);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ParseException e) {
 			return null;
 		}
 	}
@@ -276,4 +276,46 @@ public class CommonUtil {
 
 		return true;
 	}
+
+	/**
+	 * check các ký tự trong chuỗi có là ký tự kana ko
+	 * 
+	 * @param fullNameKana chuỗi cần check
+	 * @return true là chuỗi là kana
+	 */
+	public static boolean isKanaString(String fullNameKana) {
+		for (int i = 0; i < fullNameKana.length(); i++) {
+			int so = (int) fullNameKana.charAt(i);
+
+			if ((int) ConstantUtil.FIRST_KANA > so || so > (int) ConstantUtil.LAST_KANA) {
+				// ko là ký tự kana
+
+				// thì
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * kiểm tra các ký tự trong chuỗi có là ký tự 1 byte ko
+	 * 
+	 * @param pass chuỗi cần check
+	 * @return true là chuỗi chỉ bao gồm các ký tự 1 byte
+	 */
+//	public static boolean checkOneByteString(String pass) {
+//		for (int i = 0; i < pass.length(); i++) {
+//			int so = (int) pass.charAt(i);
+//
+//			if ((int) ConstantUtil.FIRST_ONE_BYTE_CHAR > so || so > (int) ConstantUtil.LAST_ONE_BYTE_CHAR) {
+//				// ko là ký tự kana
+//
+//				// thì
+//				return false;
+//			}
+//		}
+//
+//		return true;
+//	}
 }
