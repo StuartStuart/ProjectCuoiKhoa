@@ -31,7 +31,6 @@ public class EditUserController extends HttpServlet {
 			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 			// lấy về UserInforEntity
 			UserInforEntity userInforEntity = new TblUserLogicImpl().getUserInfor(userId);
-			System.out.println(userInforEntity.getNameLevel());
 			// set UserInforEntity lên request
 			request.setAttribute("userinfor", userInforEntity);
 			// fwd sang ADM005

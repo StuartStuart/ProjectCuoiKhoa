@@ -15,7 +15,7 @@
 </head>
 <body>
 	<!-- Begin vung header -->
-	<%@include file="header.jsp" %>>
+	<%@include file="header.jsp"%>
 
 	<!-- End vung header -->
 
@@ -70,11 +70,11 @@
 								<th colspan="2"><a href="#" onclick="changeJapanZone()">日本語能力</a></th>
 							</tr>
 							<tbody
-								${(userinfor.mstJapan.nameLevel == null || userinfor.mstJapan.nameLevel == '')?'style="display: none"':'' }
+								${(userinfor.nameLevel == null || userinfor.nameLevel == '')?'style="display: none"':'' }
 								id="japanzone">
 								<tr>
 									<td class="lbl_left">資格:</td>
-									<c:set value="${userinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
+									<c:set value="${userinfor.nameLevel }" var="nameLevel"></c:set>
 									<td align="left">${fn:escapeXml(nameLevel) }</td>
 								</tr>
 								<tr>
@@ -105,7 +105,9 @@
 			<table border="0" cellpadding="4" cellspacing="0" width="300px">
 				<tr>
 					<th width="200px" align="center">&nbsp;</th>
-					<td><input class="btn" type="button" value="編集" /></td>
+					<td><input class="btn" type="button" value="編集"
+						onclick="window.location.href='${pageContext.request.contextPath}/AddUserInput.do?type=edit&userid=${userinfor.userId }'" />
+					</td>
 					<td><input class="btn" type="submit" value="削除" /></td>
 					<td><input class="btn" type="button" value="戻る"
 						onclick="window.location.href='${pageContext.request.contextPath}/ListUser.do?type=back'" />
@@ -117,7 +119,7 @@
 	<!-- End vung input -->
 
 	<!-- Begin vung footer -->
-	<%@include file="footer.jsp" %>>
+	<%@include file="footer.jsp"%>>
 	<!-- End vung footer -->
 </body>
 </html>

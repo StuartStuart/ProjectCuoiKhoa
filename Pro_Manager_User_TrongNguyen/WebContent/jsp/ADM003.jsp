@@ -38,10 +38,14 @@
 					<div style="padding-left: 100px;">
 						<table border="0" width="100%" class="tbl_input" cellpadding="4"
 							cellspacing="0">
+							<c:set value="${ adm003userinfor.userId}" var="userId"></c:set>
+							<input type="hidden" name="loginName"
+								value="${adm003userinfor.loginName }" />
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> アカウント名:</td>
 								<td align="left"><input class="txBox" type="text" name="id"
-									value="${fn: escapeXml( adm003userinfor.loginName)}" size="15"
+									value="${fn: escapeXml( adm003userinfor.loginName)}"
+									${(userId != null)?'disabled="disabled"':'' } size="15"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
@@ -59,14 +63,16 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> 氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="full_name" value="${fn:escapeXml(adm003userinfor.fullName) }" size="30"
+									name="full_name"
+									value="${fn:escapeXml(adm003userinfor.fullName) }" size="30"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left">カタカナ氏名:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="full_name_kana" value="${fn:escapeXml(adm003userinfor.fullNameKana) }"
+									name="full_name_kana"
+									value="${fn:escapeXml(adm003userinfor.fullNameKana) }"
 									size="30" onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
@@ -104,31 +110,41 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> メールアドレス:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="email" value="${fn:escapeXml(adm003userinfor.email) }" size="30"
-									onfocus="this.style.borderColor='#0066ff';"
+									name="email" value="${fn:escapeXml(adm003userinfor.email) }"
+									size="30" onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
 								<td class="lbl_left"><font color="red">*</font>電話番号:</td>
 								<td align="left"><input class="txBox" type="text"
-									name="tel" value="${fn:escapeXml(adm003userinfor.tel) }" size="30"
-									onfocus="this.style.borderColor='#0066ff';"
+									name="tel" value="${fn:escapeXml(adm003userinfor.tel) }"
+									size="30" onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
-							<tr>
-								<td class="lbl_left"><font color="red">*</font> パスワード:</td>
-								<td align="left"><input class="txBox" type="password"
-									name="pass" value="" size="30"
-									onfocus="this.style.borderColor='#0066ff';"
-									onblur="this.style.borderColor='#aaaaaa';" /></td>
-							</tr>
-							<tr>
-								<td class="lbl_left">パスワード（確認）:</td>
-								<td align="left"><input class="txBox" type="password"
-									name="repass" value="" size="30"
-									onfocus="this.style.borderColor='#0066ff';"
-									onblur="this.style.borderColor='#aaaaaa';" /></td>
-							</tr>
+							<c:choose>
+								<c:when test="${userId == null}">
+									<tr>
+										<td class="lbl_left"><font color="red">*</font> パスワード:</td>
+										<td align="left"><input class="txBox" type="password"
+											name="pass" value="" size="30"
+											onfocus="this.style.borderColor='#0066ff';"
+											onblur="this.style.borderColor='#aaaaaa';" /></td>
+									</tr>
+									<tr>
+										<td class="lbl_left">パスワード（確認）:</td>
+										<td align="left"><input class="txBox" type="password"
+											name="repass" value="" size="30"
+											onfocus="this.style.borderColor='#0066ff';"
+											onblur="this.style.borderColor='#aaaaaa';" /></td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<tr>
+										<td></td>
+										<td align="left"><a href="#">change password</a></td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
 							<tr>
 								<th align="left" colspan="2"><a href="#"
 									onclick="changeJapanZone()">日本語能力</a></th>

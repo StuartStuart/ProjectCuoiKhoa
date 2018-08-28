@@ -33,7 +33,9 @@ public class UserValidate {
 
 		try {
 			// validate login name
-			{
+			if (null != userInfor.getUserId()) {
+				// khi là thêm ms
+				
 				if (userInfor.getLoginName().isEmpty()) {
 					// check ko nhập
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
@@ -139,7 +141,9 @@ public class UserValidate {
 				}
 			}
 			// validate pass
-			{
+			if (null != userInfor.getUserId()) {
+				// khi là thêm ms
+				
 				// check ko nhập
 				if (userInfor.getPass().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Password"));
@@ -157,7 +161,9 @@ public class UserValidate {
 				}
 			}
 			// validate repass
-			{
+			if (null != userInfor.getUserId()) {
+				// khi là thêm ms
+				
 				// check repass ko đúng
 				if (!userInfor.getRepass().equals(userInfor.getPass())) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error017_RePass"));

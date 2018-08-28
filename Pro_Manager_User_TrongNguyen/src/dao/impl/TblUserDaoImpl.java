@@ -311,10 +311,10 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			openConnection();
 			// viết câu query để lấy thông tin
-			String[] userInfors = { "tbl_user.login_name", "tbl_user.group_id", "tbl_user.full_name",
-					"tbl_user.full_name_kana", "tbl_user.birthday", "tbl_user.email", "tbl_user.tel",
-					"mst_japan.code_level", "tbl_detail_user_japan.start_date", "tbl_detail_user_japan.end_date",
-					"tbl_detail_user_japan.total" };
+			String[] userInfors = { "tbl_user.user_id", "tbl_user.login_name", "tbl_user.group_id",
+					"tbl_user.full_name", "tbl_user.full_name_kana", "tbl_user.birthday", "tbl_user.email",
+					"tbl_user.tel", "mst_japan.code_level", "mst_japan.name_level", "tbl_detail_user_japan.start_date",
+					"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
 			// thêm các trường thông tin cần lấy của User
 			StringBuilder query = new StringBuilder("SELECT");
 			for (String infor : userInfors) {
@@ -351,6 +351,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				UserInforEntity userInfor = new UserInforEntity();
 
 				i = 0;
+				userInfor.setUserId(rs.getInt(userInfors[i++]));
 				userInfor.setLoginName(rs.getString(userInfors[i++]));
 				userInfor.setGroupId(rs.getInt(userInfors[i++]));
 				userInfor.setFullName(rs.getString(userInfors[i++]));

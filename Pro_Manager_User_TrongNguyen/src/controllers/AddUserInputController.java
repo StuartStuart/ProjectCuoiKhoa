@@ -25,7 +25,7 @@ import validates.UserValidate;
 /**
  * Servlet implementation class AddUserInputController
  */
-@WebServlet(urlPatterns= {"/AddUserInput.do", "/AddUserValidate.do"})
+@WebServlet(urlPatterns = { "/AddUserInput.do", "/AddUserValidate.do" })
 public class AddUserInputController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -71,6 +71,7 @@ public class AddUserInputController extends HttpServlet {
 			throws Exception {
 		UserInforEntity userInforDefault = new UserInforEntity();
 		// khai báo các thuộc tính để set cho userinfor
+		Integer userId;
 		String loginName;
 		int groupId;
 		TblMstGroupEntity mstGroup;
@@ -95,7 +96,10 @@ public class AddUserInputController extends HttpServlet {
 				// là trường hợp ấn submit
 
 				// thì nhận về các thông tin đã nhập
+				userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 				loginName = (String) request.getParameter("id");
+				loginName = (null != loginName) ? loginName : request.getParameter("loginName");
+				System.out.println(loginName);
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
@@ -125,6 +129,7 @@ public class AddUserInputController extends HttpServlet {
 					UserInforEntity sessionUser = (UserInforEntity) request.getSession()
 							.getAttribute("entityuserinfor");
 
+					userId = sessionUser.getUserId();
 					loginName = sessionUser.getLoginName();
 					groupId = sessionUser.getGroupId();
 					mstGroup = sessionUser.getMstGroup();
@@ -146,9 +151,10 @@ public class AddUserInputController extends HttpServlet {
 					// phụ thuộc user_id
 
 					// nhận user_id
-					int userId = CommonUtil.convertStrToInt(request.getParameter("userid"));
-					UserInforEntity editionUser = new TblUserLogicImpl().getUserInfor(userId);
+					Integer user_id = CommonUtil.convertStrToInt(request.getParameter("userid"));
+					UserInforEntity editionUser = new TblUserLogicImpl().getUserInfor(user_id);
 
+					userId = editionUser.getUserId();
 					loginName = editionUser.getLoginName();
 					groupId = editionUser.getGroupId();
 					mstGroup = editionUser.getMstGroup();
@@ -171,9 +177,10 @@ public class AddUserInputController extends HttpServlet {
 					Date nowTime = CommonUtil.getNowTime();
 					// thêm các thông tin mặc định cho user, ví dụ startDate là ngày
 					// hiện tại
+					userId = null;
 					loginName = "";
 					groupId = ConstantUtil.ADM003_DEFAULT_GROUP;
-					mstGroup=null;
+					mstGroup = null;
 					fullName = "";
 					fullNameKana = "";
 					birthDay = nowTime;
@@ -190,6 +197,7 @@ public class AddUserInputController extends HttpServlet {
 				}
 			}
 			// set thuộc tính cho userInforDefault
+			userInforDefault.setUserId(userId);
 			userInforDefault.setLoginName(loginName);
 			userInforDefault.setGroupId(groupId);
 			userInforDefault.setMstGroup(mstGroup);
