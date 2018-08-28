@@ -11,14 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import entities.UserInforEntity;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
-import properties.MessageProperties;
 import utils.ConstantUtil;
 
 /**
  * Servlet implementation class AddUserConfirm
  */
 @WebServlet(description = "Xử lý khi click vào button Xác nhận của ADM003", urlPatterns = { "/AddUserConfirm.do" })
-public class AddUserConfirm extends HttpServlet {
+public class AddUserConfirmController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -27,9 +26,24 @@ public class AddUserConfirm extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		UserInforEntity userInforEntity = (UserInforEntity)request.getSession().getAttribute("entityuserinfor");
-		request.setAttribute("userinfor", userInforEntity);
-		request.getRequestDispatcher(ConstantUtil.ADM004_JSP).forward(request, response);
+		try {
+			// lấy userInfor từ session
+			UserInforEntity userInforEntity = (UserInforEntity) request.getSession().getAttribute("entityuserinfor");
+			// session userInfor lên request
+			request.setAttribute("userinfor", userInforEntity);
+			// fwd đến adm004
+			request.getRequestDispatcher(ConstantUtil.ADM004_JSP).forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// chuyển đến màn hình Error
+			try {
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
+				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	/**

@@ -42,7 +42,6 @@ public class LoginController extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			request.setCharacterEncoding("UTF-8");
 			// nhận về chuỗi đã nhập trong textbox [login]
 			String loginId = new String(request.getParameter("adm001loginid"));
 			String password = new String(request.getParameter("adm001password"));

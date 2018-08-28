@@ -115,7 +115,7 @@ public class AddUserInputController extends HttpServlet {
 				// end_date trong tbl_user
 				String[] arrEndDate = request.getParameterValues("end_date");
 				endDate = CommonUtil.convertToDate(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
-				total = CommonUtil.getTotalFromTextbox(request.getParameter("total"));
+				total = CommonUtil.getIntegerFromTextbox(request.getParameter("total"));
 			} else {
 				// ko là trường hợp submit
 				switch (type) {
@@ -185,7 +185,7 @@ public class AddUserInputController extends HttpServlet {
 					mstJapan = null;
 					startDate = nowTime;
 					endDate = nowTime;
-					total = ConstantUtil.ADM003_DEFAULT_TOTAL;
+					total = null;
 					break;
 				}
 			}

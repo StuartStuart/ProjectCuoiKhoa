@@ -213,7 +213,7 @@
 									<td class="lbl_left">点数:</td>
 									<td align="left"><input class="txBox" type="text"
 										name="total"
-										value="${adm003userinfor.total!=0?adm003userinfor.total:'' }"
+										value="${adm003userinfor.total!=null?adm003userinfor.total:'' }"
 										size="5" onfocus="this.style.borderColor='#0066ff';"
 										onblur="this.style.borderColor='#aaaaaa';" /></td>
 								</tr>

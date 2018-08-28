@@ -153,4 +153,12 @@ public class ConstantUtil {
 	 * ký tự 1 byte cuối cùng
 	 */
 	public static final char LAST_ONE_BYTE_CHAR = (char) 255;
+	/*
+	 * gọi đến ADM006 ở trạng thái delete
+	 */
+	public static final String ADM006_DELETE_TYPE = "delete";
+	/*
+	 * đường dẫn đến ADM005
+	 */
+	public static final String ADM005_JSP = "/jsp/ADM005.jsp";;
 }

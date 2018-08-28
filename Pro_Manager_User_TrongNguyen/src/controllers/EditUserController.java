@@ -1,22 +1,23 @@
 package controllers;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entities.UserInforEntity;
+import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
-import properties.MessageProperties;
+import utils.CommonUtil;
 import utils.ConstantUtil;
 
 /**
- * Servlet implementation class SuccessController
+ * Servlet implementation class EditUserController
  */
-@WebServlet(description = "Xử lý các logic thông báo thành công và lỗi hệ thống", urlPatterns = { "/Success.do" })
-public class SuccessController extends HttpServlet {
+@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/EditUser.do" })
+public class EditUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -26,26 +27,16 @@ public class SuccessController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			String type = request.getParameter("type");
-			switch (type) {
-			case ConstantUtil.ADM006_SUCCESS_TYPE:
-				// thêm message
-				request.setAttribute("adm006msg", MessageProperties.getValue("MSG001"));
-				// chuyển tiếp ADM006
-				request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
-				break;
-			case ConstantUtil.ADM006_ERROR_TYPE:
-				// chuyển tiếp system error
-				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
-				break;
-			case ConstantUtil.ADM006_DELETE_TYPE:
-			default:
-				// thêm message
-				request.setAttribute("adm006msg", MessageProperties.getValue("MSG003"));
-				request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
-break;
-				
-			}
+			// lấy về userId dạng Integer
+			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+			// lấy về UserInforEntity
+			UserInforEntity userInforEntity = new TblUserLogicImpl().getUserInfor(userId);
+			System.out.println(userInforEntity.getNameLevel());
+			// set UserInforEntity lên request
+			request.setAttribute("userinfor", userInforEntity);
+			// fwd sang ADM005
+			request.getRequestDispatcher(ConstantUtil.ADM005_JSP).forward(request, response);
+			;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
@@ -65,7 +56,7 @@ break;
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hello from doPost of SuccessController!");
+		System.out.println("Hello from doPost of EditUser.do");
 	}
 
 }

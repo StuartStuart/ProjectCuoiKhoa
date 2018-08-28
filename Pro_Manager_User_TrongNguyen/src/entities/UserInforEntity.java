@@ -13,7 +13,7 @@ import java.util.Date;
  *
  */
 public class UserInforEntity {
-	private int userId;
+	private Integer userId;
 	private String loginName;
 	private int groupId;
 	private String groupName;
@@ -91,7 +91,7 @@ public class UserInforEntity {
 	/**
 	 * @return the userId
 	 */
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 

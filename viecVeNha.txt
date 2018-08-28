@@ -3,3 +3,4 @@ ADM002: check testcase
 
 ADM003: AddUserConfirm lấy từ request -> 2 tab xung đột
 
+Session: Lấy về từ session xong phải xóa

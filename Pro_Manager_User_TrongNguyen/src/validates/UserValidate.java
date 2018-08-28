@@ -68,12 +68,13 @@ public class UserValidate {
 				// check ko nhập
 				if (userInfor.getFullName().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_FullName"));
-				}
-				// check max length
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_FullName"));
-				int currentLength = userInfor.getFullName().length();
-				if (currentLength > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullName"));
+				} else {
+					// check max length
+					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_FullName"));
+					int currentLength = userInfor.getFullName().length();
+					if (currentLength > maxLength) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error006_FullName"));
+					}
 				}
 			}
 			// validate full name kana
@@ -83,11 +84,12 @@ public class UserValidate {
 				int currentLength = userInfor.getFullNameKana().length();
 				if (currentLength > maxLength) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullNameKana"));
-				}
-				// check kana
-				String chuoiKana = userInfor.getFullNameKana();
-				if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
+				} else {
+					// check kana
+					String chuoiKana = userInfor.getFullNameKana();
+					if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
+					}
 				}
 			}
 			// validate birthday
@@ -102,20 +104,19 @@ public class UserValidate {
 				// check ko nhập
 				if (userInfor.getEmail().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Email"));
-				}
-				// check đã tồn tại
-				if (new TblUserLogicImpl().checkExistedEmail(userInfor.getUserId(), userInfor.getEmail())) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error003_Email"));
-				}
+				} else
+				// check max length
+				if (userInfor.getEmail().length() > CommonUtil
+						.convertStrToInt(ConfigProperties.getValue("MaxLength_Email"))) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error006_Email"));
+				} else
 				// check sai format
 				if (!userInfor.getEmail().matches(ConstantUtil.EMAIL_REGREX)) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error005_Email"));
-				}
-				// check max length
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Email"));
-				int currentLength = userInfor.getEmail().length();
-				if (currentLength > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error006_Email"));
+				} else
+				// check đã tồn tại
+				if (new TblUserLogicImpl().checkExistedEmail(userInfor.getUserId(), userInfor.getEmail())) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error003_Email"));
 				}
 			}
 			// validate tel
@@ -123,17 +124,18 @@ public class UserValidate {
 				// check ko nhập
 				if (userInfor.getTel().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Tel"));
-				}
+				} else
 				// check sai format
 				if (!userInfor.getTel().matches("[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}")) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
-				}
-				// check maxlength
-				// check max length
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Tel"));
-				int currentLength = userInfor.getTel().length();
-				if (currentLength > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error006_Tel"));
+				} else {
+					// check maxlength
+					// check max length
+					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Tel"));
+					int currentLength = userInfor.getTel().length();
+					if (currentLength > maxLength) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error006_Tel"));
+					}
 				}
 			}
 			// validate pass

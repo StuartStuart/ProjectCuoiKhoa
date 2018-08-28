@@ -284,7 +284,7 @@ public class CommonUtil {
 	 * @param parameter chuỗi textbox
 	 * @return null là chuỗi ko phải số
 	 */
-	public static Integer getTotalFromTextbox(String parameter) {
+	public static Integer getIntegerFromTextbox(String parameter) {
 		try {
 			return Integer.parseInt(parameter);
 		} catch (Exception e) {

@@ -359,6 +359,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				userInfor.setEmail(rs.getString(userInfors[i++]));
 				userInfor.setTel(rs.getString(userInfors[i++]));
 				userInfor.setCodeLevel(rs.getString(userInfors[i++]));
+				userInfor.setNameLevel(rs.getString(userInfors[i++]));
 				userInfor.setStartDate(rs.getDate(userInfors[i++]));
 				userInfor.setEndDate(rs.getDate(userInfors[i++]));
 				userInfor.setTotal(rs.getInt(userInfors[i++]));
@@ -444,7 +445,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append(" FROM tbl_user");
 			query.append(" WHERE category = ?");
 			if (null != userId) {
-				query.append(" AND user_id = ?");
+				query.append(" AND NOT user_id = ?");
 			}
 			if (!email.isEmpty()) {
 				query.append(" AND email = ?");

@@ -95,7 +95,7 @@
 				</tr>
 				<c:forEach items="${userInfors}" var="userInfors">
 					<tr>
-						<td align="right"><a href="#">${userInfors.userId}</a></td>
+						<td align="right"><a href="${pageContext.request.contextPath}/EditUser.do?userid=${userInfors.userId}">${userInfors.userId}</a></td>
 						<td>${fn: escapeXml(userInfors.fullName)}</td>
 						<td align="center">${userInfors.birthDay}</td>
 						<td>${fn: escapeXml(userInfors.groupName)}</td>

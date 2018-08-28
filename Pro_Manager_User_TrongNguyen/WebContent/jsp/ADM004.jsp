@@ -19,9 +19,10 @@
 	<%@ include file="header.jsp"%>
 
 	<!-- End vung header -->
-
+	<input type="hidden" name="test" value="test" />
 	<!-- Begin vung input-->
-	<form action="${pageContext.request.contextPath }/AddUserConfirm.do" method="post" name="inputform">
+	<form action="${pageContext.request.contextPath }/AddUserConfirm.do"
+		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -69,7 +70,9 @@
 							<tr>
 								<th colspan="2"><a href="#" onclick="changeJapanZone()">日本語能力</a></th>
 							</tr>
-							<tbody style="display: none" id="japanzone">
+							<tbody
+								${(userinfor.mstJapan.nameLevel == null || userinfor.mstJapan.nameLevel == '')?'style="display: none"':'' }
+								id="japanzone">
 								<tr>
 									<td class="lbl_left">資格:</td>
 									<c:set value="${userinfor.mstJapan.nameLevel }" var="nameLevel"></c:set>
@@ -84,8 +87,7 @@
 								<tr>
 									<td class="lbl_left">失効日:</td>
 									<td align="left"><fmt:formatDate pattern="yyyy/MM/dd"
-											value="${userinfor.endDate}" var="endDate" />
-										${(nameLevel == null)?'':endDate }</td>
+											value="${userinfor.endDate}" var="endDate" /> ${(nameLevel == null)?'':endDate }</td>
 								</tr>
 								<tr>
 									<td class="lbl_left">点数:</td>
@@ -105,8 +107,8 @@
 				<tr>
 					<th width="200px" align="center">&nbsp;</th>
 					<td><input class="btn" type="submit" value="OK" /></td>
-					<td><input class="btn" type="button" value="戻る" 
-					onclick="window.location.href='${pageContext.request.contextPath }/AddUserInput.do?type=back'"/></td>
+					<td><input class="btn" type="button" value="戻る"
+						onclick="window.location.href='${pageContext.request.contextPath }/AddUserInput.do?type=back'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->
