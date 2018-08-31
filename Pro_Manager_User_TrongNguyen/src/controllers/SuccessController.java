@@ -43,8 +43,8 @@ public class SuccessController extends HttpServlet {
 				// thêm message
 				request.setAttribute("adm006msg", MessageProperties.getValue("MSG003"));
 				request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
-break;
-				
+				break;
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

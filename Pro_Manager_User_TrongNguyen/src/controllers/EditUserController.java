@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.UserInforEntity;
+import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
 import utils.CommonUtil;
@@ -35,7 +37,6 @@ public class EditUserController extends HttpServlet {
 			request.setAttribute("userinfor", userInforEntity);
 			// fwd sang ADM005
 			request.getRequestDispatcher(ConstantUtil.ADM005_JSP).forward(request, response);
-			;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
@@ -43,7 +44,6 @@ public class EditUserController extends HttpServlet {
 				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
 				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -55,7 +55,30 @@ public class EditUserController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hello from doPost of EditUser.do");
-	}
+		try {
+			// lấy userId của user cần xóa
+			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+			// gọi method xóa của logic
+			TblUserLogic tblUserLogic = new TblUserLogicImpl();
+			if (tblUserLogic.deleteUser(userId)) {
+				// chuyển hướng ADM006 - success
+				response.sendRedirect(
+						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_DELETE_TYPE);
+			} else {
+				// chuyển hướng ADM006 - error
+				response.sendRedirect(
+						request.getContextPath() + ConstantUtil.ADM006_JSP + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
+			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			// chuyển đến màn hình Error
+			try {
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
+				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 }

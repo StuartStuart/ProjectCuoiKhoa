@@ -96,10 +96,9 @@ public class AddUserInputController extends HttpServlet {
 				// là trường hợp ấn submit
 
 				// thì nhận về các thông tin đã nhập
-				userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 				loginName = (String) request.getParameter("id");
 				loginName = (null != loginName) ? loginName : request.getParameter("loginName");
-				System.out.println(loginName);
+				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
