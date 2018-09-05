@@ -4,7 +4,6 @@
  */
 package dao;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.TblUserEntity;
@@ -97,22 +96,11 @@ public interface TblUserDao {
 	 * @throws Exception
 	 */
 	void insertUser(UserInforEntity userInfor) throws Exception;
-
+	
 	/**
-	 * nhận userId có loginName tương ứng từ db
-	 * 
-	 * @param loginName tên đăng nhập
-	 * @return id của login name
+	 * @param loginName
+	 * @return
 	 * @throws Exception
 	 */
 	Integer getUserIdByLoginName(final String loginName) throws Exception;
-
-	/**
-	 * xóa user có id tương ứng từ db
-	 * 
-	 * @param userId id của user cần xóa
-	 * @return true là xóa thành công
-	 * @throws SQLException
-	 */
-	boolean deleteUser(Integer userId) throws SQLException;
 }

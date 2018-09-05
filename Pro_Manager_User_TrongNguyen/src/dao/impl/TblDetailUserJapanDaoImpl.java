@@ -53,25 +53,4 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 		}
 	}
 
-	/**
-	 * xóa user trong tbl_detail_user_japan có id tương ứng
-	 * 
-	 * @param userId id của user cần xóa
-	 * @throws Exception 
-	 */
-	public void deleteUserById(Integer userId) throws Exception {
-		try {// viết query
-			query = "DELETE FROM tbl_detail_user_japan WHERE user_id = ?;";
-			// hoàn thiện query
-			ps = conn.prepareStatement(query);
-			int i = 0;
-			ps.setInt(++i, userId);
-			// thực hiện query
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
 }

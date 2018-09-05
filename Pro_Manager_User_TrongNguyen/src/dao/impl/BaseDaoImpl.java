@@ -23,7 +23,7 @@ import properties.DatabaseProperties;
  *
  */
 public class BaseDaoImpl implements BaseDao {
-	protected static Connection conn;
+	protected Connection conn;
 	protected Statement stt;
 	protected PreparedStatement ps;
 	protected String query;
@@ -131,6 +131,12 @@ public class BaseDaoImpl implements BaseDao {
 			if (conn != null) {
 				conn.close();
 				conn = null;
+			}
+			if (stt != null) {
+				stt.close();
+			}
+			if (ps != null) {
+				ps.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

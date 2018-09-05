@@ -134,34 +134,4 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			throw e;
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see logics.TblUserLogic#getUserIdByLoginName(java.lang.String)
-	 */
-	@Override
-	public Integer getUserIdByLoginName(String loginName) throws Exception {
-		try {
-			return tblUserDaoImpl.getUserIdByLoginName(loginName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see logics.TblUserLogic#deleteUserById(java.lang.Integer)
-	 */
-	@Override
-	public boolean deleteUser(Integer userId) throws Exception {
-		try {
-			return tblUserDaoImpl.deleteUser(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
 }

@@ -32,29 +32,27 @@ public class UserValidate {
 		ArrayList<String> listErrMsg = new ArrayList<>();
 
 		try {
-			if (null == userInfor.getUserId()) {
-				// validate login name
-				if (null != userInfor.getUserId()) {
-					// khi là thêm ms
-
-					if (userInfor.getLoginName().isEmpty()) {
-						// check ko nhập
-						listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
-					} else if (!userInfor.getLoginName().matches(ConstantUtil.LOGIN_NAME_REGREX)) {
-						// check định dạng
-						System.out.println("a".matches(ConstantUtil.LOGIN_NAME_REGREX));
-						listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
-					} else if (userInfor.getLoginName().length() < CommonUtil
-							.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"))
-							|| userInfor.getLoginName().length() > CommonUtil
-									.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"))) {
-						// check độ dài trong khoảng
-						listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
-					} else if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(),
-							userInfor.getLoginName())) {
-						// check đã tồn tại
-						listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
-					}
+			// validate login name
+			if (null != userInfor.getUserId()) {
+				// khi là thêm ms
+				
+				if (userInfor.getLoginName().isEmpty()) {
+					// check ko nhập
+					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
+				} else if (!userInfor.getLoginName().matches(ConstantUtil.LOGIN_NAME_REGREX)) {
+					// check định dạng
+					System.out.println("a".matches(ConstantUtil.LOGIN_NAME_REGREX));
+					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
+				} else if (userInfor.getLoginName().length() < CommonUtil
+						.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"))
+						|| userInfor.getLoginName().length() > CommonUtil
+								.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"))) {
+					// check độ dài trong khoảng
+					listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
+				} else if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(),
+						userInfor.getLoginName())) {
+					// check đã tồn tại
+					listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
 				}
 			}
 			// validate group
@@ -143,9 +141,9 @@ public class UserValidate {
 				}
 			}
 			// validate pass
-			if (null == userInfor.getUserId()) {
+			if (null != userInfor.getUserId()) {
 				// khi là thêm ms
-
+				
 				// check ko nhập
 				if (userInfor.getPass().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Password"));
@@ -163,9 +161,9 @@ public class UserValidate {
 				}
 			}
 			// validate repass
-			if (null == userInfor.getUserId()) {
+			if (null != userInfor.getUserId()) {
 				// khi là thêm ms
-
+				
 				// check repass ko đúng
 				if (!userInfor.getRepass().equals(userInfor.getPass())) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error017_RePass"));
