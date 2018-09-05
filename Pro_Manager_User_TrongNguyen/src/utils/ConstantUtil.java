@@ -160,5 +160,9 @@ public class ConstantUtil {
 	/*
 	 * đường dẫn đến ADM005
 	 */
-	public static final String ADM005_JSP = "/jsp/ADM005.jsp";;
+	public static final String ADM005_JSP = "/jsp/ADM005.jsp";
+	/*
+	 * gọi đến màn hình ADM006 ở trạng thái update
+	 */
+	public static final String ADM006_UPADATE_TYPE = "update";;
 }

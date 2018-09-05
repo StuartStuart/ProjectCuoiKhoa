@@ -19,10 +19,11 @@
 	<%@ include file="header.jsp"%>
 
 	<!-- End vung header -->
-	<input type="hidden" name="test" value="test" />
+	
 	<!-- Begin vung input-->
 	<form action="${pageContext.request.contextPath }/AddUserConfirm.do"
 		method="post" name="inputform">
+		<input type="hidden" name="keyEntity" value="${key}" />
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -108,7 +109,7 @@
 					<th width="200px" align="center">&nbsp;</th>
 					<td><input class="btn" type="submit" value="OK" /></td>
 					<td><input class="btn" type="button" value="戻る"
-						onclick="window.location.href='${pageContext.request.contextPath }/AddUserInput.do?type=back'" /></td>
+						onclick="window.location.href='${pageContext.request.contextPath }/AddUserInput.do?type=back&key=${key}'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->

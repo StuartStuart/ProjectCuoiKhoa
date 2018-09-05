@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import dao.TblDetailUserJapanDao;
 import dao.TblUserDao;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
@@ -492,7 +493,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			// tran 1
 			insertUser(userInfor);
 			// tran 2
-			new TblDetailUserJapanDaoImpl().insertUser(userInfor);
+			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+			japanDao.setConn(this.conn);
+			japanDao.insertUser(userInfor);
 			// commit
 			conn.commit();
 			// hoàn thành tất cả - trả về true
@@ -542,6 +545,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		ps.setInt(++i, ConstantUtil.USER_CATEGORY);
 		// thực hiện query
 		ps.executeUpdate();
+		ps.close();
+		ps = null;
 	}
 
 	/*
@@ -558,14 +563,15 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				openConnection();
 			}
 			// viết query
-			query = "SELECT user_id FROM tbl_user t ORDER BY t.user_id DESC LIMIT 1;";
+			query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
 			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setString(++i, loginName);
 			// thực hiện query
 			ResultSet rs = ps.executeQuery();
 			// trả về kết quả
 			if (rs.next()) {
 				userId = rs.getInt("user_id");
-				System.out.println(userId);
 			} else {
 				userId = null;
 			}
@@ -577,5 +583,78 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			throw e;
 		}
 		return userId;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#deleteUserById(java.lang.Integer)
+	 */
+	@Override
+	public boolean deleteUser(Integer userId) throws SQLException {
+		try {
+			// đồng bộ conn
+			openConnection();
+			// set AutoCommit
+			conn.setAutoCommit(false);
+			// tran 1
+			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+			japanDao.setConn(this.conn);
+			japanDao.deleteUserById(userId);
+			// tran 2
+			deleteUserById(userId);
+			// commit
+			conn.commit();
+			// trả về kết quả
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			return false;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
+
+	/**
+	 * xóa user từ db
+	 * 
+	 * @param userId id của user cần xóa
+	 * @throws Exception
+	 */
+	public void deleteUserById(Integer userId) throws Exception {
+		try {
+			// viết query
+			query = "DELETE FROM tbl_user WHERE user_id = ?;";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setInt(++i, userId);
+			// thực hiện query
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#updateUser(entities.UserInforEntity)
+	 */
+	@Override
+	public boolean updateUser(UserInforEntity userInforEntity) {
+		System.out.println("Đã chạy qua đây");
+		return false;
 	}
 }

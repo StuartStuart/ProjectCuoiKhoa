@@ -32,10 +32,10 @@ public class UserValidate {
 		ArrayList<String> listErrMsg = new ArrayList<>();
 
 		try {
-			// validate login name
-			if (null != userInfor.getUserId()) {
+			if (null == userInfor.getUserId()) {
+				// validate login name
 				// khi là thêm ms
-				
+
 				if (userInfor.getLoginName().isEmpty()) {
 					// check ko nhập
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
@@ -54,7 +54,9 @@ public class UserValidate {
 					// check đã tồn tại
 					listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
 				}
-			}
+			} /*
+				 * else { userInfor.setUserId(null); }
+				 */
 			// validate group
 			{
 				// check ko chọn
@@ -130,45 +132,39 @@ public class UserValidate {
 				// check sai format
 				if (!userInfor.getTel().matches("[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}")) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
-				} else {
-					// check maxlength
-					// check max length
-					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Tel"));
-					int currentLength = userInfor.getTel().length();
-					if (currentLength > maxLength) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error006_Tel"));
-					}
 				}
 			}
 			// validate pass
-			if (null != userInfor.getUserId()) {
+			if (null == userInfor.getUserId()) {
 				// khi là thêm ms
-				
+
 				// check ko nhập
 				if (userInfor.getPass().isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Password"));
-				}
-				// check dộ dài trong khoảng
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Password"));
-				int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_Password"));
-				int currentLengh = userInfor.getPass().length();
-				if (currentLengh < minLength || currentLengh > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error007_Password"));
-				}
-				// check ký tự 1 byte
-				if (!CommonUtil.checkOneByteString(userInfor.getPass())) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
+				} else {
+					// check dộ dài trong khoảng
+					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Password"));
+					int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_Password"));
+					int currentLengh = userInfor.getPass().length();
+					if (currentLengh < minLength || currentLengh > maxLength) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error007_Password"));
+					} else
+					// check ký tự 1 byte
+					if (!CommonUtil.checkOneByteString(userInfor.getPass())) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error008_Password"));
+					} else
+
+					// validate repass
+
+					// khi là thêm ms
+
+					// check repass ko đúng
+					if (!userInfor.getRepass().equals(userInfor.getPass())) {
+						listErrMsg.add(MessageErrorProperties.getValue("Error017_RePass"));
+					}
 				}
 			}
-			// validate repass
-			if (null != userInfor.getUserId()) {
-				// khi là thêm ms
-				
-				// check repass ko đúng
-				if (!userInfor.getRepass().equals(userInfor.getPass())) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error017_RePass"));
-				}
-			}
+
 			// validate japan zone
 			if (!userInfor.getCodeLevel().equalsIgnoreCase("N0")) {
 				// đã select code level
@@ -210,17 +206,11 @@ public class UserValidate {
 					}
 				}
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 
 		return listErrMsg;
-	}
-
-	public static void main(String[] args) {
-		System.out.println("a".matches("^[a-zA-Z]+[a-zA-Z0-9_]+$"));
 	}
 }

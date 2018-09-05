@@ -7,8 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entities.UserInforEntity;
+import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
 import utils.ConstantUtil;
@@ -28,9 +30,16 @@ public class AddUserConfirmController extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			// lấy userInfor từ session
-			UserInforEntity userInforEntity = (UserInforEntity) request.getSession().getAttribute("entityuserinfor");
-			// session userInfor lên request
+			HttpSession session = request.getSession();
+			// lấy key
+			String key = request.getParameter("key");
+			// lấy obj userInfor
+			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + key);
+
+			// set userInfor lên request
 			request.setAttribute("userinfor", userInforEntity);
+			// set key lên request
+			request.setAttribute("key", key);
 			// fwd đến adm004
 			request.getRequestDispatcher(ConstantUtil.ADM004_JSP).forward(request, response);
 		} catch (Exception e) {
@@ -53,15 +62,32 @@ public class AddUserConfirmController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			if (new TblUserLogicImpl()
-					.createUser((UserInforEntity) request.getSession().getAttribute("entityuserinfor"))) {
-				// tạo thành công user
+			HttpSession session = request.getSession();
+			String keyParam = request.getParameter("keyEntity");
+			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + keyParam);
+			if (null == userInforEntity.getUserId()) {
+				// obj thực hiện create user
+				TblUserLogic tblUserLogic = new TblUserLogicImpl();
+				// email
+				String email = userInforEntity.getEmail();
+				// login name
+				String loginName = userInforEntity.getLoginName();
+				// là tạo user thành công
+				boolean isCreatedUser = !tblUserLogic.checkExistedEmail(null, email)
+						&& !tblUserLogic.checkExistedLoginName(null, loginName)
+						&& tblUserLogic.createUser(userInforEntity);
+				if (isCreatedUser) {
+					// tạo thành công user
+					response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+							+ ConstantUtil.ADM006_SUCCESS_TYPE);
+				} else {
+					// không tạo thành công user
+					response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+							+ ConstantUtil.ADM006_ERROR_TYPE);
+				}
+			} else if (new TblUserLogicImpl().updateUser(userInforEntity)) {
 				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_SUCCESS_TYPE);
-			} else {
-				// không tạo thành công user
-				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
+						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_UPADATE_TYPE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -12,7 +12,7 @@ import entities.UserInforEntity;
  * @author TrongNguyen
  *
  */
-public interface TblDetailUserJapanDao {
+public interface TblDetailUserJapanDao extends BaseDao {
 	/**
 	 * insert thông tin vào tbl_detail_user_japan
 	 * 
@@ -21,4 +21,12 @@ public interface TblDetailUserJapanDao {
 	 * @throws Exception
 	 */
 	void insertUser(UserInforEntity userInfor) throws Exception;
+
+	/**
+	 * xóa thông tin từ tbl)detail_user_japan
+	 * 
+	 * @param userId id của obj cần xóa
+	 * @throws Exception 
+	 */
+	void deleteUserById(Integer userId) throws Exception;
 }

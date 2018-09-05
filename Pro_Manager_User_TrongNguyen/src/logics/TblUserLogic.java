@@ -67,10 +67,10 @@ public interface TblUserLogic {
 	 * @param userId    user_id của đối tượng cần lấy
 	 * @param loginName tên đăng nhập của đối tượng cần lấy
 	 * @return đối tượng có loginName tương ứng
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean checkExistedLoginName(final Integer userId, final String loginName) throws Exception;
-	
+
 	/**
 	 * 
 	 * @param userId
@@ -79,12 +79,39 @@ public interface TblUserLogic {
 	 * @throws Exception
 	 */
 	public boolean checkExistedEmail(final Integer userId, final String email) throws Exception;
-	
+
 	/**
 	 * gọi đến phương thức tạo của dao
+	 * 
 	 * @param userInfor đối tượng cần tạo
 	 * @return true là tạo thành công
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean createUser(UserInforEntity userInfor) throws Exception;
+
+	/**
+	 * nhận userId có loginName tương ứng từ dao
+	 * 
+	 * @param loginName tên đăng nhập
+	 * @return id của login name
+	 * @throws Exception
+	 */
+	Integer getUserIdByLoginName(final String loginName) throws Exception;
+
+	/**
+	 * gọi dao để xóa user có id tương ứng
+	 * 
+	 * @param userId id của user cần xóa
+	 * @return true là xóa thành công
+	 * @throws Exception
+	 */
+	boolean deleteUser(Integer userId) throws Exception;
+
+	/**
+	 * gọi dao để update user có thông tin tương ứng
+	 * 
+	 * @param userInforEntity đối tượng cần update
+	 * @return true là update thành công
+	 */
+	boolean updateUser(UserInforEntity userInforEntity);
 }

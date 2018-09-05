@@ -36,6 +36,7 @@ public class SuccessController extends HttpServlet {
 				break;
 			case ConstantUtil.ADM006_ERROR_TYPE:
 				// chuyển tiếp system error
+				request.setAttribute("systemerrormessage", "HashCode tại SuccessController: thất bại!");
 				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
 				break;
 			case ConstantUtil.ADM006_DELETE_TYPE:
@@ -43,8 +44,8 @@ public class SuccessController extends HttpServlet {
 				// thêm message
 				request.setAttribute("adm006msg", MessageProperties.getValue("MSG003"));
 				request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
-break;
-				
+				break;
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

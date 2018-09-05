@@ -62,8 +62,8 @@ public class BaseDaoImpl implements BaseDao {
 					ResultSet rsFields = conn.getMetaData().getColumns(null, nameDB, nameTable, null);
 					while (rsFields.next()) {
 						/*
-						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì
-						 * thêm vào listTableFieldName
+						 * kiểm tra tên trường đã tồn tại hay chưa, nếu chưa thì thêm vào
+						 * listTableFieldName
 						 */
 						String nameField = rsFields.getString("COLUMN_NAME");
 
@@ -71,8 +71,7 @@ public class BaseDaoImpl implements BaseDao {
 							listDBFieldName.add(nameTable + "." + nameField);
 						} else {
 							/*
-							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì
-							 * thêm vào listTableFieldName
+							 * kiểm tra nameField đã tồn tại chưa nếu chưa thì thêm vào listTableFieldName
 							 */
 							for (final String oldColName : listDBFieldName) {
 								// không tồn tại trong listDBFieldName
@@ -132,12 +131,6 @@ public class BaseDaoImpl implements BaseDao {
 				conn.close();
 				conn = null;
 			}
-			if (stt != null) {
-				stt.close();
-			}
-			if (ps != null) {
-				ps.close();
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -171,5 +164,15 @@ public class BaseDaoImpl implements BaseDao {
 		}
 
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#setConn(java.sql.Connection)
+	 */
+	@Override
+	public void setConn(Connection conn) {
+		this.conn = conn;
 	}
 }

@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -37,9 +38,15 @@ public interface BaseDao {
 	/**
 	 * kiểm tra tên trường có tồn tại trong db hay ko
 	 * 
-	 * @param colName
-	 *            tên trường cần kiểm tra
+	 * @param colName tên trường cần kiểm tra
 	 * @return true - tồn tại trong db
 	 */
 	boolean isExistColName(String colName) throws Exception;
+
+	/**
+	 * set kết nối cho conn
+	 * 
+	 * @param conn obj kết nối đươc thiết lập
+	 */
+	void setConn(Connection conn);
 }

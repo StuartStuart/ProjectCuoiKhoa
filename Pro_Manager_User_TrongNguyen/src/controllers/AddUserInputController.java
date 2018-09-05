@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entities.MstJapanEntity;
 import entities.TblMstGroupEntity;
@@ -52,7 +53,6 @@ public class AddUserInputController extends HttpServlet {
 				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
 				request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -96,10 +96,9 @@ public class AddUserInputController extends HttpServlet {
 				// là trường hợp ấn submit
 
 				// thì nhận về các thông tin đã nhập
-				userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 				loginName = (String) request.getParameter("id");
 				loginName = (null != loginName) ? loginName : request.getParameter("loginName");
-				System.out.println(loginName);
+				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
@@ -126,8 +125,11 @@ public class AddUserInputController extends HttpServlet {
 
 				case ConstantUtil.ADM003_BACK_TYPE:
 					// thêm các thông tin mặc định cho user từ session
-					UserInforEntity sessionUser = (UserInforEntity) request.getSession()
-							.getAttribute("entityuserinfor");
+					HttpSession session = request.getSession();
+					String key = request.getParameter("key");
+					UserInforEntity sessionUser = (UserInforEntity) session.getAttribute("entityuserinfor" + key);
+					// xóa obj
+					session.removeAttribute("entityuserinfor" + key);
 
 					userId = sessionUser.getUserId();
 					loginName = sessionUser.getLoginName();
@@ -280,11 +282,14 @@ public class AddUserInputController extends HttpServlet {
 				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
 
 			} else {
-				// ko có lỗi
+				/*
+				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
+				 */
 
-				// thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
-				request.getSession().setAttribute("entityuserinfor", userInfor);
-				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM);
+				// tạo key
+				String key = new Date().getTime() + "";
+				request.getSession().setAttribute("entityuserinfor" + key, userInfor);
+				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM + "?key=" + key);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

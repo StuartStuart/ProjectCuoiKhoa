@@ -20,7 +20,7 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="${pageContext.request.contextPath }/AddUserConfirm.do"
+	<form action="${pageContext.request.contextPath }/EditUser.do"
 		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
@@ -32,6 +32,7 @@
 					<div style="padding-left: 100px;">&nbsp;</div>
 				</th>
 			</tr>
+			<input type="hidden" name="userid" value="${userinfor.userId }" />
 			<tr>
 				<td align="left">
 					<div style="padding-left: 100px;">
