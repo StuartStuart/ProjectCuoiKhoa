@@ -44,7 +44,7 @@
 							<tr>
 								<td class="lbl_left"><font color="red">*</font> アカウント名:</td>
 								<td align="left"><input class="txBox" type="text" name="id"
-									value="${fn: escapeXml( adm003userinfor.loginName)}"
+									value="<c:out value="${adm003userinfor.loginName}" escapeXml="true"/>"
 									${(userId != null)?'disabled="disabled"':'' } size="15"
 									onfocus="this.style.borderColor='#0066ff';"
 									onblur="this.style.borderColor='#aaaaaa';" /></td>

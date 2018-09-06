@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-@WebFilter(description = "LoginFilter", urlPatterns = { "*.do" })
+@WebFilter(description = "LoginFilter", urlPatterns = { "*" })
 public class LoginFilter implements Filter {
 	/**
 	 * Kiểm tra session có tồn tại hay ko Nếu ko thì trở về ADM001

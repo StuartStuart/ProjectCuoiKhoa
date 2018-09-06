@@ -44,7 +44,7 @@
 							</tr>
 							<tr>
 								<td class="lbl_left">グループ:</td>
-								<td align="left">${fn:escapeXml(userinfor.mstGroup.groupName) }</td>
+								<td align="left">${fn:escapeXml(userinfor.groupName) }</td>
 							</tr>
 							<tr>
 								<td class="lbl_left">氏名:</td>

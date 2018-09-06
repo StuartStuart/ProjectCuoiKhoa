@@ -24,7 +24,8 @@ public class UserValidate {
 	/**
 	 * kiểm tra các lỗi có thể tồn tại trong userInfor
 	 * 
-	 * @param userInfor đối tượng được kiểm tra
+	 * @param userInfor
+	 *            đối tượng được kiểm tra
 	 * @return danh sách các lỗi xuất hiện
 	 * @throws Exception
 	 */
@@ -41,7 +42,6 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_LoginName"));
 				} else if (!userInfor.getLoginName().matches(ConstantUtil.LOGIN_NAME_REGREX)) {
 					// check định dạng
-					System.out.println("a".matches(ConstantUtil.LOGIN_NAME_REGREX));
 					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
 				} else if (userInfor.getLoginName().length() < CommonUtil
 						.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"))
@@ -100,7 +100,7 @@ public class UserValidate {
 			{
 				// check ngày ko hợp lệ
 				if (null == userInfor.getBirthDay()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error0011_BirthDay"));
+					listErrMsg.add(MessageErrorProperties.getValue("Error011_BirthDay"));
 				}
 			}
 			// validate email
@@ -200,7 +200,7 @@ public class UserValidate {
 					// check ko nhập
 					if (null == userInfor.getTotal()) {
 						listErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
-					} else if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
+					} else if (!CommonUtil.checkHalfSizeNumber("" + userInfor.getTotal())) {
 						// check là số haffsize
 						listErrMsg.add(MessageErrorProperties.getValue("Error018_Total"));
 					}

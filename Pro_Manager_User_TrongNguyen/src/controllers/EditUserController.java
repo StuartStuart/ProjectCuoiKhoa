@@ -12,13 +12,14 @@ import entities.UserInforEntity;
 import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
+import properties.MessageProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 
 /**
  * Servlet implementation class EditUserController
  */
-@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/EditUser.do" })
+@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/EditUser.do", "/ShowUser.do" })
 public class EditUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -33,10 +34,15 @@ public class EditUserController extends HttpServlet {
 			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 			// lấy về UserInforEntity
 			UserInforEntity userInforEntity = new TblUserLogicImpl().getUserInfor(userId);
-			// set UserInforEntity lên request
-			request.setAttribute("userinfor", userInforEntity);
-			// fwd sang ADM005
-			request.getRequestDispatcher(ConstantUtil.ADM005_JSP).forward(request, response);
+			if (0 < userId && null != userInforEntity) {
+				// set UserInforEntity lên request
+				request.setAttribute("userinfor", userInforEntity);
+				// fwd sang ADM005
+				request.getRequestDispatcher(ConstantUtil.ADM005_JSP).forward(request, response);
+			} else {
+				request.setAttribute("systemerrormessage", MessageProperties.getValue("MSG005"));
+				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error

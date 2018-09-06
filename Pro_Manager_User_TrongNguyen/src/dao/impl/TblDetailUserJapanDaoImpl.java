@@ -58,7 +58,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 				ps.setInt(++i, userInfor.getTotal());
 				// thực hiện query
 				ps.executeUpdate();
-				
+
 				ps.close();
 				ps = null;
 			}
@@ -71,12 +71,17 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	/**
 	 * xóa user trong tbl_detail_user_japan có id tương ứng
 	 * 
-	 * @param userId id của user cần xóa
+	 * @param userId
+	 *            id của user cần xóa
 	 * @throws Exception
 	 */
 	public void deleteUserById(Integer userId) throws Exception {
 		try {// viết query
-			query = "DELETE FROM tbl_detail_user_japan WHERE user_id = ?;";
+			query = "DELETE FROM tbl_detail_user_japan WHERE user_id = ?; "
+					/*+ "SET @num := 0; "
+					+ "UPDATE tbl_detail_user_japan SET id = @num := (@num+1); "
+					+ "ALTER TABLE tbl_detail_user_japan AUTO_INCREMENT = 1;"*/;
+
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;

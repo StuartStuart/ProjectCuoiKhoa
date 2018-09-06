@@ -27,7 +27,7 @@ public class CommonUtil {
 	 * @param total điểm
 	 * @return true là total là số nguyên dương
 	 */
-	public static boolean checkHalfSizeNumber(int total) {
+	public static boolean checkHalfSizeNumber(String total) {
 		return (total + "").matches("[1-9][0-9]*");
 	}
 

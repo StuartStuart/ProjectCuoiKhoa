@@ -98,7 +98,7 @@ public class AddUserInputController extends HttpServlet {
 				// thì nhận về các thông tin đã nhập
 				loginName = (String) request.getParameter("id");
 				loginName = (null != loginName) ? loginName : request.getParameter("loginName");
-				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
+//				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
@@ -199,7 +199,7 @@ public class AddUserInputController extends HttpServlet {
 				}
 			}
 			// set thuộc tính cho userInforDefault
-			userInforDefault.setUserId(userId);
+//			userInforDefault.setUserId(userId);
 			userInforDefault.setLoginName(loginName);
 			userInforDefault.setGroupId(groupId);
 			userInforDefault.setMstGroup(mstGroup);

@@ -27,7 +27,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName tên đăng nhập
+	 * @param userName
+	 *            tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -148,8 +149,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 
 			/*
-			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không thì thực hiện
-			 * bình thường
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
+			 * thì thực hiện bình thường
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
@@ -208,10 +209,14 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xác đinh chuỗi điều kiện order by
 	 * 
-	 * @param sortType        loại sắp xếp
-	 * @param sortByFullName  kiểu sx của tên
-	 * @param sortByCodeLevel kiểu sx của codeLevel
-	 * @param sortByEndDate   kiểu sx của endDate
+	 * @param sortType
+	 *            loại sắp xếp
+	 * @param sortByFullName
+	 *            kiểu sx của tên
+	 * @param sortByCodeLevel
+	 *            kiểu sx của codeLevel
+	 * @param sortByEndDate
+	 *            kiểu sx của endDate
 	 * @return chuỗi điều kiện sx
 	 * @throws Exception
 	 */
@@ -312,7 +317,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			openConnection();
 			// viết câu query để lấy thông tin
-			String[] userInfors = { "tbl_user.user_id", "tbl_user.login_name", "tbl_user.group_id",
+			String[] userInfors = { "tbl_user.user_id", "tbl_user.login_name", "mst_group.group_name",
 					"tbl_user.full_name", "tbl_user.full_name_kana", "tbl_user.birthday", "tbl_user.email",
 					"tbl_user.tel", "mst_japan.code_level", "mst_japan.name_level", "tbl_detail_user_japan.start_date",
 					"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
@@ -354,7 +359,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				i = 0;
 				userInfor.setUserId(rs.getInt(userInfors[i++]));
 				userInfor.setLoginName(rs.getString(userInfors[i++]));
-				userInfor.setGroupId(rs.getInt(userInfors[i++]));
+				userInfor.setGroupName(rs.getString(userInfors[i++]));
 				userInfor.setFullName(rs.getString(userInfors[i++]));
 				userInfor.setFullNameKana(rs.getString(userInfors[i++]));
 				userInfor.setBirthDay(rs.getDate(userInfors[i++]));
@@ -400,7 +405,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append(" FROM tbl_user");
 			query.append(" WHERE category = ?");
 			if (null != userId) {
-				query.append(" AND user_id = ?");
+				query.append(" AND NOT user_id = ?");
 			}
 			if (!loginName.isEmpty()) {
 				query.append(" AND login_name = ?");
@@ -433,7 +438,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer, java.lang.String)
+	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer,
+	 * java.lang.String)
 	 */
 	@Override
 	public boolean checkExistedEmail(Integer userId, String email) throws Exception {
@@ -555,13 +561,12 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @see dao.TblUserDao#getUserIdByLoginName(java.lang.String)
 	 */
 	@Override
-	public Integer getUserIdByLoginName(String loginName) throws Exception {
-		Integer userId;
+	public Integer getUserIdByLoginName(String loginName) throws SQLException {
+
 		try {
-			boolean isExistedConnection = !(null == conn || conn.isClosed());
-			if (!isExistedConnection) {
-				openConnection();
-			}
+			openConnection();
+			Integer userId;
+
 			// viết query
 			query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
 			ps = conn.prepareStatement(query);
@@ -575,14 +580,20 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			} else {
 				userId = null;
 			}
-			if (isExistedConnection) {
-				closeConnection();
-			}
+
+			return userId;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
 		}
-		return userId;
+
 	}
 
 	/*
@@ -628,13 +639,15 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xóa user từ db
 	 * 
-	 * @param userId id của user cần xóa
+	 * @param userId
+	 *            id của user cần xóa
 	 * @throws Exception
 	 */
 	public void deleteUserById(Integer userId) throws Exception {
 		try {
 			// viết query
-			query = "DELETE FROM tbl_user WHERE user_id = ?;";
+			query = "DELETE FROM tbl_user WHERE user_id = ?; "/* + "SET @num := 0; "
+					+ "	UPDATEtbl_usere SET id = @num := (@num+1);" + " ALTER TABLEtbl_usere AUTO_INCREMENT = 1;"*/;
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
