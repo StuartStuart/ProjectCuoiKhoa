@@ -82,15 +82,6 @@ public interface TblUserDao {
 	boolean checkExistedEmail(final Integer userId, final String email) throws Exception;
 
 	/**
-	 * tạo 1 user trong db
-	 * 
-	 * @param userInfor đối tượng cần tạo
-	 * @return true là tạo thành công
-	 * @throws Exception
-	 */
-	boolean createUser(UserInforEntity userInfor) throws Exception;
-
-	/**
 	 * insert các thông tin vào bảng tbl_user
 	 * 
 	 * @param userInfor đối tượng chứa thông tin tbl_user va tbl_detail_japan

@@ -15,6 +15,56 @@ import java.sql.SQLException;
  */
 public interface BaseDao {
 	/**
+	 * @return connection
+	 */
+	Connection getConnection();
+
+	/**
+	 * @param conn connection
+	 */
+	void setConnection(Connection conn);
+
+	/**
+	 * kết nối connection conn
+	 * 
+	 * @param conn connection cần kết nối
+	 * @throws Exception
+	 */
+	void openConnection(Connection conn) throws Exception;
+
+	/**
+	 * ngắt kết nối connection conn
+	 * 
+	 * @param conn connection cần ngắt kết nối
+	 * @throws SQLException
+	 */
+	void closeConnection(Connection conn) throws SQLException;
+
+	/**
+	 * set autocommit cho connection là false để thực hiện transaction
+	 * 
+	 * @param conn connection cần set auto commit
+	 * @throws SQLException
+	 */
+	void setAutoCommit(Connection conn) throws SQLException;
+
+	/**
+	 * commit nhóm lệnh đã thực hiện
+	 * 
+	 * @param conn connection cần commit
+	 * @throws SQLException
+	 */
+	void commitTransaction(Connection conn) throws SQLException;
+
+	/**
+	 * rollback nhóm lệnh đã thực hiện
+	 * 
+	 * @param conn connection cần rollback
+	 * @throws SQLException
+	 */
+	void rollbackTransaction(Connection conn) throws SQLException;
+
+	/**
 	 * mở kết nối đến db
 	 * 
 	 * @throws Exception
@@ -42,11 +92,4 @@ public interface BaseDao {
 	 * @return true - tồn tại trong db
 	 */
 	boolean isExistColName(String colName) throws Exception;
-
-	/**
-	 * set kết nối cho conn
-	 * 
-	 * @param conn obj kết nối đươc thiết lập
-	 */
-	void setConn(Connection conn);
 }

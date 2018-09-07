@@ -4,8 +4,14 @@
  */
 package logics.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dao.BaseDao;
+import dao.TblDetailUserJapanDao;
+import dao.impl.BaseDaoImpl;
+import dao.impl.TblDetailUserJapanDaoImpl;
 import dao.impl.TblUserDaoImpl;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
@@ -127,11 +133,36 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
+		BaseDao dao = new BaseDaoImpl();
+		dao.openConnection();
+		Connection conn = dao.getConnection();
 		try {
-			return tblUserDaoImpl.createUser(userInfor);
+			// transaction
+			dao.setAutoCommit(conn);
+			// lệnh 1
+			tblUserDaoImpl.setConnection(conn);
+			tblUserDaoImpl.insertUser(userInfor);
+			// lệnh 2
+			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+			japanDao.setConnection(conn);
+			japanDao.insertUser(userInfor);
+			// commit
+			tblUserDaoImpl.commitTransaction(conn);
+
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			// rollback kết quả
+			dao.rollbackTransaction(conn);
+
+			return false;
+		} finally {
+			try {
+				tblUserDaoImpl.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
 		}
 	}
 

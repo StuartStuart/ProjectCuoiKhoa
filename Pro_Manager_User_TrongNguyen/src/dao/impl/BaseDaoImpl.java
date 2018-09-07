@@ -169,10 +169,110 @@ public class BaseDaoImpl implements BaseDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see dao.BaseDao#setConn(java.sql.Connection)
+	 * @see dao.BaseDao#setAutoCommit(java.sql.Connection)
 	 */
 	@Override
-	public void setConn(Connection conn) {
+	public void setAutoCommit(Connection conn) throws SQLException {
+		try {
+			conn.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#commitTransaction(java.sql.Connection)
+	 */
+	@Override
+	public void commitTransaction(Connection conn) throws SQLException {
+		try {
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#rollbackTransaction(java.sql.Connection)
+	 */
+	@Override
+	public void rollbackTransaction(Connection conn) throws SQLException {
+		try {
+			conn.rollback();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#openConnection(java.sql.Connection)
+	 */
+	@Override
+	public void openConnection(Connection conn) throws Exception {
+		try {
+			String className, url, user, pass;
+			// nháº­n vá»� className
+			className = DatabaseProperties.getValue("className");
+			url = DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname");
+			user = DatabaseProperties.getValue("user");
+			pass = DatabaseProperties.getValue("pass");
+			// káº¿t ná»‘i Ä‘áº¿n Class
+			Class.forName(className);
+			// má»Ÿ káº¿t ná»‘i Ä‘áº¿n cÆ¡ sá»Ÿ dá»¯ liá»‡u
+			if (conn == null) {
+				// thiáº¿t láº­p káº¿t ná»‘i
+				conn = DriverManager.getConnection(url, user, pass);
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#closeConnection(java.sql.Connection)
+	 */
+	@Override
+	public void closeConnection(Connection conn) throws SQLException {
+		try {
+			if (conn != null) {
+				conn.close();
+				conn = null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#getConnection()
+	 */
+	@Override
+	public Connection getConnection() {
+		return conn;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.BaseDao#setConnection(java.sql.Connection)
+	 */
+	@Override
+	public void setConnection(Connection conn) {
 		this.conn = conn;
 	}
 }
