@@ -20,7 +20,7 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="${pageContext.request.contextPath }/EditUser.do"
+	<form action="${pageContext.request.contextPath }/ShowUser.do"
 		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
@@ -107,7 +107,7 @@
 				<tr>
 					<th width="200px" align="center">&nbsp;</th>
 					<td><input class="btn" type="button" value="編集"
-						onclick="window.location.href='${pageContext.request.contextPath}/AddUserInput.do?type=edit&userid=${userinfor.userId }'" />
+						onclick="window.location.href='${pageContext.request.contextPath}/EditUserInput.do?type=edit&userid=${userinfor.userId }'" />
 					</td>
 					<td><input class="btn" type="submit" value="削除" /></td>
 					<td><input class="btn" type="button" value="戻る"

@@ -317,10 +317,11 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			openConnection();
 			// viết câu query để lấy thông tin
-			String[] userInfors = { "tbl_user.user_id", "tbl_user.login_name", "mst_group.group_name",
-					"tbl_user.full_name", "tbl_user.full_name_kana", "tbl_user.birthday", "tbl_user.email",
-					"tbl_user.tel", "mst_japan.code_level", "mst_japan.name_level", "tbl_detail_user_japan.start_date",
-					"tbl_detail_user_japan.end_date", "tbl_detail_user_japan.total" };
+			String[] userInfors = { "tbl_user.user_id", "tbl_user.login_name", "mst_group.group_id",
+					"mst_group.group_name", "tbl_user.full_name", "tbl_user.full_name_kana", "tbl_user.birthday",
+					"tbl_user.email", "tbl_user.tel", "mst_japan.code_level", "mst_japan.name_level",
+					"tbl_detail_user_japan.start_date", "tbl_detail_user_japan.end_date",
+					"tbl_detail_user_japan.total" };
 			// thêm các trường thông tin cần lấy của User
 			StringBuilder query = new StringBuilder("SELECT");
 			for (String infor : userInfors) {
@@ -359,6 +360,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				i = 0;
 				userInfor.setUserId(rs.getInt(userInfors[i++]));
 				userInfor.setLoginName(rs.getString(userInfors[i++]));
+				userInfor.setGroupId(rs.getInt(userInfors[i++]));
 				userInfor.setGroupName(rs.getString(userInfors[i++]));
 				userInfor.setFullName(rs.getString(userInfors[i++]));
 				userInfor.setFullNameKana(rs.getString(userInfors[i++]));
@@ -607,8 +609,14 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	public void deleteUserById(Integer userId) throws Exception {
 		try {
 			// viết query
-			query = "DELETE FROM tbl_user WHERE user_id = ?; "/* + "SET @num := 0; "
-					+ "	UPDATEtbl_usere SET id = @num := (@num+1);" + " ALTER TABLEtbl_usere AUTO_INCREMENT = 1;"*/;
+			query = "DELETE FROM tbl_user WHERE user_id = ?; "/*
+																 * +
+																 * "SET @num := 0; "
+																 * +
+																 * "	UPDATEtbl_usere SET id = @num := (@num+1);"
+																 * +
+																 * " ALTER TABLEtbl_usere AUTO_INCREMENT = 1;"
+																 */;
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
@@ -628,7 +636,39 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 */
 	@Override
 	public boolean updateUser(UserInforEntity userInforEntity) {
-		System.out.println("Đã chạy qua đây");
+		System.out.println("Đã chạy qua updateUser");
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#checkExistedUserId(java.lang.Integer)
+	 */
+	@Override
+	public boolean checkExistedUserId(Integer userId) throws Exception {
+		try {
+			openConnection();
+			// viết query
+			query = "SELECT user_id FROM tbl_user WHERE user_id = ?";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setInt(++i, userId);
+			// thực hiện query
+			return ps.executeQuery().next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw e;
+			}
+		}
+
 	}
 }

@@ -65,6 +65,7 @@ public class AddUserConfirmController extends HttpServlet {
 			HttpSession session = request.getSession();
 			String keyParam = request.getParameter("keyEntity");
 			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + keyParam);
+			session.removeAttribute("entityuserinfor" + keyParam);
 			if (null == userInforEntity.getUserId()) {
 				// obj thực hiện create user
 				TblUserLogic tblUserLogic = new TblUserLogicImpl();

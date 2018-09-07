@@ -19,8 +19,8 @@ import utils.ConstantUtil;
 /**
  * Servlet implementation class EditUserController
  */
-@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/EditUser.do", "/ShowUser.do" })
-public class EditUserController extends HttpServlet {
+@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/ShowUser.do" })
+public class ShowUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -30,11 +30,15 @@ public class EditUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			TblUserLogic userLogic = new TblUserLogicImpl();
 			// lấy về userId dạng Integer
 			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
-			// lấy về UserInforEntity
-			UserInforEntity userInforEntity = new TblUserLogicImpl().getUserInfor(userId);
-			if (0 < userId && null != userInforEntity) {
+
+			if (null != userId && userLogic.checkExistedUserId(userId)) {
+				// nếu userId là số và tồn tại
+
+				// thì lấy về UserInforEntity
+				UserInforEntity userInforEntity = userLogic.getUserInfor(userId);
 				// set UserInforEntity lên request
 				request.setAttribute("userinfor", userInforEntity);
 				// fwd sang ADM005

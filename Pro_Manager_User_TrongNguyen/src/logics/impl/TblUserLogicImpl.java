@@ -211,4 +211,17 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 		}
 
 	}
+
+	/* (non-Javadoc)
+	 * @see logics.TblUserLogic#checkExistedUserId(java.lang.Integer)
+	 */
+	@Override
+	public boolean checkExistedUserId(Integer userId) throws Exception {
+		try {
+			return tblUserDaoImpl.checkExistedUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

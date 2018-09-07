@@ -18,8 +18,10 @@ public interface TblUserLogic {
 	/**
 	 * kiểm tra tài khoản có tồn tại trong database hay ko
 	 * 
-	 * @param userName tên đăng nhập
-	 * @param pass     mật khẩu
+	 * @param userName
+	 *            tên đăng nhập
+	 * @param pass
+	 *            mật khẩu
 	 * @return true (tài khoản không tồn tại) hoặc false (tài khoản tồn tại)
 	 * @throws Exception
 	 */
@@ -28,8 +30,10 @@ public interface TblUserLogic {
 	/**
 	 * nhận về tổng số User có group_id và full_name tương ứng
 	 * 
-	 * @param groupId  mã nhóm làm việc
-	 * @param fullName tên đầy đủ
+	 * @param groupId
+	 *            mã nhóm làm việc
+	 * @param fullName
+	 *            tên đầy đủ
 	 * @return tổng số user tương ứng
 	 * @throws Exception
 	 */
@@ -38,14 +42,22 @@ public interface TblUserLogic {
 	/**
 	 * Lấy về danh sách các User từ db
 	 * 
-	 * @param offSet          vị trí của User đầu tiên
-	 * @param limit           số bản ghi tối đa
-	 * @param groupId         mã group_id trong db
-	 * @param fullName        full_name trong db
-	 * @param sortType        loại cần sắp xếp
-	 * @param sortByFullName  sắp xếp theo tên đầy đủ
-	 * @param sortByCodeLevel sắp xếp theo mức code
-	 * @param sortByEndDate   sắp xếp theo ngày hêt hạn
+	 * @param offSet
+	 *            vị trí của User đầu tiên
+	 * @param limit
+	 *            số bản ghi tối đa
+	 * @param groupId
+	 *            mã group_id trong db
+	 * @param fullName
+	 *            full_name trong db
+	 * @param sortType
+	 *            loại cần sắp xếp
+	 * @param sortByFullName
+	 *            sắp xếp theo tên đầy đủ
+	 * @param sortByCodeLevel
+	 *            sắp xếp theo mức code
+	 * @param sortByEndDate
+	 *            sắp xếp theo ngày hêt hạn
 	 * @return danh sách TblUserEntity
 	 * @throws Exception
 	 */
@@ -55,7 +67,8 @@ public interface TblUserLogic {
 	/**
 	 * lấy thông tin user từ dao
 	 * 
-	 * @param userId id của người dùng - là duy nhất
+	 * @param userId
+	 *            id của người dùng - là duy nhất
 	 * @return một đối tượng chứa thông tin của người dùng
 	 * @throws Exception
 	 */
@@ -64,8 +77,10 @@ public interface TblUserLogic {
 	/**
 	 * nhận về đối tượng có loginName tương ứng
 	 * 
-	 * @param userId    user_id của đối tượng cần lấy
-	 * @param loginName tên đăng nhập của đối tượng cần lấy
+	 * @param userId
+	 *            user_id của đối tượng cần lấy
+	 * @param loginName
+	 *            tên đăng nhập của đối tượng cần lấy
 	 * @return đối tượng có loginName tương ứng
 	 * @throws Exception
 	 */
@@ -83,7 +98,8 @@ public interface TblUserLogic {
 	/**
 	 * gọi đến phương thức tạo của dao
 	 * 
-	 * @param userInfor đối tượng cần tạo
+	 * @param userInfor
+	 *            đối tượng cần tạo
 	 * @return true là tạo thành công
 	 * @throws Exception
 	 */
@@ -92,7 +108,8 @@ public interface TblUserLogic {
 	/**
 	 * nhận userId có loginName tương ứng từ dao
 	 * 
-	 * @param loginName tên đăng nhập
+	 * @param loginName
+	 *            tên đăng nhập
 	 * @return id của login name
 	 * @throws Exception
 	 */
@@ -101,7 +118,8 @@ public interface TblUserLogic {
 	/**
 	 * gọi dao để xóa user có id tương ứng
 	 * 
-	 * @param userId id của user cần xóa
+	 * @param userId
+	 *            id của user cần xóa
 	 * @return true là xóa thành công
 	 * @throws Exception
 	 */
@@ -110,8 +128,19 @@ public interface TblUserLogic {
 	/**
 	 * gọi dao để update user có thông tin tương ứng
 	 * 
-	 * @param userInforEntity đối tượng cần update
+	 * @param userInforEntity
+	 *            đối tượng cần update
 	 * @return true là update thành công
 	 */
 	boolean updateUser(UserInforEntity userInforEntity);
+
+	/**
+	 * kiểm tra sự tồn tại của userId bởi dao
+	 * 
+	 * @param userId
+	 *            id cần kiểm tra
+	 * @return true là tồn tại
+	 * @throws Exception 
+	 */
+	public boolean checkExistedUserId(Integer userId) throws Exception;
 }

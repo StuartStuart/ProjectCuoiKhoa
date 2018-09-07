@@ -20,7 +20,8 @@ public interface TblUserDao {
 	/**
 	 * nhận về 1 admin account có username tương ứng
 	 * 
-	 * @param userName tên đăng nhập
+	 * @param userName
+	 *            tên đăng nhập
 	 * @return 1 admin account
 	 * @throws Exception
 	 */
@@ -29,8 +30,10 @@ public interface TblUserDao {
 	/**
 	 * nhận về tổng số user trong db theo groupId và fullName
 	 * 
-	 * @param groupId  loại group_id có trong db
-	 * @param fullName chuỗi full_name có trong db
+	 * @param groupId
+	 *            loại group_id có trong db
+	 * @param fullName
+	 *            chuỗi full_name có trong db
 	 * @return tổng cộng các user có đủ 2 tham số trên
 	 * @throws Exception
 	 */
@@ -39,14 +42,22 @@ public interface TblUserDao {
 	/**
 	 * Lấy về danh sách các User từ db
 	 * 
-	 * @param offSet          vị trí của User đầu tiên
-	 * @param limit           số bản ghi tối đa
-	 * @param groupId         mã group_id trong db
-	 * @param fullName        full_name trong db
-	 * @param sortType        loại cần sắp xếp
-	 * @param sortByFullName  sắp xếp theo tên đầy đủ
-	 * @param sortByCodeLevel sắp xếp theo mức code
-	 * @param sortByEndDate   sắp xếp theo ngày hêt hạn
+	 * @param offSet
+	 *            vị trí của User đầu tiên
+	 * @param limit
+	 *            số bản ghi tối đa
+	 * @param groupId
+	 *            mã group_id trong db
+	 * @param fullName
+	 *            full_name trong db
+	 * @param sortType
+	 *            loại cần sắp xếp
+	 * @param sortByFullName
+	 *            sắp xếp theo tên đầy đủ
+	 * @param sortByCodeLevel
+	 *            sắp xếp theo mức code
+	 * @param sortByEndDate
+	 *            sắp xếp theo ngày hêt hạn
 	 * @return danh sách TblUserEntity
 	 * @throws Exception
 	 */
@@ -56,7 +67,8 @@ public interface TblUserDao {
 	/**
 	 * lấy từ db các thông tin của user dựa vào userId
 	 * 
-	 * @param userId id của người dùng - là duy nhất
+	 * @param userId
+	 *            id của người dùng - là duy nhất
 	 * @return một đối tượng chứa thông tin của người dùng
 	 */
 	UserInforEntity getUserInfor(int userId) throws Exception;
@@ -64,8 +76,10 @@ public interface TblUserDao {
 	/**
 	 * nhận về từ db đối tượng thỏa mãn id và loginName
 	 * 
-	 * @param userId    id của đối tượng
-	 * @param loginName tên đăng nhập của đối tượng
+	 * @param userId
+	 *            id của đối tượng
+	 * @param loginName
+	 *            tên đăng nhập của đối tượng
 	 * @return một bản ghi có tên đăng nhập và id tương ứng hoặc null
 	 * @throws Exception
 	 */
@@ -74,8 +88,10 @@ public interface TblUserDao {
 	/**
 	 * xác định đối tượng với email có tồn tại hay không
 	 * 
-	 * @param userId id của đối tượng
-	 * @param email  email của đối tượng
+	 * @param userId
+	 *            id của đối tượng
+	 * @param email
+	 *            email của đối tượng
 	 * @return true là tồn tại
 	 * @throws Exception
 	 */
@@ -84,7 +100,8 @@ public interface TblUserDao {
 	/**
 	 * insert các thông tin vào bảng tbl_user
 	 * 
-	 * @param userInfor đối tượng chứa thông tin tbl_user va tbl_detail_japan
+	 * @param userInfor
+	 *            đối tượng chứa thông tin tbl_user va tbl_detail_japan
 	 * @throws Exception
 	 */
 	void insertUser(UserInforEntity userInfor) throws Exception;
@@ -92,7 +109,8 @@ public interface TblUserDao {
 	/**
 	 * nhận userId có loginName tương ứng từ db
 	 * 
-	 * @param loginName tên đăng nhập
+	 * @param loginName
+	 *            tên đăng nhập
 	 * @return id của login name
 	 * @throws Exception
 	 */
@@ -101,7 +119,8 @@ public interface TblUserDao {
 	/**
 	 * xóa user có id tương ứng từ db
 	 * 
-	 * @param userId id của user cần xóa
+	 * @param userId
+	 *            id của user cần xóa
 	 * @return true là xóa thành công
 	 * @throws SQLException
 	 */
@@ -110,8 +129,19 @@ public interface TblUserDao {
 	/**
 	 * gọi db để udpate thông tin của user tương ứng
 	 * 
-	 * @param userInforEntity đối tượng có thông tin càn update
+	 * @param userInforEntity
+	 *            đối tượng có thông tin càn update
 	 * @return true là update thành công
 	 */
 	boolean updateUser(UserInforEntity userInforEntity);
+
+	/**
+	 * kiểm tra trong db có tồn tại userId tương ứng ko
+	 * 
+	 * @param userId
+	 *            id cần kiểm tra
+	 * @return true là tồn tại
+	 * @throws Exception 
+	 */
+	public boolean checkExistedUserId(Integer userId) throws Exception;
 }

@@ -98,8 +98,8 @@ public class UserValidate {
 			}
 			// validate birthday
 			{
-				// check ngày ko hợp lệ
-				if (null == userInfor.getBirthDay()) {
+				// check ngày hợp lệ
+				if (!CommonUtil.checkDate(userInfor.getBirthDay())) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error011_BirthDay"));
 				}
 			}

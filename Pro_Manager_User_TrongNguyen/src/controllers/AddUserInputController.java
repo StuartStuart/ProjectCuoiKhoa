@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import entities.MstJapanEntity;
 import entities.TblMstGroupEntity;
 import entities.UserInforEntity;
+import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.MstJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
@@ -26,7 +27,7 @@ import validates.UserValidate;
 /**
  * Servlet implementation class AddUserInputController
  */
-@WebServlet(urlPatterns = { "/AddUserInput.do", "/AddUserValidate.do" })
+@WebServlet(urlPatterns = { "/AddUserInput.do", "/AddUserValidate.do", "/EditUserInput.do" })
 public class AddUserInputController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -37,10 +38,11 @@ public class AddUserInputController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// set các thông tin trong combobox lên request
-			setDataLogic(request);
 			// nhận về 1 userInfor tùy thuộc từng điều kiện
 			UserInforEntity userInforDefault = getUserInforDefault(request, response);
+
+			// set các thông tin trong combobox lên request
+			setDataLogic(request);
 
 			// gửi userInforDefault lên request
 			request.setAttribute("adm003userinfor", userInforDefault);
@@ -59,8 +61,8 @@ public class AddUserInputController extends HttpServlet {
 	}
 
 	/**
-	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy cập
-	 * màn hình ADM003
+	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy
+	 * cập màn hình ADM003
 	 * 
 	 * @param request
 	 * @param response
@@ -98,7 +100,7 @@ public class AddUserInputController extends HttpServlet {
 				// thì nhận về các thông tin đã nhập
 				loginName = (String) request.getParameter("id");
 				loginName = (null != loginName) ? loginName : request.getParameter("loginName");
-//				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
+				userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
 				groupId = CommonUtil.convertStrToInt((String) request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = (String) request.getParameter("full_name");
@@ -149,14 +151,26 @@ public class AddUserInputController extends HttpServlet {
 					total = sessionUser.getTotal();
 					break;
 				case ConstantUtil.ADM003_EDIT_TYPE:
-					// thêm các thông tin mặc định cho user bằng các thông tin từ db
+					// thêm các thông tin mặc định cho user bằng các thông tin
+					// từ db
 					// phụ thuộc user_id
 
-					// nhận user_id
-					Integer user_id = CommonUtil.convertStrToInt(request.getParameter("userid"));
-					UserInforEntity editionUser = new TblUserLogicImpl().getUserInfor(user_id);
+					// lấy về userId dạng Integer
+					userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
 
-					userId = editionUser.getUserId();
+					TblUserLogic userLogic = new TblUserLogicImpl();
+					UserInforEntity editionUser;
+					if (null != userId && userLogic.checkExistedUserId(userId)) {
+						// nếu userId là số và tồn tại
+
+						// thì lấy về UserInforEntity
+						editionUser = new TblUserLogicImpl().getUserInfor(userId);
+					} else {
+						editionUser = null;
+						
+						// sẽ đươc thay = fwd
+					}
+
 					loginName = editionUser.getLoginName();
 					groupId = editionUser.getGroupId();
 					mstGroup = editionUser.getMstGroup();
@@ -177,7 +191,8 @@ public class AddUserInputController extends HttpServlet {
 				default: // cùng trường hợp với add type
 
 					Date nowTime = CommonUtil.getNowTime();
-					// thêm các thông tin mặc định cho user, ví dụ startDate là ngày
+					// thêm các thông tin mặc định cho user, ví dụ startDate là
+					// ngày
 					// hiện tại
 					userId = null;
 					loginName = "";
@@ -199,7 +214,7 @@ public class AddUserInputController extends HttpServlet {
 				}
 			}
 			// set thuộc tính cho userInforDefault
-//			userInforDefault.setUserId(userId);
+			userInforDefault.setUserId(userId);
 			userInforDefault.setLoginName(loginName);
 			userInforDefault.setGroupId(groupId);
 			userInforDefault.setMstGroup(mstGroup);
@@ -283,7 +298,8 @@ public class AddUserInputController extends HttpServlet {
 
 			} else {
 				/*
-				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
+				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến
+				 * AddUserConfirm.do
 				 */
 
 				// tạo key

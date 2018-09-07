@@ -14,7 +14,6 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="ADM002.html" method="post" name="inputform">
 		<table class="tbl_input" border="0" width="80%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -31,12 +30,7 @@
 					<div style="height: 70px"></div>
 				</td>
 			</tr>
-			<tr>
-				<td align="center" colspan="2"><input class="btn" type="submit"
-					value="OK" onclick="" /></td>
-			</tr>
 		</table>
-	</form>
 	<!-- End vung input -->
 
 	<!-- Begin vung footer -->
