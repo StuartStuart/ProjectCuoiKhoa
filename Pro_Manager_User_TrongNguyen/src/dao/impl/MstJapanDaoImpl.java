@@ -65,7 +65,7 @@ public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 			openConnection();
 			// tạo query
 			StringBuilder query = new StringBuilder("");
-			query.append("SELECT COUNT(code_level)");
+			query.append("SELECT code_level");
 			query.append(" FROM mst_japan");
 			query.append(" WHERE code_level = ?");
 			query.append(";");

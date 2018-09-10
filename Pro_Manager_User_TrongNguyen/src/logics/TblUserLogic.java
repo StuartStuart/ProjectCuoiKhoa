@@ -4,6 +4,7 @@
  */
 package logics;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.UserInforEntity;
@@ -130,9 +131,11 @@ public interface TblUserLogic {
 	 * 
 	 * @param userInforEntity
 	 *            đối tượng cần update
+	 * @param changeTblDetail
 	 * @return true là update thành công
+	 * @throws SQLException
 	 */
-	boolean updateUser(UserInforEntity userInforEntity);
+	boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException;
 
 	/**
 	 * kiểm tra sự tồn tại của userId bởi dao

@@ -635,9 +635,30 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @see dao.TblUserDao#updateUser(entities.UserInforEntity)
 	 */
 	@Override
-	public boolean updateUser(UserInforEntity userInforEntity) {
-		System.out.println("Đã chạy qua updateUser");
-		return false;
+	public void updateUser(UserInforEntity userInforEntity) throws Exception {
+		try {
+			// viết query
+			StringBuilder sb = new StringBuilder("");
+
+			sb.append("UPDATE tbl_user");
+			sb.append(" SET group_id = ?, full_name = ?, full_name_kana = ?, email = ?, tel = ?, birthday = ?");
+			sb.append(" WHERE user_id = ?;");
+			// hoàn thiện query
+			ps = conn.prepareStatement(sb.toString());
+			int i = 0;
+			ps.setInt(++i, userInforEntity.getGroupId());
+			ps.setString(++i, userInforEntity.getFullName());
+			ps.setString(++i, userInforEntity.getFullNameKana());
+			ps.setString(++i, userInforEntity.getEmail());
+			ps.setString(++i, userInforEntity.getTel());
+			ps.setDate(++i, new java.sql.Date(userInforEntity.getBirthDay().getTime()));
+			ps.setInt(++i, userInforEntity.getUserId());
+			// thực hiện query
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	/*

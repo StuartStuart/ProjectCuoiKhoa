@@ -132,8 +132,9 @@ public interface TblUserDao {
 	 * @param userInforEntity
 	 *            đối tượng có thông tin càn update
 	 * @return true là update thành công
+	 * @throws Exception 
 	 */
-	boolean updateUser(UserInforEntity userInforEntity);
+	void updateUser(UserInforEntity userInforEntity) throws Exception;
 
 	/**
 	 * kiểm tra trong db có tồn tại userId tương ứng ko

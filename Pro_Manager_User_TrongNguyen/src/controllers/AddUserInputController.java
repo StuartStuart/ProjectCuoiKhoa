@@ -205,7 +205,7 @@ public class AddUserInputController extends HttpServlet {
 					tel = "";
 					pass = "";
 					repass = "";
-					codeLevel = "";
+					codeLevel = null;
 					mstJapan = null;
 					startDate = nowTime;
 					endDate = nowTime;

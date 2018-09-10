@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,9 +12,12 @@ import javax.servlet.http.HttpSession;
 
 import entities.UserInforEntity;
 import logics.TblUserLogic;
+import logics.impl.MstJapanLogicImpl;
+import logics.impl.TblDetailUserJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import properties.MessageErrorProperties;
 import utils.ConstantUtil;
+import validates.UserValidate;
 
 /**
  * Servlet implementation class AddUserConfirm
@@ -66,29 +70,81 @@ public class AddUserConfirmController extends HttpServlet {
 			String keyParam = request.getParameter("keyEntity");
 			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + keyParam);
 			session.removeAttribute("entityuserinfor" + keyParam);
-			if (null == userInforEntity.getUserId()) {
-				// obj thực hiện create user
+			// validate lần 2
+			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInforEntity);
+
+			if (0 == listErrMsg.size()) {
+				// ko tồn tại lỗi
+
+				// thì kiểm tra tiếp các điều kiện update or add
+				// obj thực hiện create or update user
 				TblUserLogic tblUserLogic = new TblUserLogicImpl();
-				// email
-				String email = userInforEntity.getEmail();
-				// login name
-				String loginName = userInforEntity.getLoginName();
-				// là tạo user thành công
-				boolean isCreatedUser = !tblUserLogic.checkExistedEmail(null, email)
-						&& !tblUserLogic.checkExistedLoginName(null, loginName)
-						&& tblUserLogic.createUser(userInforEntity);
-				if (isCreatedUser) {
-					// tạo thành công user
-					response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
-							+ ConstantUtil.ADM006_SUCCESS_TYPE);
+				if (null == userInforEntity.getUserId()) {
+					if (tblUserLogic.createUser(userInforEntity)) {
+						// tạo thành công user
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+								+ ConstantUtil.ADM006_SUCCESS_TYPE);
+					} else {
+						// không tạo thành công user
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+								+ ConstantUtil.ADM006_ERROR_TYPE);
+					}
 				} else {
-					// không tạo thành công user
-					response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
-							+ ConstantUtil.ADM006_ERROR_TYPE);
+					// check tồn tại detailUserId - isExistedUserId
+					boolean isExistedUserId = new TblDetailUserJapanLogicImpl()
+							.checkExistUserId(userInforEntity.getUserId());
+					// check tồn tại codeLevel - isExistedCodeLevel
+					boolean isExistedCodeLevel = new MstJapanLogicImpl()
+							.checkExistCodeLevel(userInforEntity.getCodeLevel());
+
+					String changeTblDetail;
+					if (!isExistedCodeLevel) {
+						/*
+						 * nếu !iECL
+						 */
+						// nếu iEUI
+						if (isExistedUserId) {
+							// thì gán biến changeTblDetail = delete
+							changeTblDetail = ConstantUtil.DELETE_DETAIL_JAPAN_USER;
+						} else {
+							// nếu !iEUI
+
+							// thì changeTblDetail = doNothing
+							changeTblDetail = ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER;
+						}
+					} else {
+						/*
+						 * nếu iECL
+						 */
+
+						// nếu iEUI
+						if (isExistedUserId) {
+							// thì update
+							changeTblDetail = ConstantUtil.UPDATE_DETAIL_JAPAN_USER;
+						} else {
+							// nếu !iEUI
+
+							// thì insert
+							changeTblDetail = ConstantUtil.INSERT_DETAIL_JAPAN_USER;
+						}
+					}
+					
+					// gọi updateUserInfor()
+					if (tblUserLogic.updateUser(userInforEntity, changeTblDetail)) {
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+								+ ConstantUtil.ADM006_UPADATE_TYPE);
+					} else {
+						// không update thành công user
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
+								+ ConstantUtil.ADM006_ERROR_TYPE);
+					}
 				}
-			} else if (new TblUserLogicImpl().updateUser(userInforEntity)) {
+			} else {
+				// tồn tại lỗi
+
+				// không tạo thành công user
 				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_UPADATE_TYPE);
+						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

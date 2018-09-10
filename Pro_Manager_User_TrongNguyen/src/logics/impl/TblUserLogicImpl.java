@@ -8,15 +8,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dao.BaseDao;
 import dao.TblDetailUserJapanDao;
-import dao.impl.BaseDaoImpl;
 import dao.impl.TblDetailUserJapanDaoImpl;
 import dao.impl.TblUserDaoImpl;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
 import logics.TblUserLogic;
 import utils.CommonUtil;
+import utils.ConstantUtil;
 
 /**
  * Ä‘á»‘i tÆ°á»£ng TblUserLogic
@@ -51,7 +50,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 				return false;
 			} else { // tài khoản tồn tại
 				String encodedPass = CommonUtil.encodeMatKhau(pass, adminAccount.getSalt());
-//				 System.out.println(encodedPass);
+				// System.out.println(encodedPass);
 				boolean isTrungMatKhau = adminAccount.getPassword().equals(encodedPass);
 				if (!isTrungMatKhau) { // 2 pass không trung nhau
 					return false;
@@ -133,14 +132,12 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
-		BaseDao dao = new BaseDaoImpl();
-		dao.openConnection();
-		Connection conn = dao.getConnection();
+		tblUserDaoImpl.openConnection();
+		Connection conn = tblUserDaoImpl.getConnection();
 		try {
 			// transaction
-			dao.setAutoCommit(conn);
+			tblUserDaoImpl.setAutoCommit(conn);
 			// lệnh 1
-			tblUserDaoImpl.setConnection(conn);
 			tblUserDaoImpl.insertUser(userInfor);
 			// lệnh 2
 			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
@@ -153,7 +150,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// rollback kết quả
-			dao.rollbackTransaction(conn);
+			tblUserDaoImpl.rollbackTransaction(conn);
 
 			return false;
 		} finally {
@@ -202,17 +199,57 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 * @see logics.TblUserLogic#updateUser(entities.UserInforEntity)
 	 */
 	@Override
-	public boolean updateUser(UserInforEntity userInforEntity) {
+	public boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException {
+		tblUserDaoImpl.openConnection();
+		Connection conn = tblUserDaoImpl.getConnection();
 		try {
-			return tblUserDaoImpl.updateUser(userInforEntity);
+			// transaction
+			tblUserDaoImpl.setAutoCommit(conn);
+			// lệnh 1
+			tblUserDaoImpl.updateUser(userInforEntity);
+			// lệnh 2
+			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+			japanDao.setConnection(conn);
+			switch (changeTblDetail) {
+			case ConstantUtil.UPDATE_DETAIL_JAPAN_USER:
+				japanDao.updateUser(userInforEntity);
+
+				break;
+			case ConstantUtil.INSERT_DETAIL_JAPAN_USER:
+				// insert
+				japanDao.insertUser(userInforEntity);
+				break;
+			case ConstantUtil.DELETE_DETAIL_JAPAN_USER:
+				// delete
+				japanDao.deleteUserById(userInforEntity.getUserId());
+				break;
+			case ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER:
+			default:
+				break;
+			}
+			// commit
+			tblUserDaoImpl.commitTransaction(conn);
+
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
-		}
+			// rollback kết quả
+			tblUserDaoImpl.rollbackTransaction(conn);
 
+			return false;
+		} finally {
+			try {
+				tblUserDaoImpl.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see logics.TblUserLogic#checkExistedUserId(java.lang.Integer)
 	 */
 	@Override

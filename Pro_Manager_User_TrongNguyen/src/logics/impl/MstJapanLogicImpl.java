@@ -59,4 +59,14 @@ public class MstJapanLogicImpl extends BaseLogicImpl implements MstJapanLogic {
 	public MstJapanEntity getMstJapanByCodeLevel(String codeLevel) throws Exception {
 		return mstJapan.getMstJapanByCodeLevel(codeLevel);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.MstJapanLogic#checkExistCodeLevel(java.lang.String)
+	 */
+	@Override
+	public boolean checkExistCodeLevel(String codeLevel) throws Exception {
+		return mstJapan.checkExistedCodeLevel(codeLevel);
+	}
 }

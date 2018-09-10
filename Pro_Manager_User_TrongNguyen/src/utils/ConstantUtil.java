@@ -164,5 +164,21 @@ public class ConstantUtil {
 	/*
 	 * gọi đến màn hình ADM006 ở trạng thái update
 	 */
-	public static final String ADM006_UPADATE_TYPE = "update";;
+	public static final String ADM006_UPADATE_TYPE = "update";
+	/**
+	 * update detail japan bởi cách delete user
+	 */
+	public static final String DELETE_DETAIL_JAPAN_USER = "DELETE_DETAIL_JAPAN_USER";
+	/**
+	 * update detail japan bởi cách ko làm gì cả
+	 */
+	public static final String DO_NOTHING_DETAIL_JAPAN_USER = "DO_NOTHING_DETAIL_JAPAN_USER";
+	/**
+	 * update detail japan bởi cách update
+	 */
+	public static final String UPDATE_DETAIL_JAPAN_USER = "UPDATE_DETAIL_JAPAN_USER";
+	/**
+	 * update detail japan bởi cách insert
+	 */
+	public static final String INSERT_DETAIL_JAPAN_USER = "INSERT_DETAIL_JAPAN_USER";
 }

@@ -26,7 +26,8 @@ public interface MstJapanLogic {
 	/**
 	 * kiểm tra sự tồn tại cũa codeLevel trong db
 	 * 
-	 * @param codeLevel mã trình độ tiếng Nhật
+	 * @param codeLevel
+	 *            mã trình độ tiếng Nhật
 	 * @return true là tồn tại
 	 * @throws Exception
 	 */
@@ -35,9 +36,20 @@ public interface MstJapanLogic {
 	/**
 	 * lấy về đối tượng MstJapanEntity từ dao
 	 * 
-	 * @param codeLevel mã trình độ tiếng Nhật
+	 * @param codeLevel
+	 *            mã trình độ tiếng Nhật
 	 * @return đối tượng MstJapanEntity
 	 * @throws Exception
 	 */
 	MstJapanEntity getMstJapanByCodeLevel(final String codeLevel) throws Exception;
+
+	/**
+	 * kiểm tra sự tồn tại của codeLevel trong mst_japan
+	 * 
+	 * @param codeLevel
+	 *            codeLevel cần check
+	 * @return true là codeLevel đó có tồn tại trong mst_japan
+	 * @throws Exception 
+	 */
+	boolean checkExistCodeLevel(String codeLevel) throws Exception;
 }
