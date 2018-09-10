@@ -185,11 +185,34 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean deleteUser(Integer userId) throws Exception {
+		tblUserDaoImpl.openConnection();
+		Connection conn = tblUserDaoImpl.getConnection();
 		try {
-			return tblUserDaoImpl.deleteUser(userId);
+			// transaction
+			tblUserDaoImpl.setAutoCommit(conn);
+			// lệnh 1
+			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+			japanDao.setConnection(conn);
+			japanDao.deleteUserById(userId);
+			// lệnh 2
+			tblUserDaoImpl.deleteUserById(userId);
+			// commit
+			tblUserDaoImpl.commitTransaction(conn);
+
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			// rollback kết quả
+			tblUserDaoImpl.rollbackTransaction(conn);
+
+			return false;
+		} finally {
+			try {
+				tblUserDaoImpl.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
 		}
 	}
 
@@ -256,6 +279,21 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	public boolean checkExistedUserId(Integer userId) throws Exception {
 		try {
 			return tblUserDaoImpl.checkExistedUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.TblUserLogic#checkAdminAccount(java.lang.String)
+	 */
+	@Override
+	public boolean checkAdminAccount(String loginId) throws Exception {
+		try {
+			return tblUserDaoImpl.checkAdminAccount(loginId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import logics.impl.TblUserLogicImpl;
+
 /**
  * Servlet Filter implementation class LoginFilter
  */
@@ -31,7 +33,7 @@ public class LoginFilter implements Filter {
 		// điều kiện URL trỏ đến ADM001
 		boolean inLogin = (req.getContextPath() + "/login.do").equalsIgnoreCase(webURI)
 				|| (req.getContextPath() + "/").equalsIgnoreCase(webURI);
-		boolean isLogin = null != req.getSession().getAttribute("isLogin");
+		boolean isLogin = null != req.getSession().getAttribute("loginId");
 		if (inLogin) {
 			// ở trang login
 			if (isLogin) {
@@ -50,8 +52,29 @@ public class LoginFilter implements Filter {
 			if (isLogin) {
 				// đã login
 
-				// thì cho qua
-				chain.doFilter(req, res);
+				// thì kiểm tra admin
+				String loginId = (String) req.getSession().getAttribute("loginId");
+				try {
+					if (new TblUserLogicImpl().checkAdminAccount(loginId)) {
+						// là adminAccount
+
+						// pass the request along the filter chain
+						chain.doFilter(request, response);
+					} else {
+						// ko là adminAccount
+
+						// gọi logout
+						if ((req.getContextPath() + "/logout.do").equalsIgnoreCase(webURI)) {
+							chain.doFilter(request, response);
+						} else {
+							res.sendRedirect(req.getContextPath() + "/logout.do");
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					// về error_system
+					System.out.println("LoginFilter - doFilter - gọi servlet ShowSystemError");
+				}
 			} else {
 				// chưa login
 

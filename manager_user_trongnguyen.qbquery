@@ -21,7 +21,7 @@ user_id INT(11) not null,
 code_level VARCHAR(15) not null default 'N5',
 start_date	Date not null default '1900-01-01',
 end_date	Date not null default '1900-01-01',
-total	INT(11) not null default 0);
+total	INT(11) not null default -1);
 
 CREATE TABLE IF NOT EXISTS `mst_group`(
 group_id	INT(11) not null PRIMARY KEY AUTO_INCREMENT,

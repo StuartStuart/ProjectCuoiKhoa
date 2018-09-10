@@ -692,4 +692,32 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		}
 
 	}
+
+	@Override
+	public boolean checkAdminAccount(String loginId) throws Exception {
+		try {
+			openConnection();
+			// viết query
+			query = "SELECT category FROM tbl_user WHERE login_name = ?;";
+			// hoàn thiện query
+			ps = conn.prepareStatement(query);
+			int i = 0;
+			ps.setString(++i, loginId);
+			// thực hiện query
+			ResultSet rs = ps.executeQuery();
+			// trả về kết quả
+			return (rs.next() && 0 == rs.getInt("category"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				closeConnection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
+
 }

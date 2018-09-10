@@ -58,37 +58,4 @@ public class ShowUserController extends HttpServlet {
 			}
 		}
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			// lấy userId của user cần xóa
-			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
-			// gọi method xóa của logic
-			TblUserLogic tblUserLogic = new TblUserLogicImpl();
-			if (tblUserLogic.deleteUser(userId)) {
-				// chuyển hướng ADM006 - success
-				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.SUCCESS + "?type=" + ConstantUtil.ADM006_DELETE_TYPE);
-			} else {
-				// chuyển hướng ADM006 - error
-				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.ADM006_JSP + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			// chuyển đến màn hình Error
-			try {
-				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
-				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
 }

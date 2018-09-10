@@ -103,7 +103,7 @@
 						<td>${userInfors.tel}</td>
 						<td>${fn: escapeXml(userInfors.nameLevel)}</td>
 						<td align="center">${userInfors.endDate}</td>
-						<td align="right">${userInfors.total}</td>
+						<td align="right">${(userInfors.nameLevel != null)?userInfors.total:''}</td>
 					</tr>
 				</c:forEach>
 			</c:when>

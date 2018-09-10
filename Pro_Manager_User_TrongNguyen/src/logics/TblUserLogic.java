@@ -143,7 +143,17 @@ public interface TblUserLogic {
 	 * @param userId
 	 *            id cần kiểm tra
 	 * @return true là tồn tại
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean checkExistedUserId(Integer userId) throws Exception;
+
+	/**
+	 * kiểm tra loginId trong db có phải đại diện cho admin ko
+	 * 
+	 * @param loginId
+	 *            loginId cần kiểm tra
+	 * @return true là đại diện cho admin
+	 * @throws Exception 
+	 */
+	public boolean checkAdminAccount(String loginId) throws Exception;
 }

@@ -18,6 +18,16 @@ import entities.UserInforEntity;
  */
 public interface TblUserDao {
 	/**
+	 * kiểm tra trong db loginId có là admin ko
+	 * 
+	 * @param loginId
+	 *            cần check
+	 * @return true là đúng
+	 * @throws Exception 
+	 */
+	boolean checkAdminAccount(String loginId) throws Exception;
+
+	/**
 	 * nhận về 1 admin account có username tương ứng
 	 * 
 	 * @param userName
@@ -132,7 +142,7 @@ public interface TblUserDao {
 	 * @param userInforEntity
 	 *            đối tượng có thông tin càn update
 	 * @return true là update thành công
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	void updateUser(UserInforEntity userInforEntity) throws Exception;
 
@@ -142,7 +152,7 @@ public interface TblUserDao {
 	 * @param userId
 	 *            id cần kiểm tra
 	 * @return true là tồn tại
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean checkExistedUserId(Integer userId) throws Exception;
 }

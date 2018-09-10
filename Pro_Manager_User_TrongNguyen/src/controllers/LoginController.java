@@ -49,7 +49,7 @@ public class LoginController extends HttpServlet {
 			// nhận thông báo tương ứng với textbox [login] và [password] đã nhập
 			ArrayList<String> listMessage = new LoginValidate().validate(loginId, password);
 			if (0 == listMessage.size()) { // login thành công
-				request.getSession().setAttribute("isLogin", true); // đánh dấu đăng nhập vào
+				request.getSession().setAttribute("loginId", loginId); // đánh dấu đăng nhập vào
 				response.sendRedirect("ListUser.do");
 			} else { // login không thành công
 				request.setAttribute("adm001message", listMessage);

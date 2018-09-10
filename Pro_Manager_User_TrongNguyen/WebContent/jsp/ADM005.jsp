@@ -20,7 +20,7 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
-	<form action="${pageContext.request.contextPath }/ShowUser.do"
+	<form action="${pageContext.request.contextPath }/DeleteUser.do"
 		method="post" name="inputform">
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
@@ -109,10 +109,10 @@
 					<td><input class="btn" type="button" value="編集"
 						onclick="window.location.href='${pageContext.request.contextPath}/EditUserInput.do?type=edit&userid=${userinfor.userId }'" />
 					</td>
-					<td><input class="btn" type="submit" value="削除" /></td>
+					<td><input class="btn" type="submit" value="削除"
+						onclick="return confirm('Are you sure you want to delete?')" /></td>
 					<td><input class="btn" type="button" value="戻る"
-						onclick="window.location.href='${pageContext.request.contextPath}/ListUser.do?type=back'" />
-					</td>
+						onclick="window.location.href='${pageContext.request.contextPath}/ListUser.do?type=back'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->
