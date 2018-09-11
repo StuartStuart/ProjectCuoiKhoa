@@ -141,7 +141,7 @@
 								<c:otherwise>
 									<tr>
 										<td></td>
-										<td align="left"><a href="#">change password</a></td>
+										<td></td>
 									</tr>
 								</c:otherwise>
 							</c:choose>
@@ -149,7 +149,9 @@
 								<th align="left" colspan="2"><a href="#"
 									onclick="changeJapanZone()">日本語能力</a></th>
 							</tr>
-							<tbody ${(adm003userinfor.codeLevel == null)?'style="display: none"':'style="display: table-row-group"' } id="japanzone">
+							<tbody
+								${(adm003userinfor.codeLevel == null)?'style="display: none"':'style="display: table-row-group"' }
+								id="japanzone">
 								<tr>
 									<td class="lbl_left">資格:</td>
 									<td align="left"><select name="kyu_id">

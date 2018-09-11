@@ -132,7 +132,7 @@ public class AddUserConfirmController extends HttpServlet {
 					// gọi updateUserInfor()
 					if (tblUserLogic.updateUser(userInforEntity, changeTblDetail)) {
 						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="
-								+ ConstantUtil.ADM006_UPADATE_TYPE);
+								+ ConstantUtil.ADM006_UPDATE_TYPE);
 					} else {
 						// không update thành công user
 						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS + "?type="

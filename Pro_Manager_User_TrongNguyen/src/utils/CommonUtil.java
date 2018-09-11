@@ -273,7 +273,7 @@ public class CommonUtil {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * check các ký tự trong chuỗi có là ký tự kana ko
 	 * 
@@ -342,5 +342,14 @@ public class CommonUtil {
 	 */
 	public static boolean checkDate(Date birthDay) {
 		return (null != birthDay);
+	}
+
+	/**
+	 * nhận về salt lấy từ milisecond
+	 * 
+	 * @return salt
+	 */
+	public static String getSalt() {
+		return new Date().getTime() + "";
 	}
 }

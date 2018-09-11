@@ -153,7 +153,21 @@ public interface TblUserLogic {
 	 * @param loginId
 	 *            loginId cần kiểm tra
 	 * @return true là đại diện cho admin
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean checkAdminAccount(String loginId) throws Exception;
+
+	/**
+	 * gọi dao để update pass và salt cho user có id tương ưng
+	 * 
+	 * @param userId
+	 *            id của user
+	 * @param pass
+	 *            password cần update
+	 * @param salt
+	 *            salt cần update
+	 * @return true là update thành công
+	 * @throws Exception 
+	 */
+	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception;
 }

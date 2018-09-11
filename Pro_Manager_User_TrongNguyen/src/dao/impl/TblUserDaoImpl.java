@@ -720,4 +720,42 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see dao.TblUserDao#updatePasswordForId(java.lang.Integer,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception {
+		try {
+			openConnection();
+			// viết query
+			StringBuilder sb = new StringBuilder("");
+
+			sb.append("UPDATE tbl_user");
+			sb.append(" SET password = ?, salt = ?");
+			sb.append(" WHERE user_id = ?;");
+			// hoàn thiện query
+			ps = conn.prepareStatement(sb.toString());
+			int i = 0;
+			ps.setString(++i, pass);
+			ps.setString(++i, salt);
+			ps.setInt(++i, userId);
+			// thực hiện query
+			ps.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				closeConnection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+		}
+	}
+
 }

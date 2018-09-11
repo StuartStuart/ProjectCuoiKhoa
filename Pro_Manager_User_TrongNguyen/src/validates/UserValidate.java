@@ -137,9 +137,9 @@ public class UserValidate {
 			// validate pass
 			if (null == userInfor.getUserId()) {
 				// khi là thêm ms
-
+				String errMess = validatePass(userInfor.getPass(),userInfor.getRepass());
 				// check ko nhập
-				if (userInfor.getPass().isEmpty()) {
+				if (!errMess.isEmpty()) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_Password"));
 				} else {
 					// check dộ dài trong khoảng
@@ -212,5 +212,41 @@ public class UserValidate {
 		}
 
 		return listErrMsg;
+	}
+
+	public String validatePass(String pass, String repass) throws Exception {
+		try {
+			String errMess = "";
+			// check ko nhập
+			if (pass.isEmpty()) {
+				errMess = MessageErrorProperties.getValue("Error001_Password");
+			} else {
+				// check dộ dài trong khoảng
+				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Password"));
+				int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_Password"));
+				int currentLengh = pass.length();
+				if (currentLengh < minLength || currentLengh > maxLength) {
+					errMess = MessageErrorProperties.getValue("Error007_Password");
+				} else
+				// check ký tự 1 byte
+				if (!CommonUtil.checkOneByteString(pass)) {
+					errMess = MessageErrorProperties.getValue("Error008_Password");
+				} else
+
+				// validate repass
+
+				// khi là thêm ms
+
+				// check repass ko đúng
+				if (!repass.equals(pass)) {
+					errMess = MessageErrorProperties.getValue("Error017_RePass");
+				}
+			}
+
+			return errMess;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

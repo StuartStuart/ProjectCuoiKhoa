@@ -299,4 +299,17 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			throw e;
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see logics.TblUserLogic#updatePasswordForId(java.lang.Integer, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception {
+		try {
+			return tblUserDaoImpl.updatePasswordForId(userId, pass, salt);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

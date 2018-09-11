@@ -164,7 +164,7 @@ public class ConstantUtil {
 	/*
 	 * gọi đến màn hình ADM006 ở trạng thái update
 	 */
-	public static final String ADM006_UPADATE_TYPE = "update";
+	public static final String ADM006_UPDATE_TYPE = "update";
 	/**
 	 * update detail japan bởi cách delete user
 	 */
@@ -181,4 +181,5 @@ public class ConstantUtil {
 	 * update detail japan bởi cách insert
 	 */
 	public static final String INSERT_DETAIL_JAPAN_USER = "INSERT_DETAIL_JAPAN_USER";
+	public static final String ADM007_JSP = "/jsp/ADM007.jsp";
 }

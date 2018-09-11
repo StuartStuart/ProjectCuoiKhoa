@@ -23,7 +23,7 @@ public interface TblUserDao {
 	 * @param loginId
 	 *            cần check
 	 * @return true là đúng
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	boolean checkAdminAccount(String loginId) throws Exception;
 
@@ -155,4 +155,18 @@ public interface TblUserDao {
 	 * @throws Exception
 	 */
 	public boolean checkExistedUserId(Integer userId) throws Exception;
+
+	/**
+	 * update pass và salt vào db ứng vs userid
+	 * 
+	 * @param userId
+	 *            user sẽ được update
+	 * @param pass
+	 *            pass cần update
+	 * @param salt
+	 *            salt sễ update
+	 * @return true là update thành công
+	 * @throws Exception 
+	 */
+	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception;
 }

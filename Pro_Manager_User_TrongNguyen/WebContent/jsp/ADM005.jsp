@@ -113,6 +113,8 @@
 						onclick="return confirm('Are you sure you want to delete?')" /></td>
 					<td><input class="btn" type="button" value="戻る"
 						onclick="window.location.href='${pageContext.request.contextPath}/ListUser.do?type=back'" /></td>
+					<td><input class="btn" type="button" value="editPass"
+						onclick="window.location.href='${pageContext.request.contextPath}/ChangePass.do?userid=${userinfor.userId }'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->
