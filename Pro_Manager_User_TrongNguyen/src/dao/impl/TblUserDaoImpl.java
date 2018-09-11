@@ -27,8 +27,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * tìm tài khoản tương ứng username trong db
 	 * 
-	 * @param userName
-	 *            tên đăng nhập
+	 * @param userName tên đăng nhập
 	 * @return tài khoản tương ứng username trong db
 	 * @throws Exception
 	 */
@@ -149,8 +148,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 
 			/*
-			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không
-			 * thì thực hiện bình thường
+			 * nếu sortType tồn tại trong db thì thực hiện order by, nếu không thì thực hiện
+			 * bình thường
 			 */
 			// thêm điều kiện sắp xếp
 			query.append("\nORDER BY ");
@@ -209,14 +208,10 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xác đinh chuỗi điều kiện order by
 	 * 
-	 * @param sortType
-	 *            loại sắp xếp
-	 * @param sortByFullName
-	 *            kiểu sx của tên
-	 * @param sortByCodeLevel
-	 *            kiểu sx của codeLevel
-	 * @param sortByEndDate
-	 *            kiểu sx của endDate
+	 * @param sortType        loại sắp xếp
+	 * @param sortByFullName  kiểu sx của tên
+	 * @param sortByCodeLevel kiểu sx của codeLevel
+	 * @param sortByEndDate   kiểu sx của endDate
 	 * @return chuỗi điều kiện sx
 	 * @throws Exception
 	 */
@@ -440,8 +435,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer,
-	 * java.lang.String)
+	 * @see dao.TblUserDao#checkExistedEmail(java.lang.Integer, java.lang.String)
 	 */
 	@Override
 	public boolean checkExistedEmail(Integer userId, String email) throws Exception {
@@ -525,26 +519,30 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 */
 	@Override
 	public Integer getUserIdByLoginName(String loginName) throws SQLException {
-
 		try {
-			openConnection();
-			Integer userId;
+			if (!loginName.isEmpty()) {
 
-			// viết query
-			query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
-			ps = conn.prepareStatement(query);
-			int i = 0;
-			ps.setString(++i, loginName);
-			// thực hiện query
-			ResultSet rs = ps.executeQuery();
-			// trả về kết quả
-			if (rs.next()) {
-				userId = rs.getInt("user_id");
+				openConnection();
+				Integer userId;
+
+				// viết query
+				query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
+				ps = conn.prepareStatement(query);
+				int i = 0;
+				ps.setString(++i, loginName);
+				// thực hiện query
+				ResultSet rs = ps.executeQuery();
+				// trả về kết quả
+				if (rs.next()) {
+					userId = rs.getInt("user_id");
+				} else {
+					userId = null;
+				}
+
+				return userId;
 			} else {
-				userId = null;
+				return null;
 			}
-
-			return userId;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -602,19 +600,15 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/**
 	 * xóa user từ db
 	 * 
-	 * @param userId
-	 *            id của user cần xóa
+	 * @param userId id của user cần xóa
 	 * @throws Exception
 	 */
 	public void deleteUserById(Integer userId) throws Exception {
 		try {
 			// viết query
 			query = "DELETE FROM tbl_user WHERE user_id = ?; "/*
-																 * +
-																 * "SET @num := 0; "
-																 * +
-																 * "	UPDATEtbl_usere SET id = @num := (@num+1);"
-																 * +
+																 * + "SET @num := 0; " +
+																 * "	UPDATEtbl_usere SET id = @num := (@num+1);" +
 																 * " ALTER TABLEtbl_usere AUTO_INCREMENT = 1;"
 																 */;
 			// hoàn thiện query
@@ -723,8 +717,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see dao.TblUserDao#updatePasswordForId(java.lang.Integer,
-	 * java.lang.String, java.lang.String)
+	 * @see dao.TblUserDao#updatePasswordForId(java.lang.Integer, java.lang.String,
+	 * java.lang.String)
 	 */
 	@Override
 	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception {
