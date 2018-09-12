@@ -319,4 +319,88 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			throw e;
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see logics.TblUserLogic#updateUser(entities.UserInforEntity, boolean)
+	 */
+	@Override
+	public boolean updateUser(UserInforEntity userInforEntity, boolean isExistedUserId) throws Exception {
+		try {
+			// check tồn tại codeLevel - isExistedCodeLevel
+			boolean isExistedCodeLevel = new MstJapanLogicImpl().checkExistCodeLevel(userInforEntity.getCodeLevel());
+			String changeTblDetail;
+			if (!isExistedCodeLevel) {
+				// nếu codeLevel ko tồn tại
+				if (isExistedUserId) {
+					// tồn tại id
+					changeTblDetail = ConstantUtil.DELETE_DETAIL_JAPAN_USER;
+				} else {
+					// ko tồn tại id
+					changeTblDetail = ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER;
+				}
+			} else {
+				// codeLevel tồn tại
+				if (isExistedUserId) {
+					// tồn tại userId
+					changeTblDetail = ConstantUtil.UPDATE_DETAIL_JAPAN_USER;
+				} else {
+					// ko tồn tại usr id
+					changeTblDetail = ConstantUtil.INSERT_DETAIL_JAPAN_USER;
+				}
+			}
+			/*
+			 * thực hiện update
+			 */
+			tblUserDaoImpl.openConnection();
+			Connection conn = tblUserDaoImpl.getConnection();
+			try {
+				// transaction
+				tblUserDaoImpl.setAutoCommit(conn);
+				// lệnh 1
+				tblUserDaoImpl.updateUser(userInforEntity);
+				// lệnh 2
+				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+				japanDao.setConnection(conn);
+				switch (changeTblDetail) {
+				case ConstantUtil.UPDATE_DETAIL_JAPAN_USER:
+					japanDao.updateUser(userInforEntity);
+
+					break;
+				case ConstantUtil.INSERT_DETAIL_JAPAN_USER:
+					// insert
+					japanDao.insertUser(userInforEntity);
+					break;
+				case ConstantUtil.DELETE_DETAIL_JAPAN_USER:
+					// delete
+					japanDao.deleteUserById(userInforEntity.getUserId());
+					break;
+				case ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER:
+				default:
+					break;
+				}
+				// commit
+				tblUserDaoImpl.commitTransaction(conn);
+
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				// rollback kết quả
+				tblUserDaoImpl.rollbackTransaction(conn);
+
+				return false;
+			} finally {
+				try {
+					tblUserDaoImpl.closeConnection();
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw e;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

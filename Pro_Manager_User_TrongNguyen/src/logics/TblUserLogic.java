@@ -167,7 +167,19 @@ public interface TblUserLogic {
 	 * @param salt
 	 *            salt cần update
 	 * @return true là update thành công
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception;
+
+	/**
+	 * update vào db theo từng kiểu
+	 * 
+	 * @param userInforEntity
+	 *            userInfor cần update
+	 * @param isExistedUserId
+	 *            id cần update
+	 * @return true là update thành công
+	 * @throws Exception 
+	 */
+	public boolean updateUser(UserInforEntity userInforEntity, boolean isExistedUserId) throws Exception;
 }

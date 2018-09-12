@@ -12,8 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import entities.UserInforEntity;
 import logics.TblUserLogic;
-import logics.impl.MstJapanLogicImpl;
-import logics.impl.TblDetailUserJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -65,7 +63,7 @@ public class AddUserConfirmController extends HttpServlet {
 			session.removeAttribute("entityuserinfor" + keyParam);
 			// validate lần 2
 			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInforEntity);
-
+			session.setAttribute(ConstantUtil.THROUGH_ADM006, ConstantUtil.THROUGH_ADM006);
 			if (0 == listErrMsg.size()) {
 				// ko tồn tại lỗi
 
@@ -84,46 +82,13 @@ public class AddUserConfirmController extends HttpServlet {
 					}
 				} else {
 					// check tồn tại detailUserId - isExistedUserId
-					boolean isExistedUserId = new TblDetailUserJapanLogicImpl()
-							.checkExistUserId(userInforEntity.getUserId());
-					// check tồn tại codeLevel - isExistedCodeLevel
-					boolean isExistedCodeLevel = new MstJapanLogicImpl()
-							.checkExistCodeLevel(userInforEntity.getCodeLevel());
+					boolean isExistedUserId = new TblUserLogicImpl().checkExistedUserId(userInforEntity.getUserId());
 
-					String changeTblDetail;
-					if (!isExistedCodeLevel) {
-						/*
-						 * nếu !iECL
-						 */
-						// nếu iEUI
-						if (isExistedUserId) {
-							// thì gán biến changeTblDetail = delete
-							changeTblDetail = ConstantUtil.DELETE_DETAIL_JAPAN_USER;
-						} else {
-							// nếu !iEUI
-
-							// thì changeTblDetail = doNothing
-							changeTblDetail = ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER;
-						}
-					} else {
-						/*
-						 * nếu iECL
-						 */
-
-						// nếu iEUI
-						if (isExistedUserId) {
-							// thì update
-							changeTblDetail = ConstantUtil.UPDATE_DETAIL_JAPAN_USER;
-						} else {
-							// nếu !iEUI
-
-							// thì insert
-							changeTblDetail = ConstantUtil.INSERT_DETAIL_JAPAN_USER;
-						}
-					}
+					// gọi logic update userInfor
+					boolean isUpdateSuccess = tblUserLogic.updateUser(userInforEntity, isExistedUserId);
 
 					// gọi updateUserInfor()
-					if (tblUserLogic.updateUser(userInforEntity, changeTblDetail)) {
+					if (isUpdateSuccess) {
 						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
 								+ ConstantUtil.ADM006_UPDATE_TYPE);
 					} else {

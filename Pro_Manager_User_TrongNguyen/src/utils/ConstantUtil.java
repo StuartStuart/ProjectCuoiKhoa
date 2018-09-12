@@ -195,4 +195,8 @@ public class ConstantUtil {
 	 * submit ở màn hình ADM003
 	 */
 	public static final String ADM003_SUBMIT_TYPE = "submit";
+	/*
+	 * cho phép qua ADM006
+	 */
+	public static final String THROUGH_ADM006 = "THROUGH_ADM006";
 }
