@@ -24,8 +24,7 @@ public class UserValidate {
 	/**
 	 * kiểm tra các lỗi có thể tồn tại trong userInfor
 	 * 
-	 * @param userInfor
-	 *            đối tượng được kiểm tra
+	 * @param userInfor đối tượng được kiểm tra
 	 * @return danh sách các lỗi xuất hiện
 	 * @throws Exception
 	 */
@@ -94,6 +93,13 @@ public class UserValidate {
 					if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
 						listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
 					}
+				}
+			}
+			// validate category
+			{
+				int category = userInfor.getCategory();
+				if (category > 1 || category < 0) {
+					listErrMsg.add("Category không hợp lệ");
 				}
 			}
 			// validate birthday

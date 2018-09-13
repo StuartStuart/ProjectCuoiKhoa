@@ -78,6 +78,15 @@
 									onblur="this.style.borderColor='#aaaaaa';" /></td>
 							</tr>
 							<tr>
+								<td class="lbl_left">Category:</td>
+								<td align="left"><input type="radio" name="category"
+									value="0"
+									${(adm003userinfor.category == 0)?'checked="checked"':'' } />
+									Admin <input type="radio" name="category" value="1"
+									${(adm003userinfor.category == 1)?'checked="checked"':'' } />
+									User</td>
+							</tr>
+							<tr>
 								<td class="lbl_left"><font color="red">*</font> 生年月日:</td>
 								<c:set
 									value="${CommonUtil.convertToArrDateString(adm003userinfor.birthDay)}"
@@ -144,7 +153,7 @@
 							<c:choose>
 								<c:when test="${fn:length(errmsg) eq 0}">
 									<c:choose>
-										<c:when test="${adm003userinfor.codeLevel == null }">
+										<c:when test="${adm003userinfor.codeLevel == 'N0' }">
 											<c:set value="style='display: none'" var="style" />
 										</c:when>
 										<c:otherwise>
@@ -234,13 +243,14 @@
 			<table border="0" cellpadding="4" cellspacing="0" width="300px">
 				<tr>
 					<th width="200px" align="center">&nbsp;</th>
-					<td><input class="btn" type="submit" value="確認" onclick="setStyleJapanZone()"/></td>
+					<td><input class="btn" type="submit" value="確認"
+						onclick="setStyleJapanZone()" /></td>
 					<td><input class="btn" type="button" value="戻る"
 						onclick="window.location.href='${pageContext.request.contextPath }/ListUser.do?type=back'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->
-			<input type="hidden" name="styleJapanZone" id="styleJapanZone"/>
+			<input type="hidden" name="styleJapanZone" id="styleJapanZone" />
 	</form>
 	<!-- End vung input -->
 

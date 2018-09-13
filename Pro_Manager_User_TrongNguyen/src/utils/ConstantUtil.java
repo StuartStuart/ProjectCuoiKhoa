@@ -245,4 +245,8 @@ public class ConstantUtil {
 	 * URL của ADM002
 	 */
 	public static final String ADM002_JSP = "/jsp/ADM002.jsp";
+	/**
+	 * code level mặc định khi vào adm003
+	 */
+	public static final String DEFAULT_CODE_LEVEL = "N0";
 }

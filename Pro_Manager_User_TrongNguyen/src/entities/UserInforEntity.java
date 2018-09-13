@@ -18,6 +18,7 @@ public class UserInforEntity {
 	private TblMstGroupEntity mstGroup;
 	private String fullName;
 	private String fullNameKana;
+	private int category;
 	private String birthDay;
 	private String email;
 	private String tel;
@@ -29,6 +30,20 @@ public class UserInforEntity {
 	private String startDate;
 	private String endDate;
 	private Integer total;
+
+	/**
+	 * @return the category
+	 */
+	public int getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
 	/**
 	 * @return the mstGroup

@@ -57,6 +57,10 @@
 								<td align="left">${fn:escapeXml(userinfor.fullNameKana) }</td>
 							</tr>
 							<tr>
+								<td class="lbl_left">Category:</td>
+								<td align="left">${ (userinfor.category == 0)?'Admin':'User'}</td>
+							</tr>
+							<tr>
 								<td class="lbl_left">生年月日:</td>
 								<td align="left">${CommonUtil.showFormatDate(userinfor.birthDay) }</td>
 							</tr>

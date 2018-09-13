@@ -55,8 +55,8 @@ public class AddUserInputController extends HttpServlet {
 	}
 
 	/**
-	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy
-	 * cập màn hình ADM003
+	 * set các thuộc tính cho userInforDefault có thông tin tùy thuộc cách truy cập
+	 * màn hình ADM003
 	 * 
 	 * @param request
 	 * @param response
@@ -73,15 +73,16 @@ public class AddUserInputController extends HttpServlet {
 		TblMstGroupEntity mstGroup;
 		String fullName;
 		String fullNameKana;
-		String birthDay = "";
+		String birthDay;
+		int category;
 		String email;
 		String tel;
 		String pass;
 		String repass;
 		String codeLevel;
 		MstJapanEntity mstJapan;
-		String startDate = "";
-		String endDate = "";
+		String startDate;
+		String endDate;
 		Integer total;
 		// nhận về loại đến ADM003 - type
 		try {
@@ -108,6 +109,7 @@ public class AddUserInputController extends HttpServlet {
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
 				fullName = request.getParameter("full_name");
 				fullNameKana = request.getParameter("full_name_kana");
+				category = CommonUtil.convertStrToInteger(request.getParameter("category"));
 				// birth_day trong tbl_user
 				String[] arrBirthDay = request.getParameterValues("birth_day");
 				birthDay = CommonUtil.convertToDateString(arrBirthDay[0], arrBirthDay[1], arrBirthDay[2]);
@@ -139,6 +141,7 @@ public class AddUserInputController extends HttpServlet {
 				mstGroup = sessionUser.getMstGroup();
 				fullName = sessionUser.getFullName();
 				fullNameKana = sessionUser.getFullNameKana();
+				category = sessionUser.getCategory();
 				birthDay = sessionUser.getBirthDay();
 				email = sessionUser.getEmail();
 				tel = sessionUser.getTel();
@@ -171,6 +174,7 @@ public class AddUserInputController extends HttpServlet {
 				mstGroup = editionUser.getMstGroup();
 				fullName = editionUser.getFullName();
 				fullNameKana = editionUser.getFullNameKana();
+				category = editionUser.getCategory();
 				birthDay = editionUser.getBirthDay();
 				email = editionUser.getEmail();
 				tel = editionUser.getTel();
@@ -198,12 +202,13 @@ public class AddUserInputController extends HttpServlet {
 				mstGroup = null;
 				fullName = "";
 				fullNameKana = "";
+				category = 1;
 				birthDay = CommonUtil.getNowTime(false);
 				email = "";
 				tel = "";
 				pass = "";
 				repass = "";
-				codeLevel = null;
+				codeLevel = ConstantUtil.DEFAULT_CODE_LEVEL;
 				mstJapan = null;
 				startDate = CommonUtil.getNowTime(false);
 				endDate = CommonUtil.getNowTime(true);
@@ -217,6 +222,7 @@ public class AddUserInputController extends HttpServlet {
 			userInforDefault.setMstGroup(mstGroup);
 			userInforDefault.setFullName(fullName);
 			userInforDefault.setFullNameKana(fullNameKana);
+			userInforDefault.setCategory(category);
 			userInforDefault.setBirthDay(birthDay);
 			userInforDefault.setEmail(email);
 			userInforDefault.setTel(tel);
@@ -298,8 +304,7 @@ public class AddUserInputController extends HttpServlet {
 
 			} else {
 				/*
-				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến
-				 * AddUserConfirm.do
+				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
 				 */
 
 				// tạo key
