@@ -1,5 +1,0 @@
-﻿ADM001:
-- tự động về ADM001 khi session time out
-
-ADM002:
-- Sửa link phải tương ứng màn hình
