@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utils.ConstantUtil;
+
 /**
  * 
  * Điều khiển logout tài khoản Servlet implementation class LogoutController
  */
-@WebServlet(description = "LogoutController", urlPatterns = { "/logout.do" })
+@WebServlet(description = "LogoutController", urlPatterns = { ConstantUtil.LOGOUT_CONTROLLER })
 public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -24,8 +26,8 @@ public class LogoutController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.removeAttribute("loginId");
+		session.removeAttribute(ConstantUtil.DANH_DAU_LOGIN);
 		session.invalidate(); // xóa session
-		response.sendRedirect(request.getContextPath() + "/login.do");
+		response.sendRedirect(request.getContextPath() + ConstantUtil.LOGIN_CONTROLLER);
 	}
 }

@@ -8,11 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import properties.MessageErrorProperties;
+import utils.ConstantUtil;
 
 /**
  * Servlet implementation class SystemErrorController
  */
-@WebServlet(description = "Chuyển hướng trang khi lỗi try - catch", urlPatterns = { "/SystemError.do" })
+@WebServlet(description = "Chuyển hướng trang khi lỗi try - catch", urlPatterns = { ConstantUtil.SYSTEM_ERROR_CONTROLLER })
 public class SystemErrorController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +23,7 @@ public class SystemErrorController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
-			request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
+			request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Lỗi MessageErrorProperties");

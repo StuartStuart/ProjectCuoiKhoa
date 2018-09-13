@@ -16,7 +16,7 @@ import entities.UserInforEntity;
  * @author TrongNguyen
  *
  */
-public interface TblUserDao {
+public interface TblUserDao extends BaseDao {
 	/**
 	 * kiểm tra trong db loginId có là admin ko
 	 * 
@@ -47,7 +47,7 @@ public interface TblUserDao {
 	 * @return tổng cộng các user có đủ 2 tham số trên
 	 * @throws Exception
 	 */
-	int getTotalUser(int groupId, String fullName) throws Exception;
+	int getTotalUser(Integer groupId, String fullName) throws Exception;
 
 	/**
 	 * Lấy về danh sách các User từ db
@@ -71,7 +71,7 @@ public interface TblUserDao {
 	 * @return danh sách TblUserEntity
 	 * @throws Exception
 	 */
-	ArrayList<UserInforEntity> getListUser(int offSet, int limit, int groupId, String fullName, String sortType,
+	ArrayList<UserInforEntity> getListUser(int offSet, int limit, Integer groupId, String fullName, String sortType,
 			String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception;
 
 	/**
@@ -166,7 +166,16 @@ public interface TblUserDao {
 	 * @param salt
 	 *            salt sễ update
 	 * @return true là update thành công
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception;
+
+	/**
+	 * delete user có id tương ưng
+	 * 
+	 * @param userId
+	 *            id của user cần xóa
+	 * @throws Exception 
+	 */
+	void deleteUserById(Integer userId) throws Exception;
 }

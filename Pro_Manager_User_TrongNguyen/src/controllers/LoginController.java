@@ -20,7 +20,7 @@ import validates.LoginValidate;
  * Servlet implementation class LoginController
  */
 @SuppressWarnings("serial")
-@WebServlet(description = "LoginController", urlPatterns = { "/login.do" })
+@WebServlet(description = "LoginController", urlPatterns = { ConstantUtil.LOGIN_CONTROLLER })
 public class LoginController extends HttpServlet {
 
 	/*
@@ -31,7 +31,7 @@ public class LoginController extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.getRequestDispatcher("jsp/ADM001.jsp").forward(req, resp);
+		req.getRequestDispatcher(ConstantUtil.ADM001_JSP).forward(req, resp);
 	}
 
 	/**
@@ -46,20 +46,16 @@ public class LoginController extends HttpServlet {
 			String loginId = new String(request.getParameter("adm001loginid"));
 			String password = new String(request.getParameter("adm001password"));
 
-			// nhận thông báo tương ứng với textbox [login] và [password] đã
-			// nhập
+			// nhận thông báo tương ứng với tb [login] và [password] đã nhập
 			ArrayList<String> listMessage = new LoginValidate().validate(loginId, password);
 			if (0 == listMessage.size()) { // login thành công
-				request.getSession().setAttribute("loginId", loginId); // đánh
-																		// dấu
-																		// đăng
-																		// nhập
-																		// vào
-				response.sendRedirect("ListUser.do");
+				// đánh dấu đăng nhập vào
+				request.getSession().setAttribute(ConstantUtil.DANH_DAU_LOGIN, loginId);
+				response.sendRedirect(request.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
 			} else { // login không thành công
 				request.setAttribute("adm001message", listMessage);
 				request.setAttribute("adm001loginid", loginId);
-				request.getRequestDispatcher("jsp/ADM001.jsp").forward(request, response);
+				request.getRequestDispatcher(ConstantUtil.ADM001_JSP).forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

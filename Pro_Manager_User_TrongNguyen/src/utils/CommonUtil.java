@@ -59,14 +59,14 @@ public class CommonUtil {
 	 * chuyển từ chuỗi sang số
 	 * 
 	 */
-	public static int convertStrToInt(String str) {
-		try {
-			return Integer.parseInt(str);
-		} catch (NumberFormatException e) {
-			// str không là số
-			return 0;
-		}
-	}
+//	public static int convertStrToInt(String str) {
+//		try {
+//			return Integer.parseInt(str);
+//		} catch (NumberFormatException e) {
+//			// str không là số
+//			return 0;
+//		}
+//	}
 
 	/**
 	 * mã hóa chuỗi pass + salt sang SHA1
@@ -79,7 +79,11 @@ public class CommonUtil {
 	public static String encodeMatKhau(String pass, String salt) throws NoSuchAlgorithmException {
 		MessageDigest mDigest;
 		try {
+			// xác định kiểu encode là SHA1
 			mDigest = MessageDigest.getInstance("SHA1");
+			/*
+			 *  endcode
+			 */
 			byte[] result = mDigest.digest((pass + salt).getBytes());
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < result.length; i++) {
@@ -186,15 +190,15 @@ public class CommonUtil {
 	 * @return ASC hoặc DESC
 	 * @throws Exception
 	 */
-	public static String convertSymbol(String sortSymbol) {
-		try {
-			return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol)) ? ConstantUtil.ADM002_SX_TANG
-					: ConstantUtil.ADM002_SX_GIAM;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+//	public static String convertSymbol(String sortSymbol) {
+//		try {
+//			return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol)) ? ConstantUtil.ADM002_SX_TANG
+//					: ConstantUtil.ADM002_SX_GIAM;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return "";
+//	}
 
 	/**
 	 * tạo danh sách các năm từ startYear đến năm hiện tại
@@ -302,17 +306,17 @@ public class CommonUtil {
 	/**
 	 * nhận total từ textbox
 	 * 
-	 * @param parameter chuỗi textbox
+	 * @param str chuỗi textbox
 	 * @return null là chuỗi ko phải số
 	 */
-	public static Integer getIntegerFromTextbox(String parameter) {
+	public static Integer convertStrToInteger(String str) {
 		try {
-			return Integer.parseInt(parameter);
+			return Integer.parseInt(str);
 		} catch (Exception e) {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * kiểm tra các ký tự trong chuỗi có là ký tự 1 byte ko
 	 * 

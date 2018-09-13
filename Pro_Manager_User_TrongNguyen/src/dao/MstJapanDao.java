@@ -14,7 +14,7 @@ import entities.MstJapanEntity;
  * @author TrongNguyen
  *
  */
-public interface MstJapanDao {
+public interface MstJapanDao extends BaseDao {
 	/**
 	 * nhận về các trình độ tiếng Nhật
 	 * 

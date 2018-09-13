@@ -15,7 +15,7 @@ import entities.UserInforEntity;
  * @author TrongNguyen
  *
  */
-public interface TblUserLogic {
+public interface TblUserLogic extends BaseLogic {
 	/**
 	 * kiểm tra tài khoản có tồn tại trong database hay ko
 	 * 
@@ -26,7 +26,7 @@ public interface TblUserLogic {
 	 * @return true (tài khoản không tồn tại) hoặc false (tài khoản tồn tại)
 	 * @throws Exception
 	 */
-	public boolean checkExist(String userName, String pass) throws Exception;
+	public boolean checkExistUser(String userName, String pass) throws Exception;
 
 	/**
 	 * nhận về tổng số User có group_id và full_name tương ứng
@@ -38,7 +38,7 @@ public interface TblUserLogic {
 	 * @return tổng số user tương ứng
 	 * @throws Exception
 	 */
-	int getTotalUser(int groupId, String fullName) throws Exception;
+	int getTotalUser(Integer groupId, String fullName) throws Exception;
 
 	/**
 	 * Lấy về danh sách các User từ db
@@ -62,7 +62,7 @@ public interface TblUserLogic {
 	 * @return danh sách TblUserEntity
 	 * @throws Exception
 	 */
-	ArrayList<UserInforEntity> getListUser(int offSet, int limit, int groupId, String fullName, String sortType,
+	ArrayList<UserInforEntity> getListUser(int offSet, int limit, Integer groupId, String fullName, String sortType,
 			String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception;
 
 	/**
@@ -134,8 +134,9 @@ public interface TblUserLogic {
 	 * @param changeTblDetail
 	 * @return true là update thành công
 	 * @throws SQLException
+	 * @throws Exception
 	 */
-	boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException;
+	boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException, Exception;
 
 	/**
 	 * kiểm tra sự tồn tại của userId bởi dao
@@ -179,7 +180,7 @@ public interface TblUserLogic {
 	 * @param isExistedUserId
 	 *            id cần update
 	 * @return true là update thành công
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean updateUser(UserInforEntity userInforEntity, boolean isExistedUserId) throws Exception;
 }

@@ -15,7 +15,7 @@ import utils.ConstantUtil;
 /**
  * Servlet implementation class SuccessController
  */
-@WebServlet(description = "Xử lý các logic thông báo thành công và lỗi hệ thống", urlPatterns = { "/Success.do" })
+@WebServlet(description = "Xử lý các logic thông báo thành công và lỗi hệ thống", urlPatterns = { ConstantUtil.SUCCESS_CONTROLLER })
 public class SuccessController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

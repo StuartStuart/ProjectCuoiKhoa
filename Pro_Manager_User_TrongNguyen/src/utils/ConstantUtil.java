@@ -97,6 +97,10 @@ public class ConstantUtil {
 	 * giá trị total mặc định
 	 */
 	public static final int ADM003_DEFAULT_TOTAL = 0;
+	/**
+	 * URL của DeleteController
+	 */
+	public static final String DELETE_CONTROLLER = "/DeleteUser.do";
 	/*
 	 * đường dẫn đến servlet add user confirm
 	 */
@@ -121,6 +125,18 @@ public class ConstantUtil {
 	 * đường dẫn đến successController
 	 */
 	public static final String SUCCESS_CONTROLLER = "/Success.do";
+	/**
+	 * URL thứ 1 của AddUserInputController
+	 */
+	public static final String ADD_USER_INPUT_CONTROLLER = "/AddUserInput.do";
+	/**
+	 * URL thứ 2 của AddUserInputController
+	 */
+	public static final String ADD_USER_VALIDATE_CONTROLLER = "/AddUserValidate.do";
+	/**
+	 * URL thứ 3 của AddUserInputController
+	 */
+	public static final String EDIT_USER_INPUT_CONTROLLER = "/EditUserInput.do";
 	/*
 	 * gọi đến màn hình ADM006 ở trạng thái thành công
 	 */
@@ -185,12 +201,14 @@ public class ConstantUtil {
 	 * đường dẫn đến ADM007.jsp
 	 */
 	public static final String ADM007_JSP = "/jsp/ADM007.jsp";
-
 	/**
 	 * đường dẫn đến SystemErrorController
 	 */
 	public static final String SYSTEM_ERROR_CONTROLLER = "/SystemError.do";
-
+	/**
+	 * URL của ChangePassController
+	 */
+	public static final String CHANGE_PASS_CONTROLLER = "/ChangePass.do";
 	/**
 	 * submit ở màn hình ADM003
 	 */
@@ -199,4 +217,32 @@ public class ConstantUtil {
 	 * cho phép qua ADM006
 	 */
 	public static final String THROUGH_ADM006 = "THROUGH_ADM006";
+	/*
+	 * URL của ListUserController
+	 */
+	public static final String LIST_USER_CONTROLLER = "/ListUser.do";
+	/*
+	 * URL của ADM001
+	 */
+	public static final String ADM001_JSP = "/jsp/ADM001.jsp";
+	/*
+	 * url của LoginController
+	 */
+	public static final String LOGIN_CONTROLLER = "/login.do";
+	/*
+	 * url của LogoutController
+	 */
+	public static final String LOGOUT_CONTROLLER = "/logout.do";
+	/**
+	 * url của ShowUserController
+	 */
+	public static final String SHOW_USER_CONTROLLER = "/ShowUser.do";
+	/**
+	 * đánh dấu là đã login
+	 */
+	public static final String DANH_DAU_LOGIN = "loginId";
+	/*
+	 * URL của ADM002
+	 */
+	public static final String ADM002_JSP = "/jsp/ADM002.jsp";
 }

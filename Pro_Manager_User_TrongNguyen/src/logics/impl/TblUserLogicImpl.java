@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.TblDetailUserJapanDao;
+import dao.TblUserDao;
 import dao.impl.TblDetailUserJapanDaoImpl;
 import dao.impl.TblUserDaoImpl;
 import entities.TblUserEntity;
@@ -24,7 +25,7 @@ import utils.ConstantUtil;
  *
  */
 public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
-	private TblUserDaoImpl tblUserDaoImpl;
+	private TblUserDao userDao;
 
 	/*
 	 * Khởi tạo tblUserDaoImpl
@@ -33,7 +34,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public void init() {
-		tblUserDaoImpl = new TblUserDaoImpl();
+		userDao = new TblUserDaoImpl();
 	}
 
 	/*
@@ -42,10 +43,10 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 * @see logics.TblUserLogic#checkExist(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean checkExist(String userName, String pass) throws Exception {
+	public boolean checkExistUser(String loginId, String pass) throws Exception {
 		try {
 			// mỗi tài khoản có username duy nhất
-			TblUserEntity adminAccount = tblUserDaoImpl.getLoginUser(userName);
+			TblUserEntity adminAccount = userDao.getLoginUser(loginId);
 			if (null == adminAccount) { // tài khoản không tồn tại
 				return false;
 			} else { // tài khoản tồn tại
@@ -68,9 +69,9 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 * @see logics.TblUserLogic#getTotalUser(int, java.lang.String)
 	 */
 	@Override
-	public int getTotalUser(int groupId, String fullName) throws Exception {
+	public int getTotalUser(Integer groupId, String fullName) throws Exception {
 		try {
-			return tblUserDaoImpl.getTotalUser(groupId, fullName);
+			return userDao.getTotalUser(groupId, fullName);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -82,10 +83,10 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 * java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public ArrayList<UserInforEntity> getListUser(int offSet, int limit, int groupId, String fullName, String sortType,
-			String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception {
-		return this.tblUserDaoImpl.getListUser(offSet, limit, groupId, fullName, sortType, sortByFullName,
-				sortByCodeLevel, sortByEndDate);
+	public ArrayList<UserInforEntity> getListUser(int offSet, int limit, Integer groupId, String fullName,
+			String sortType, String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception {
+		return this.userDao.getListUser(offSet, limit, groupId, fullName, sortType, sortByFullName, sortByCodeLevel,
+				sortByEndDate);
 	}
 
 	/*
@@ -95,7 +96,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public UserInforEntity getUserInfor(int userId) throws Exception {
-		return tblUserDaoImpl.getUserInfor(userId);
+		return userDao.getUserInfor(userId);
 	}
 
 	/*
@@ -107,7 +108,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public boolean checkExistedLoginName(Integer userId, String loginName) throws Exception {
 		try {
-			return tblUserDaoImpl.checkExistedLoginName(userId, loginName);
+			return userDao.checkExistedLoginName(userId, loginName);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -122,7 +123,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean checkExistedEmail(Integer userId, String email) throws Exception {
-		return tblUserDaoImpl.checkExistedEmail(userId, email);
+		return userDao.checkExistedEmail(userId, email);
 	}
 
 	/*
@@ -132,30 +133,30 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
-		tblUserDaoImpl.openConnection();
-		Connection conn = tblUserDaoImpl.getConnection();
+		userDao.openConnection();
+		Connection conn = userDao.getConnection();
 		try {
 			// transaction
-			tblUserDaoImpl.setAutoCommit(conn);
+			userDao.setAutoCommit(conn);
 			// lệnh 1
-			tblUserDaoImpl.insertUser(userInfor);
+			userDao.insertUser(userInfor);
 			// lệnh 2
 			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
 			japanDao.setConnection(conn);
 			japanDao.insertUser(userInfor);
 			// commit
-			tblUserDaoImpl.commitTransaction(conn);
+			userDao.commitTransaction(conn);
 
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// rollback kết quả
-			tblUserDaoImpl.rollbackTransaction(conn);
+			userDao.rollbackTransaction(conn);
 
 			return false;
 		} finally {
 			try {
-				tblUserDaoImpl.closeConnection();
+				userDao.closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw e;
@@ -171,10 +172,10 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public Integer getUserIdByLoginName(String loginName) throws Exception {
 		try {
-			if (loginName.isEmpty()) {
+			if (null != loginName && loginName.isEmpty()) {
 				return null;
 			} else {
-				return tblUserDaoImpl.getUserIdByLoginName(loginName);
+				return userDao.getUserIdByLoginName(loginName);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -189,30 +190,30 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean deleteUser(Integer userId) throws Exception {
-		tblUserDaoImpl.openConnection();
-		Connection conn = tblUserDaoImpl.getConnection();
+		userDao.openConnection();
+		Connection conn = userDao.getConnection();
 		try {
 			// transaction
-			tblUserDaoImpl.setAutoCommit(conn);
+			userDao.setAutoCommit(conn);
 			// lệnh 1
 			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
 			japanDao.setConnection(conn);
 			japanDao.deleteUserById(userId);
 			// lệnh 2
-			tblUserDaoImpl.deleteUserById(userId);
+			userDao.deleteUserById(userId);
 			// commit
-			tblUserDaoImpl.commitTransaction(conn);
+			userDao.commitTransaction(conn);
 
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// rollback kết quả
-			tblUserDaoImpl.rollbackTransaction(conn);
+			userDao.rollbackTransaction(conn);
 
 			return false;
 		} finally {
 			try {
-				tblUserDaoImpl.closeConnection();
+				userDao.closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw e;
@@ -226,14 +227,14 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 * @see logics.TblUserLogic#updateUser(entities.UserInforEntity)
 	 */
 	@Override
-	public boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException {
-		tblUserDaoImpl.openConnection();
-		Connection conn = tblUserDaoImpl.getConnection();
+	public boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws Exception {
+		userDao.openConnection();
+		Connection conn = userDao.getConnection();
 		try {
 			// transaction
-			tblUserDaoImpl.setAutoCommit(conn);
+			userDao.setAutoCommit(conn);
 			// lệnh 1
-			tblUserDaoImpl.updateUser(userInforEntity);
+			userDao.updateUser(userInforEntity);
 			// lệnh 2
 			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
 			japanDao.setConnection(conn);
@@ -255,18 +256,18 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 				break;
 			}
 			// commit
-			tblUserDaoImpl.commitTransaction(conn);
+			userDao.commitTransaction(conn);
 
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			// rollback kết quả
-			tblUserDaoImpl.rollbackTransaction(conn);
+			userDao.rollbackTransaction(conn);
 
 			return false;
 		} finally {
 			try {
-				tblUserDaoImpl.closeConnection();
+				userDao.closeConnection();
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw e;
@@ -282,7 +283,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public boolean checkExistedUserId(Integer userId) throws Exception {
 		try {
-			return tblUserDaoImpl.checkExistedUserId(userId);
+			return userDao.checkExistedUserId(userId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -297,7 +298,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public boolean checkAdminAccount(String loginId) throws Exception {
 		try {
-			return tblUserDaoImpl.checkAdminAccount(loginId);
+			return userDao.checkAdminAccount(loginId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -313,7 +314,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public boolean updatePasswordForId(Integer userId, String pass, String salt) throws Exception {
 		try {
-			return tblUserDaoImpl.updatePasswordForId(userId, pass, salt);
+			return userDao.updatePasswordForId(userId, pass, salt);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -353,13 +354,13 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			/*
 			 * thực hiện update
 			 */
-			tblUserDaoImpl.openConnection();
-			Connection conn = tblUserDaoImpl.getConnection();
+			userDao.openConnection();
+			Connection conn = userDao.getConnection();
 			try {
 				// transaction
-				tblUserDaoImpl.setAutoCommit(conn);
+				userDao.setAutoCommit(conn);
 				// lệnh 1
-				tblUserDaoImpl.updateUser(userInforEntity);
+				userDao.updateUser(userInforEntity);
 				// lệnh 2
 				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
 				japanDao.setConnection(conn);
@@ -381,18 +382,18 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 					break;
 				}
 				// commit
-				tblUserDaoImpl.commitTransaction(conn);
+				userDao.commitTransaction(conn);
 
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 				// rollback kết quả
-				tblUserDaoImpl.rollbackTransaction(conn);
+				userDao.rollbackTransaction(conn);
 
 				return false;
 			} finally {
 				try {
-					tblUserDaoImpl.closeConnection();
+					userDao.closeConnection();
 				} catch (SQLException e) {
 					e.printStackTrace();
 					throw e;

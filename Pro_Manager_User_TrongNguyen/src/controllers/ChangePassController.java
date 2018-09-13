@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
+import properties.MessageErrorProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -17,7 +18,8 @@ import validates.UserValidate;
 /**
  * Servlet implementation class ChangePassController
  */
-@WebServlet(description = "Xử lý click button[editPass] ở màn hình ADM005", urlPatterns = { "/ChangePass.do" })
+@WebServlet(description = "Xử lý click button[editPass] ở màn hình ADM005", urlPatterns = {
+		ConstantUtil.CHANGE_PASS_CONTROLLER })
 public class ChangePassController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +30,7 @@ public class ChangePassController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// nhận về userId từ request
-		Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+		Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 
 		try {
 			if (new TblUserLogicImpl().checkExistedUserId(userId)) {
@@ -37,7 +39,7 @@ public class ChangePassController extends HttpServlet {
 				request.getRequestDispatcher(ConstantUtil.ADM007_JSP).forward(request, response);
 			} else {
 				// userId ko tồn tại thì gửi mess user ko tồn tại
-				request.setAttribute("systemerrormessage", "user ko tồn tại");
+				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error013"));
 				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
 			}
 		} catch (Exception e) {
@@ -53,9 +55,7 @@ public class ChangePassController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("START doPost ChangePassController");
-
-		Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userId"));
+		Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userId"));
 		try {
 			TblUserLogic userLogic = new TblUserLogicImpl();
 			if (userLogic.checkExistedUserId(userId)) {
@@ -80,15 +80,13 @@ public class ChangePassController extends HttpServlet {
 				}
 			} else {
 				// userId ko tồn tại thì gửi mess user ko tồn tại
-				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type=" + ConstantUtil.ADM006_ERROR_TYPE);
+				response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
+						+ ConstantUtil.ADM006_ERROR_TYPE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
-
-		System.out.println("END doPost ChangePassController");
 	}
 }

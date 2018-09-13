@@ -18,7 +18,7 @@ import utils.ConstantUtil;
 /**
  * Servlet implementation class EditUserController
  */
-@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { "/ShowUser.do" })
+@WebServlet(description = "Điều khiển các sự kiện ADM002, ADM005", urlPatterns = { ConstantUtil.SHOW_USER_CONTROLLER })
 public class ShowUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class ShowUserController extends HttpServlet {
 		try {
 			TblUserLogic userLogic = new TblUserLogicImpl();
 			// lấy về userId dạng Integer
-			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+			Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 
 			if (null != userId && userLogic.checkExistedUserId(userId)) {
 				// nếu userId là số và tồn tại

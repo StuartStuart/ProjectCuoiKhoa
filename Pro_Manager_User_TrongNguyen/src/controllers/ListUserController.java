@@ -22,7 +22,7 @@ import utils.ConstantUtil;
  * Servlet implementation class ListUserController
  */
 @SuppressWarnings("serial")
-@WebServlet(description = "ListUserController", urlPatterns = "/ListUser.do")
+@WebServlet(description = "ListUserController", urlPatterns = ConstantUtil.LIST_USER_CONTROLLER)
 public class ListUserController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -39,7 +39,7 @@ public class ListUserController extends HttpServlet {
 			Integer currentPage = (Integer) request.getSession().getAttribute("adm002currentpage");
 			int userLimit = CommonUtil.getLimit();
 			int amountSortType = ConstantUtil.DEFAULT_WAYS.length;
-			String[] displaySX = { "ASC", "ASC", "DESC" };
+			String[] displaySX = { ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_GIAM };
 			/*
 			 * Các loại vào ADM002
 			 */
@@ -58,7 +58,7 @@ public class ListUserController extends HttpServlet {
 
 				// nhận groupId
 				String groupType = request.getParameter("adm002groupid");
-				groupId = CommonUtil.convertStrToInt(groupType);
+				groupId = CommonUtil.convertStrToInteger(groupType);
 				// lưu session
 				request.getSession().setAttribute("adm002cbbgroupid", groupId);
 
@@ -92,7 +92,7 @@ public class ListUserController extends HttpServlet {
 					break;
 				default:
 					// xác định currentPage
-					currentPage = CommonUtil.convertStrToInt(page);
+					currentPage = CommonUtil.convertStrToInteger(page);
 					currentPage = (currentPage < 1) ? 1 : currentPage;
 					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 					break;
@@ -105,15 +105,15 @@ public class ListUserController extends HttpServlet {
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 				// get old status sortWay
 				sortWay = (String) request.getParameter("sort");
-				if ("ASC".equals(sortWay)) {
-					sortWay = "DESC";
-				} else if ("DESC".equals(sortWay)) {
-					sortWay = "ASC";
+				if (ConstantUtil.ADM002_SX_TANG.equals(sortWay)) {
+					sortWay = ConstantUtil.ADM002_SX_GIAM;
+				} else if (ConstantUtil.ADM002_SX_GIAM.equals(sortWay)) {
+					sortWay = ConstantUtil.ADM002_SX_TANG;
 				} else {
 					if (BaseDaoImpl.WHITE_LIST[2].equals(sortType)) {
-						sortWay = "DESC";
+						sortWay = ConstantUtil.ADM002_SX_GIAM;
 					} else {
-						sortWay = "ASC";
+						sortWay = ConstantUtil.ADM002_SX_TANG;
 					}
 				}
 				// lưu session
@@ -162,7 +162,7 @@ public class ListUserController extends HttpServlet {
 			request.setAttribute("totalPage", CommonUtil.getTotalPage(totalUser, userLimit));
 			request.setAttribute("limitPage", ConfigProperties.getValue("Paging_Limit"));
 			// request đến ADM002
-			request.getRequestDispatcher("jsp/ADM002.jsp").forward(request, response);
+			request.getRequestDispatcher(ConstantUtil.ADM002_JSP).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error

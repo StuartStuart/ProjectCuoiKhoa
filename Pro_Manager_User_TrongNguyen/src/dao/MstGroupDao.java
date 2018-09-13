@@ -14,7 +14,7 @@ import entities.TblMstGroupEntity;
  * @author TrongNguyen
  *
  */
-public interface MstGroupDao {
+public interface MstGroupDao extends BaseDao{
 	/**
 	 * nhận về danh sách các nhóm trong db
 	 * 

@@ -16,7 +16,8 @@ import utils.ConstantUtil;
 /**
  * Servlet implementation class DeleteUserController
  */
-@WebServlet(description = "Xử lý click button [delete] ở màn hình ADM005", urlPatterns = { "/DeleteUser.do" })
+@WebServlet(description = "Xử lý click button [delete] ở màn hình ADM005", urlPatterns = {
+		ConstantUtil.DELETE_CONTROLLER })
 public class DeleteUserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,11 +29,9 @@ public class DeleteUserController extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			// lấy userId của user cần xóa
-			Integer userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+			Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			if (tblUserLogic.checkExistedUserId(userId)) {
-				// nếu tồn tại userId
-
 				// thì gọi method xóa của logic
 				if (tblUserLogic.deleteUser(userId)) {
 					// chuyển hướng ADM006 - success

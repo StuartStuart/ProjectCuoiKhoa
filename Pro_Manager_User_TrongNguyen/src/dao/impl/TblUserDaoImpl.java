@@ -37,48 +37,41 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			this.openConnection(); // mở kết nối
 
-			query = "select * from tbl_user where `login_name` = ?;";
+			query = "select salt, password from tbl_user where `login_name` = ?;";
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, userName);
+			int i = 0;
+			ps.setString(++i, userName);
 
 			ResultSet rs = ps.executeQuery(); // nháº­n vá»� cÃ¡c báº£n ghi
 			if (rs.next()) {
 				TblUserEntity tblU = new TblUserEntity();
 				// lưu thông tin vào đối tượng
-				tblU.setUserId(rs.getInt("tbl_user.user_id"));
-				tblU.setGroupId(rs.getInt("tbl_user.group_id"));
-				tblU.setLoginName(rs.getString("tbl_user.login_name"));
-				tblU.setPassword(rs.getString("tbl_user.password"));
-				tblU.setFullName(rs.getString("tbl_user.full_name"));
-				tblU.setFullNameKana(rs.getString("tbl_user.full_name_kana"));
-				tblU.setEmail(rs.getString("tbl_user.email"));
-				tblU.setTel(rs.getString("tbl_user.tel"));
-				tblU.setBirthDay(rs.getString("tbl_user.birthday"));
-				tblU.setSalt(rs.getString("tbl_user.salt"));
-				tblU.setCategory(rs.getInt("tbl_user.category"));
-
+				tblU.setSalt(rs.getString("salt"));
+				tblU.setPassword(rs.getString("password"));
 				return tblU;
+			} else {
+				return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		} finally {
 			this.closeConnection(); // đóng kết nối
 		}
-		return null;
 	}
 
 	/*
 	 * @see dao.TblUserDao#getTotalUser(int, java.lang.String)
 	 */
 	@Override
-	public int getTotalUser(int groupIdSearching, String fullNameSearching) throws Exception {
+	public int getTotalUser(Integer groupIdSearching, String fullNameSearching) throws Exception {
 		int totalUsers = -1;
 		try {
 			this.openConnection();
 
 			// tạo câu truy vấn
-			StringBuilder query = new StringBuilder("SELECT COUNT(*) AS totalUsers FROM tbl_user WHERE category = 1");
-			if (groupIdSearching > 0) {
+			StringBuilder query = new StringBuilder("SELECT COUNT(*) AS totalUsers FROM tbl_user WHERE category = ?");
+			if (groupIdSearching != null && groupIdSearching > 0) {
 				query.append(" AND group_id = ?");
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
@@ -89,7 +82,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 			// hoàn thiện câu truy vấn
 			int i = 0;
-			if (groupIdSearching > 0) {
+			ps.setInt(++i, ConstantUtil.USER_CATEGORY);
+			if (groupIdSearching != null && groupIdSearching > 0) {
 				ps.setInt(++i, groupIdSearching);
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
@@ -115,8 +109,9 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @see dao.TblUserDao#getTotalUser(int, java.lang.String)
 	 */
 	@Override
-	public ArrayList<UserInforEntity> getListUser(int offSet, int limit, int groupIdSearching, String fullNameSearching,
-			String sortType, String sortByFullName, String sortByCodeLevel, String sortByEndDate) throws Exception {
+	public ArrayList<UserInforEntity> getListUser(int offSet, int limit, Integer groupIdSearching,
+			String fullNameSearching, String sortType, String sortByFullName, String sortByCodeLevel,
+			String sortByEndDate) throws Exception {
 		ArrayList<UserInforEntity> listUser = new ArrayList<>();
 		try {
 			this.openConnection();
@@ -139,9 +134,8 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append(" ON tbl_user.user_id = tbl_detail_user_japan.user_id");
 
 			// thêm điều kiện tìm kiếm
-			query.append("\nWHERE category = ");
-			query.append(ConstantUtil.USER_CATEGORY);
-			if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
+			query.append("\nWHERE category = ?");
+			if (groupIdSearching != null && groupIdSearching > 0) {
 				query.append(" AND tbl_user.group_id = ?");
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
@@ -156,10 +150,10 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			query.append("\nORDER BY ");
 			query.append(chuoiDieuKienSX(sortType, sortByFullName, sortByCodeLevel, sortByEndDate));
 			// thêm giời hạn số lượng bản ghi
-			query.append(" LIMIT " + limit);
+			query.append(" LIMIT ?");
 
 			// thêm vị trí đầu tiên lấy
-			query.append(" OFFSET " + offSet);
+			query.append(" OFFSET ?");
 
 			// đúng syntax
 			query.append(";");
@@ -169,13 +163,16 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			 */
 			ps = conn.prepareStatement(query.toString());
 			int i = 0;
-			if (groupIdSearching > 0) { // tìm kiếm theo groupId được lựa chọn
+			ps.setInt(++i, ConstantUtil.USER_CATEGORY);
+			if (groupIdSearching != null && groupIdSearching > 0) {
 				ps.setInt(++i, groupIdSearching);
 			}
 			if (null != fullNameSearching && !"".equals(fullNameSearching)) {
 				fullNameSearching = CommonUtil.convertWildCard(fullNameSearching);
 				ps.setString(++i, "%" + fullNameSearching + "%");
 			}
+			ps.setInt(++i, limit);
+			ps.setInt(++i, offSet);
 
 			/*
 			 * lấy về dữ liệu

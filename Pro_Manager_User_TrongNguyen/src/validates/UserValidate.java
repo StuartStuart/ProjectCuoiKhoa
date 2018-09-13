@@ -44,9 +44,9 @@ public class UserValidate {
 					// check định dạng
 					listErrMsg.add(MessageErrorProperties.getValue("Error019_LoginName"));
 				} else if (userInfor.getLoginName().length() < CommonUtil
-						.convertStrToInt(ConfigProperties.getValue("MinLength_LoginName"))
+						.convertStrToInteger(ConfigProperties.getValue("MinLength_LoginName"))
 						|| userInfor.getLoginName().length() > CommonUtil
-								.convertStrToInt(ConfigProperties.getValue("MaxLength_LoginName"))) {
+								.convertStrToInteger(ConfigProperties.getValue("MaxLength_LoginName"))) {
 					// check độ dài trong khoảng
 					listErrMsg.add(MessageErrorProperties.getValue("Error007_LoginName"));
 				} else if (new TblUserLogicImpl().checkExistedLoginName(userInfor.getUserId(),
@@ -74,7 +74,7 @@ public class UserValidate {
 					listErrMsg.add(MessageErrorProperties.getValue("Error001_FullName"));
 				} else {
 					// check max length
-					int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_FullName"));
+					int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullName"));
 					int currentLength = userInfor.getFullName().length();
 					if (currentLength > maxLength) {
 						listErrMsg.add(MessageErrorProperties.getValue("Error006_FullName"));
@@ -84,7 +84,7 @@ public class UserValidate {
 			// validate full name kana
 			{
 				// check max length
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_FullNameKana"));
+				int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullNameKana"));
 				int currentLength = userInfor.getFullNameKana().length();
 				if (currentLength > maxLength) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullNameKana"));
@@ -111,7 +111,7 @@ public class UserValidate {
 				} else
 				// check max length
 				if (userInfor.getEmail().length() > CommonUtil
-						.convertStrToInt(ConfigProperties.getValue("MaxLength_Email"))) {
+						.convertStrToInteger(ConfigProperties.getValue("MaxLength_Email"))) {
 					listErrMsg.add(MessageErrorProperties.getValue("Error006_Email"));
 				} else
 				// check sai format
@@ -201,8 +201,8 @@ public class UserValidate {
 				errMess = MessageErrorProperties.getValue("Error001_Password");
 			} else {
 				// check dộ dài trong khoảng
-				int maxLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MaxLength_Password"));
-				int minLength = CommonUtil.convertStrToInt(ConfigProperties.getValue("MinLength_Password"));
+				int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_Password"));
+				int minLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MinLength_Password"));
 				int currentLengh = pass.length();
 				if (currentLengh < minLength || currentLengh > maxLength) {
 					errMess = MessageErrorProperties.getValue("Error007_Password");

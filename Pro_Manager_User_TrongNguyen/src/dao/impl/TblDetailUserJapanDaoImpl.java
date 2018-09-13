@@ -77,12 +77,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	 */
 	public void deleteUserById(Integer userId) throws Exception {
 		try {// viết query
-			query = "DELETE FROM tbl_detail_user_japan WHERE user_id = ?; "
-			/*
-			 * + "SET @num := 0; " +
-			 * "UPDATE tbl_detail_user_japan SET id = @num := (@num+1); " +
-			 * "ALTER TABLE tbl_detail_user_japan AUTO_INCREMENT = 1;"
-			 */;
+			query = "DELETE FROM tbl_detail_user_japan WHERE user_id = ?; ";
 
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);

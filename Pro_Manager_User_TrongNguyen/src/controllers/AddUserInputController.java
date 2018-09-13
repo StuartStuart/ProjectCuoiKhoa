@@ -3,7 +3,6 @@ package controllers;
 import java.io.IOException;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +18,6 @@ import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.MstJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
-import properties.MessageErrorProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -27,7 +25,8 @@ import validates.UserValidate;
 /**
  * Servlet implementation class AddUserInputController
  */
-@WebServlet(urlPatterns = { "/AddUserInput.do", "/AddUserValidate.do", "/EditUserInput.do" })
+@WebServlet(urlPatterns = { ConstantUtil.ADD_USER_INPUT_CONTROLLER, ConstantUtil.ADD_USER_VALIDATE_CONTROLLER,
+		ConstantUtil.EDIT_USER_INPUT_CONTROLLER })
 public class AddUserInputController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -47,16 +46,11 @@ public class AddUserInputController extends HttpServlet {
 			// gửi userInforDefault lên request
 			request.setAttribute("adm003userinfor", userInforDefault);
 
-			request.getRequestDispatcher("/jsp/ADM003.jsp").forward(request, response);
+			request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
-			try {
-				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error015"));
-				request.getRequestDispatcher("/jsp/System_Error.jsp").forward(request, response);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
 
@@ -74,7 +68,7 @@ public class AddUserInputController extends HttpServlet {
 		UserInforEntity userInforDefault = new UserInforEntity();
 		// khai báo các thuộc tính để set cho userinfor
 		Integer userId = null;
-		String loginName;
+		String loginId;
 		int groupId;
 		TblMstGroupEntity mstGroup;
 		String fullName;
@@ -100,19 +94,20 @@ public class AddUserInputController extends HttpServlet {
 			}
 
 			// ko là trường hợp submit
+			TblUserLogic userLogic = new TblUserLogicImpl();
 			switch (type) {
 			case ConstantUtil.ADM003_SUBMIT_TYPE:
 				// thì nhận về các thông tin đã nhập
-				loginName = (String) request.getParameter("id");
-				if (null == loginName) {
+				loginId = (String) request.getParameter("id");
+				if (null == loginId) {
 					// là trường hợp submit của update thì
-					loginName = request.getParameter("loginName");
-					userId = new TblUserLogicImpl().getUserIdByLoginName(loginName);
+					loginId = request.getParameter("loginName");
+					userId = userLogic.getUserIdByLoginName(loginId);
 				}
-				groupId = CommonUtil.convertStrToInt(request.getParameter("group_id"));
+				groupId = CommonUtil.convertStrToInteger(request.getParameter("group_id"));
 				mstGroup = new MstGroupLogicImpl().getMstGroupByGroupId(groupId);
-				fullName = (String) request.getParameter("full_name");
-				fullNameKana = (String) request.getParameter("full_name_kana");
+				fullName = request.getParameter("full_name");
+				fullNameKana = request.getParameter("full_name_kana");
 				// birth_day trong tbl_user
 				String[] arrBirthDay = request.getParameterValues("birth_day");
 				birthDay = CommonUtil.convertToDateString(arrBirthDay[0], arrBirthDay[1], arrBirthDay[2]);
@@ -128,7 +123,7 @@ public class AddUserInputController extends HttpServlet {
 				// end_date trong tbl_user
 				String[] arrEndDate = request.getParameterValues("end_date");
 				endDate = CommonUtil.convertToDateString(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
-				total = CommonUtil.getIntegerFromTextbox(request.getParameter("total"));
+				total = CommonUtil.convertStrToInteger(request.getParameter("total"));
 				break;
 			case ConstantUtil.ADM003_BACK_TYPE:
 				// thêm các thông tin mặc định cho user từ session
@@ -139,7 +134,7 @@ public class AddUserInputController extends HttpServlet {
 				session.removeAttribute("entityuserinfor" + key);
 
 				userId = sessionUser.getUserId();
-				loginName = sessionUser.getLoginName();
+				loginId = sessionUser.getLoginName();
 				groupId = sessionUser.getGroupId();
 				mstGroup = sessionUser.getMstGroup();
 				fullName = sessionUser.getFullName();
@@ -161,22 +156,17 @@ public class AddUserInputController extends HttpServlet {
 				// phụ thuộc user_id
 
 				// lấy về userId dạng Integer
-				userId = CommonUtil.getIntegerFromTextbox(request.getParameter("userid"));
+				userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 
-				TblUserLogic userLogic = new TblUserLogicImpl();
 				UserInforEntity editionUser;
 				if (null != userId && userLogic.checkExistedUserId(userId)) {
-					// nếu userId là số và tồn tại
-
-					// thì lấy về UserInforEntity
-					editionUser = new TblUserLogicImpl().getUserInfor(userId);
+					// lấy về UserInforEntity
+					editionUser = userLogic.getUserInfor(userId);
 				} else {
 					editionUser = null;
-
-					// sẽ đươc thay = fwd
 				}
 
-				loginName = editionUser.getLoginName();
+				loginId = editionUser.getLoginName();
 				groupId = editionUser.getGroupId();
 				mstGroup = editionUser.getMstGroup();
 				fullName = editionUser.getFullName();
@@ -203,7 +193,7 @@ public class AddUserInputController extends HttpServlet {
 				// ngày
 				// hiện tại
 				userId = null;
-				loginName = "";
+				loginId = "";
 				groupId = ConstantUtil.ADM003_DEFAULT_GROUP;
 				mstGroup = null;
 				fullName = "";
@@ -222,7 +212,7 @@ public class AddUserInputController extends HttpServlet {
 			}
 			// set thuộc tính cho userInforDefault
 			userInforDefault.setUserId(userId);
-			userInforDefault.setLoginName(loginName);
+			userInforDefault.setLoginName(loginId);
 			userInforDefault.setGroupId(groupId);
 			userInforDefault.setMstGroup(mstGroup);
 			userInforDefault.setFullName(fullName);
@@ -313,7 +303,7 @@ public class AddUserInputController extends HttpServlet {
 				 */
 
 				// tạo key
-				String key = new Date().getTime() + "";
+				String key = CommonUtil.getSalt();
 				request.getSession().setAttribute("entityuserinfor" + key, userInfor);
 				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM + "?key=" + key);
 			}
