@@ -32,8 +32,9 @@ public class LoginFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		String webURI = req.getRequestURI();
 		if ((req.getContextPath() + "/").equalsIgnoreCase(webURI)) {
-			request.getRequestDispatcher(ConstantUtil.ADM001_JSP).forward(req, res);
-		} else if (!webURI.matches(".do$") && !webURI.matches(".jsp$")) {
+			webURI = req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER;
+		}
+		if (!webURI.matches(".*\\.do$") && !webURI.matches(".*\\.jsp$")) {
 			chain.doFilter(req, res);
 		} else {
 			// điều kiện URL trỏ đến ADM001
@@ -74,10 +75,10 @@ public class LoginFilter implements Filter {
 					// chưa login
 
 					if ((req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER).equalsIgnoreCase(req.getRequestURI())) {
-						// nếu là [/logic] thì cho qua
+						// nếu là [/login] thì cho qua
 						chain.doFilter(req, res);
 					} else {
-						// không là [/logic] thì chuyển hướng login
+						// không là [/login] thì chuyển hướng login
 						res.sendRedirect(req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER);
 					}
 				}

@@ -119,6 +119,7 @@ public class ListUserController extends HttpServlet {
 				// lưu session
 				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
 				break;
+			case ConstantUtil.ADM002_BACK:
 			default:
 				break;
 			}

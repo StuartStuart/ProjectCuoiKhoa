@@ -99,7 +99,7 @@ public class UserValidate {
 			{
 				int category = userInfor.getCategory();
 				if (category > 1 || category < 0) {
-					listErrMsg.add("Category không hợp lệ");
+					listErrMsg.add(MessageErrorProperties.getValue("ErrorCategory"));
 				}
 			}
 			// validate birthday

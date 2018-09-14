@@ -249,4 +249,8 @@ public class ConstantUtil {
 	 * code level mặc định khi vào adm003
 	 */
 	public static final String DEFAULT_CODE_LEVEL = "N0";
+	/*
+	 * quay lại ADM002
+	 */
+	public static final String ADM002_BACK = "back";
 }
