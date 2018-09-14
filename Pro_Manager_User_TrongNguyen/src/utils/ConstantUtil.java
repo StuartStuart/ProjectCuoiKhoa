@@ -48,7 +48,8 @@ public class ConstantUtil {
 	/*
 	 * các kiểu sắp xếp
 	 */
-	public static final String ADM002_SORT_TYPE_URL[] = { "fullname", "codelevel", "enddate" };
+	public static final String ADM002_SORT_TYPE_URL[] = { "tbl_user.full_name", "mst_japan.code_level",
+			"tbl_detail_user_japan.end_date" };
 	/*
 	 * danh sách sắp xếp default
 	 */
@@ -168,7 +169,7 @@ public class ConstantUtil {
 	/*
 	 * ký tự 1 byte cuối cùng
 	 */
-	public static final char LAST_ONE_BYTE_CHAR = (char) 255;
+	public static final char LAST_ONE_BYTE_CHAR = (char) 128;
 	/*
 	 * gọi đến ADM006 ở trạng thái delete
 	 */
@@ -253,4 +254,12 @@ public class ConstantUtil {
 	 * quay lại ADM002
 	 */
 	public static final String ADM002_BACK = "back";
+	/*
+	 * sortType mặc định khi search
+	 */
+	public static final Integer DEFAULT_SORT_TYPE = 0;
+	/*
+	 * currentPage mặc định của search
+	 */
+	public static final Integer DEFAULT_CURRENT_PAGE = 1;
 }

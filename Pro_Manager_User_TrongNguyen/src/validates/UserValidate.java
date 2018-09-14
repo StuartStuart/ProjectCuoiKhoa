@@ -20,7 +20,6 @@ import utils.ConstantUtil;
  *
  */
 public class UserValidate {
-
 	/**
 	 * kiểm tra các lỗi có thể tồn tại trong userInfor
 	 * 
@@ -146,7 +145,7 @@ public class UserValidate {
 				String errMess = validatePass(userInfor.getPass(), userInfor.getRepass());
 				// check ko nhập
 				if (!errMess.isEmpty()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error001_Password"));
+					listErrMsg.add(errMess);
 				}
 			}
 
@@ -212,18 +211,11 @@ public class UserValidate {
 				int currentLengh = pass.length();
 				if (currentLengh < minLength || currentLengh > maxLength) {
 					errMess = MessageErrorProperties.getValue("Error007_Password");
-				} else
-				// check ký tự 1 byte
-				if (!CommonUtil.checkOneByteString(pass)) {
+				} else if (!CommonUtil.checkOneByteString(pass)) {
+					// check ký tự 1 byte
 					errMess = MessageErrorProperties.getValue("Error008_Password");
-				} else
-
-				// validate repass
-
-				// khi là thêm ms
-
-				// check repass ko đúng
-				if (!repass.equals(pass)) {
+				} else if (!repass.equals(pass)) {
+					// check repass ko đúng
 					errMess = MessageErrorProperties.getValue("Error017_RePass");
 				}
 			}

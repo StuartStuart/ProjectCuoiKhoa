@@ -37,16 +37,21 @@ public class AddUserInputController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// nhận về 1 userInfor tùy thuộc từng điều kiện
-			UserInforEntity userInforDefault = getUserInforDefault(request, response);
+			if (ConstantUtil.ADD_USER_VALIDATE_CONTROLLER.equals(request.getServletPath())) {
+				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_INPUT_CONTROLLER + "?type="
+						+ ConstantUtil.ADM003_ADD_TYPE);
+			} else {
+				// nhận về 1 userInfor tùy thuộc từng điều kiện
+				UserInforEntity userInforDefault = getUserInforDefault(request, response);
 
-			// set các thông tin trong combobox lên request
-			setDataLogic(request);
+				// set các thông tin trong combobox lên request
+				setDataLogic(request);
 
-			// gửi userInforDefault lên request
-			request.setAttribute("adm003userinfor", userInforDefault);
+				// gửi userInforDefault lên request
+				request.setAttribute("adm003userinfor", userInforDefault);
 
-			request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
@@ -234,7 +239,7 @@ public class AddUserInputController extends HttpServlet {
 			userInforDefault.setStartDate(startDate);
 			userInforDefault.setEndDate(endDate);
 			userInforDefault.setTotal(total);
-			
+
 			return userInforDefault;
 		} catch (Exception e) {
 			e.printStackTrace();

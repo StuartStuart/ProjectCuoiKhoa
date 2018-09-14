@@ -38,14 +38,14 @@
 						<tr>
 							<td class="lbl_left">氏名:</td>
 							<td align="left"><input class="txBox" type="text"
-								name="adm002fullname" value="${fn:escapeXml(adm002tbfullname) }"
+								name="fullname" value="${fn:escapeXml(adm002tbfullname) }"
 								size="20" onfocus="this.style.borderColor='#0066ff';"
 								onblur="this.style.borderColor='#aaaaaa';" /></td>
 							<td></td>
 						</tr>
 						<tr>
 							<td class="lbl_left">グループ:</td>
-							<td align="left" width="80px"><select name="adm002groupid">
+							<td align="left" width="80px"><select name="groupid">
 									<option value="">全て</option>
 									<c:forEach items="${adm002groupid }" var="group">
 										<option value="${group.groupId}"
@@ -71,7 +71,7 @@
 				<tr class="tr2">
 					<th align="center" width="20px">ID</th>
 					<th align="left">氏名 <a
-						href="ListUser.do?type=sort&priority=tbl_user.full_name&sort=${wayFullName}">
+						href="ListUser.do?type=sort&priority=1&sort=${wayFullName}">
 							<c:if test="${wayFullName eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
 								test="${wayFullName eq 'DESC'}">&Delta;&#9660;</c:if>
 					</a>
@@ -81,13 +81,13 @@
 					<th align="left">メールアドレス</th>
 					<th align="left" width="70px">電話番号</th>
 					<th align="left">日本語能力 <a
-						href="ListUser.do?type=sort&priority=mst_japan.code_level&sort=${wayCodeLevel}">
+						href="ListUser.do?type=sort&priority=2&sort=${wayCodeLevel}">
 							<c:if test="${wayCodeLevel eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
 								test="${wayCodeLevel eq 'DESC'}">&Delta;&#9660;</c:if>
 					</a>
 					</th>
 					<th align="left">失効日 <a
-						href="ListUser.do?type=sort&priority=tbl_detail_user_japan.end_date&sort=${wayEndDate}">
+						href="ListUser.do?type=sort&priority=3&sort=${wayEndDate}">
 							<c:if test="${wayEndDate eq 'ASC'}">&#9650;&nabla;</c:if> <c:if
 								test="${wayEndDate eq 'DESC'}">&Delta;&#9660;</c:if>
 					</a>
@@ -128,7 +128,7 @@
 
 					<c:forEach items="${adm002paging}" var="page">
 						<a href="ListUser.do?type=paging&page=${page }"
-							${(adm002currentpage eq page)?'disabled="disabled" style="pointer-events: none; text-decoration: none";':'' }>${page}</a>
+							${(adm002currentpage == page)?'disabled="disabled" style="pointer-events: none; text-decoration: none;"':'' }>${page}</a>
 						<c:if test="${page != totalPage}">|</c:if>
 					</c:forEach>
 
