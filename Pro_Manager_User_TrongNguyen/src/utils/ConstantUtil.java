@@ -216,7 +216,7 @@ public class ConstantUtil {
 	/*
 	 * cho phép qua ADM006
 	 */
-	public static final String THROUGH_ADM006 = "THROUGH_ADM006";
+	public static final String ADM006_TYPE = "THROUGH_ADM006";
 	/*
 	 * URL của ListUserController
 	 */

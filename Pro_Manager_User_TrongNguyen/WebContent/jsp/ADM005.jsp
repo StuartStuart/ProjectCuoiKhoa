@@ -116,13 +116,13 @@
 					<td><input class="btn" type="button" value="編集"
 						onclick="window.location.href='${pageContext.request.contextPath}/EditUserInput.do?type=edit&userid=${userinfor.userId }'" />
 					</td>
+					<td><input class="btn" type="button" value="Edit Pass"
+						onclick="window.location.href='${pageContext.request.contextPath}/ChangePass.do?userid=${userinfor.userId }'" /></td>
 					<td><c:set value="${MessageProperties.getValue('MSG004')}"
 							var="confirmDelete" /><input class="btn" type="submit"
 						value="削除" onclick="return confirm('${confirmDelete }')" /></td>
 					<td><input class="btn" type="button" value="戻る"
 						onclick="window.location.href='${pageContext.request.contextPath}/ListUser.do?type=back'" /></td>
-					<td><input class="btn" type="button" value="editPass"
-						onclick="window.location.href='${pageContext.request.contextPath}/ChangePass.do?userid=${userinfor.userId }'" /></td>
 				</tr>
 			</table>
 			<!-- End vung button -->
@@ -130,7 +130,7 @@
 	<!-- End vung input -->
 
 	<!-- Begin vung footer -->
-	<%@include file="footer.jsp"%>>
+	<%@include file="footer.jsp"%>
 	<!-- End vung footer -->
 </body>
 </html>

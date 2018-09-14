@@ -188,7 +188,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				userInfor.setTel(rs.getString("tel"));
 				userInfor.setNameLevel(rs.getString("name_level"));
 				userInfor.setEndDate(rs.getString("end_date"));
-				userInfor.setTotal(rs.getInt("total"));
+				userInfor.setTotal(rs.getString("total"));
 
 				listUser.add(userInfor);
 			}
@@ -364,7 +364,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				userInfor.setNameLevel(rs.getString(userInfors[i++]));
 				userInfor.setStartDate(rs.getString(userInfors[i++]));
 				userInfor.setEndDate(rs.getString(userInfors[i++]));
-				userInfor.setTotal(rs.getInt(userInfors[i++]));
+				userInfor.setTotal(rs.getString(userInfors[i++]));
 
 				return userInfor;
 			} else {
@@ -506,8 +506,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		ps.setInt(++i, userInfor.getCategory());
 		// thực hiện query
 		ps.executeUpdate();
-		ps.close();
-		ps = null;
 	}
 
 	/*

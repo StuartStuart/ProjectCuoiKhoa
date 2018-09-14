@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.impl.BaseDaoImpl;
 import entities.TblMstGroupEntity;
@@ -31,15 +32,20 @@ public class ListUserController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			HttpSession session = request.getSession();
 			// Khởi tạo các biến sẽ sử dụng
-			String fullName = (String) request.getSession().getAttribute("adm002tbfullname");
-			Integer groupId = (Integer) request.getSession().getAttribute("adm002cbbgroupid");
-			String sortType = (String) request.getSession().getAttribute("adm002sortType");
-			String sortWay = (String) request.getSession().getAttribute("adm002sortsymbol");
-			Integer currentPage = (Integer) request.getSession().getAttribute("adm002currentpage");
+			String fullName = (String) session.getAttribute("adm002tbfullname");
+			Integer groupId = (Integer) session.getAttribute("adm002cbbgroupid");
+			String sortType = (String) session.getAttribute("adm002sortType");
+			String sortWay = (String) session.getAttribute("adm002sortsymbol");
+			Integer currentPage = (Integer) session.getAttribute("adm002currentpage");
 			int userLimit = CommonUtil.getLimit();
 			int amountSortType = ConstantUtil.DEFAULT_WAYS.length;
-			String[] displaySX = { ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_GIAM };
+			String[] displaySX = { ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_TANG,
+					ConstantUtil.ADM002_SX_GIAM };
+			TblUserLogic tblUserLogic = new TblUserLogicImpl();
+			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
+			int totalPage = CommonUtil.getTotalPage(totalUser, userLimit);
 			/*
 			 * Các loại vào ADM002
 			 */
@@ -54,25 +60,25 @@ public class ListUserController extends HttpServlet {
 				fullName = request.getParameter("adm002fullname");
 				fullName = (null == fullName) ? "" : fullName;
 				// lưu session
-				request.getSession().setAttribute("adm002tbfullname", fullName);
+				session.setAttribute("adm002tbfullname", fullName);
 
 				// nhận groupId
 				String groupType = request.getParameter("adm002groupid");
 				groupId = CommonUtil.convertStrToInteger(groupType);
 				// lưu session
-				request.getSession().setAttribute("adm002cbbgroupid", groupId);
+				session.setAttribute("adm002cbbgroupid", groupId);
 
 				// đổi lại sortType
 				sortType = BaseDaoImpl.WHITE_LIST[0];
-				request.getSession().setAttribute("adm002sortType", sortType);
+				session.setAttribute("adm002sortType", sortType);
 
 				// đổi lại sortSymbol
 				sortWay = ConstantUtil.DEFAULT_WAYS[0];
-				request.getSession().setAttribute("adm002sortsymbol", sortWay);
+				session.setAttribute("adm002sortsymbol", sortWay);
 
 				// đổi lại currentPage
 				currentPage = 1;
-				request.getSession().setAttribute("adm002currentpage", currentPage);
+				session.setAttribute("adm002currentpage", currentPage);
 				break;
 			case ConstantUtil.ADM002_PAGING:
 				// tính giá trị currentPage
@@ -83,26 +89,30 @@ public class ListUserController extends HttpServlet {
 				case ConstantUtil.ADM002_PAGE_BACK:
 					// xử lý chuỗi paging
 					currentPage = (currentPage - 1) / pageLimit * pageLimit;
-					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
+					session.setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 					break;
 				case ConstantUtil.ADM002_PAGE_NEXT:
 					// xử lý chuỗi paging
 					currentPage = ((currentPage - 1) / pageLimit + 1) * pageLimit + 1;
-					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
+					session.setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
 					break;
 				default:
 					// xác định currentPage
 					currentPage = CommonUtil.convertStrToInteger(page);
-					currentPage = (currentPage < 1) ? 1 : currentPage;
-					request.getSession().setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
-					break;
+					if (currentPage < 1) {
+						new Exception();
+					} else if (currentPage > totalPage) {
+						currentPage = totalPage;
+						session.setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
+						break;
+					}
 				}
 				break;
 			case ConstantUtil.ADM002_SORT:
 				// xác định priorityType
 				sortType = request.getParameter("priority");
 				// lưu session
-				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
+				session.setAttribute(ConfigProperties.getValue("ADM002_SortType"), sortType);
 				// get old status sortWay
 				sortWay = (String) request.getParameter("sort");
 				if (ConstantUtil.ADM002_SX_TANG.equals(sortWay)) {
@@ -117,9 +127,10 @@ public class ListUserController extends HttpServlet {
 					}
 				}
 				// lưu session
-				request.getSession().setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
+				session.setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
 				break;
 			case ConstantUtil.ADM002_BACK:
+				session.removeAttribute(ConstantUtil.ADM006_TYPE);
 			default:
 				break;
 			}
@@ -151,16 +162,14 @@ public class ListUserController extends HttpServlet {
 
 			// used for send userInfors
 			index = 0;
-			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			request.setAttribute("userInfors", // send userInfors List
 					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
 							sortType, displaySX[index++], displaySX[index++], displaySX[index++]));
 			/*
 			 * build paging
 			 */
-			int totalUser = tblUserLogic.getTotalUser(groupId, fullName);
 			request.setAttribute("adm002paging", CommonUtil.getListPaging(totalUser, userLimit, currentPage));
-			request.setAttribute("totalPage", CommonUtil.getTotalPage(totalUser, userLimit));
+			request.setAttribute("totalPage", totalPage);
 			request.setAttribute("limitPage", ConfigProperties.getValue("Paging_Limit"));
 			// request đến ADM002
 			request.getRequestDispatcher(ConstantUtil.ADM002_JSP).forward(request, response);

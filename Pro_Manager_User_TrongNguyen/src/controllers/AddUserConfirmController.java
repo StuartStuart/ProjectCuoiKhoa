@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import entities.UserInforEntity;
 import logics.TblUserLogic;
+import logics.impl.TblDetailUserJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -63,7 +64,6 @@ public class AddUserConfirmController extends HttpServlet {
 			session.removeAttribute("entityuserinfor" + keyParam);
 			// validate lần 2
 			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInforEntity);
-			session.setAttribute(ConstantUtil.THROUGH_ADM006, ConstantUtil.THROUGH_ADM006);
 			if (0 == listErrMsg.size()) {
 				// ko tồn tại lỗi
 
@@ -71,37 +71,36 @@ public class AddUserConfirmController extends HttpServlet {
 				// obj thực hiện create or update user
 				TblUserLogic tblUserLogic = new TblUserLogicImpl();
 				if (null == userInforEntity.getUserId()) {
+					// là case add
 					if (tblUserLogic.createUser(userInforEntity)) {
 						// tạo thành công user
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_ADD_TYPE);
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ADD_TYPE);
 					} else {
 						// không tạo thành công user
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_ERROR_TYPE);
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 					}
 				} else {
+					// là case update
 					// check tồn tại detailUserId - isExistedUserId
-					boolean isExistedUserId = new TblUserLogicImpl().checkExistedUserId(userInforEntity.getUserId());
+					boolean isExistedUserId = new TblDetailUserJapanLogicImpl()
+							.checkExistUserId(userInforEntity.getUserId());
 
 					// gọi logic update userInfor
 					boolean isUpdateSuccess = tblUserLogic.updateUser(userInforEntity, isExistedUserId);
 
 					// gọi updateUserInfor()
 					if (isUpdateSuccess) {
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_UPDATE_TYPE);
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_UPDATE_TYPE);
 					} else {
 						// không update thành công user
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_ERROR_TYPE);
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 					}
 				}
 			} else {
 				// tồn tại lỗi thì đến success controller với thông báo lỗi
-				response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-						+ ConstantUtil.ADM006_ERROR_TYPE);
+				session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 			}
+			response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error

@@ -99,12 +99,12 @@
 						<td align="right"><a
 							href="${pageContext.request.contextPath}/ShowUser.do?userid=${userInfors.userId}">${userInfors.userId}</a></td>
 						<td>${fn: escapeXml(userInfors.fullName)}</td>
-						<td align="center">${userInfors.birthDay}</td>
+						<td align="center">${CommonUtil.showFormatDate(userInfors.birthDay)}</td>
 						<td>${fn: escapeXml(userInfors.groupName)}</td>
 						<td>${fn: escapeXml(userInfors.email)}</td>
 						<td>${userInfors.tel}</td>
 						<td>${fn: escapeXml(userInfors.nameLevel)}</td>
-						<td align="center">${userInfors.endDate}</td>
+						<td align="center">${CommonUtil.showFormatDate(userInfors.endDate)}</td>
 						<td align="right">${(userInfors.nameLevel != null)?userInfors.total:''}</td>
 					</tr>
 				</c:forEach>
@@ -128,7 +128,7 @@
 
 					<c:forEach items="${adm002paging}" var="page">
 						<a href="ListUser.do?type=paging&page=${page }"
-							${(adm002currentpage eq page)?'disabled="disable" style="text-decoration: none";':'' }>${page}</a>
+							${(adm002currentpage eq page)?'disabled="disabled" style="pointer-events: none; text-decoration: none";':'' }>${page}</a>
 						<c:if test="${page != totalPage}">|</c:if>
 					</c:forEach>
 

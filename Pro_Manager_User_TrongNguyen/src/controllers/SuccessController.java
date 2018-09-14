@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import properties.MessageProperties;
 import utils.ConstantUtil;
@@ -15,7 +14,8 @@ import utils.ConstantUtil;
 /**
  * Servlet implementation class SuccessController
  */
-@WebServlet(description = "Xử lý các logic thông báo thành công và lỗi hệ thống", urlPatterns = { ConstantUtil.SUCCESS_CONTROLLER })
+@WebServlet(description = "Xử lý các logic thông báo thành công và lỗi hệ thống", urlPatterns = {
+		ConstantUtil.SUCCESS_CONTROLLER })
 public class SuccessController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -26,9 +26,8 @@ public class SuccessController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			HttpSession session = request.getSession();
-			if (null != session.getAttribute(ConstantUtil.THROUGH_ADM006)) {
-				String type = request.getParameter("type");
+			String type = (String) request.getSession().getAttribute(ConstantUtil.ADM006_TYPE);
+			if (null != type) {
 				switch (type) {
 				case ConstantUtil.ADM006_ADD_TYPE:
 					// thêm message
@@ -36,6 +35,7 @@ public class SuccessController extends HttpServlet {
 					// chuyển tiếp ADM006
 					request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
 					break;
+
 				case ConstantUtil.ADM006_UPDATE_TYPE:
 					// thêm message
 					request.setAttribute("adm006msg", MessageProperties.getValue("MSG002"));
@@ -48,6 +48,7 @@ public class SuccessController extends HttpServlet {
 					request.setAttribute("adm006msg", MessageProperties.getValue("MSG003"));
 					request.getRequestDispatcher(ConstantUtil.ADM006_JSP).forward(request, response);
 					break;
+
 				case ConstantUtil.ADM006_ERROR_TYPE:
 
 				default:
@@ -57,7 +58,8 @@ public class SuccessController extends HttpServlet {
 					break;
 				}
 			} else {
-				response.sendRedirect(request.getContextPath());
+				response.sendRedirect(request.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER + "?type="
+						+ ConstantUtil.ADM002_BACK);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

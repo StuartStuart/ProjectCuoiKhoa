@@ -29,7 +29,7 @@ public class UserInforEntity {
 	private MstJapanEntity mstJapan;
 	private String startDate;
 	private String endDate;
-	private Integer total;
+	private String total;
 
 	/**
 	 * @return the category
@@ -286,14 +286,14 @@ public class UserInforEntity {
 	/**
 	 * @return the total
 	 */
-	public Integer getTotal() {
+	public String getTotal() {
 		return total;
 	}
 
 	/**
 	 * @param total the total to set
 	 */
-	public void setTotal(Integer total) {
+	public void setTotal(String total) {
 		this.total = total;
 	}
 

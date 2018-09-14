@@ -83,7 +83,7 @@ public class AddUserInputController extends HttpServlet {
 		MstJapanEntity mstJapan;
 		String startDate;
 		String endDate;
-		Integer total;
+		String total;
 		// nhận về loại đến ADM003 - type
 		try {
 			String type = request.getParameter("type");
@@ -125,7 +125,7 @@ public class AddUserInputController extends HttpServlet {
 				// end_date trong tbl_user
 				String[] arrEndDate = request.getParameterValues("end_date");
 				endDate = CommonUtil.convertToDateString(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
-				total = CommonUtil.convertStrToInteger(request.getParameter("total"));
+				total = request.getParameter("total");
 				break;
 			case ConstantUtil.ADM003_BACK_TYPE:
 				// thêm các thông tin mặc định cho user từ session
@@ -183,6 +183,7 @@ public class AddUserInputController extends HttpServlet {
 				mstJapan = editionUser.getMstJapan();
 				codeLevel = editionUser.getCodeLevel();
 				if (null == codeLevel) {
+					codeLevel = ConstantUtil.DEFAULT_CODE_LEVEL;
 					startDate = CommonUtil.getNowTime(false);
 					endDate = CommonUtil.getNowTime(true);
 				} else {
@@ -233,7 +234,7 @@ public class AddUserInputController extends HttpServlet {
 			userInforDefault.setStartDate(startDate);
 			userInforDefault.setEndDate(endDate);
 			userInforDefault.setTotal(total);
-
+			
 			return userInforDefault;
 		} catch (Exception e) {
 			e.printStackTrace();

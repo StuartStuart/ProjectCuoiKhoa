@@ -183,9 +183,9 @@ public class UserValidate {
 				// validate total
 				{
 					// check ko nhập
-					if (null == userInfor.getTotal()) {
+					if (null == userInfor.getTotal() || userInfor.getTotal().isEmpty()) {
 						listErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
-					} else if (!CommonUtil.checkHalfSizeNumber("" + userInfor.getTotal())) {
+					} else if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
 						// check là số haffsize
 						listErrMsg.add(MessageErrorProperties.getValue("Error018_Total"));
 					}

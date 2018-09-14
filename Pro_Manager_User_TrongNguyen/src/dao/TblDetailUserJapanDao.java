@@ -18,6 +18,7 @@ public interface TblDetailUserJapanDao extends BaseDao {
 	 * 
 	 * @param userInfor
 	 *            đối tượng chứa thông tin của tbl_user và tbl_detail_user_japan
+	 * @return 
 	 * @throws Exception
 	 */
 	void insertUser(UserInforEntity userInfor) throws Exception;

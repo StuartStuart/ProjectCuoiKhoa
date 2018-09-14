@@ -26,43 +26,38 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	@Override
 	public void insertUser(UserInforEntity userInfor) throws Exception {
 		try {
-			if (!userInfor.getCodeLevel().equalsIgnoreCase("N0")) {
-				Integer userId;
-				//
-				// viết query
-				// viết query
+			Integer userId = userInfor.getUserId();
+			if (null == userId) {
+				// viet query
 				query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
+				// hoan thien query
 				ps = conn.prepareStatement(query);
 				int i = 0;
 				ps.setString(++i, userInfor.getLoginName());
-				// thực hiện query
+				// thuc hien query
 				ResultSet rs = ps.executeQuery();
-				// trả về kết quả
 				if (rs.next()) {
 					userId = rs.getInt("user_id");
+					// dong ps
+					ps.close();
 				} else {
-					userId = null;
+					new Exception();
 				}
-				// viết query
-				StringBuilder query = new StringBuilder("");
-				query.append("INSERT INTO tbl_detail_user_japan(user_id, code_level, start_date, end_date, total)");
-				query.append(" VALUES (?, ?, ?, ?, ?);");
-				// hoàn thiện query
-				ps = conn.prepareStatement(query.toString());
-
-				//
-				i = 0;
-				ps.setInt(++i, userId);
-				ps.setString(++i, userInfor.getCodeLevel());
-				ps.setString(++i, userInfor.getStartDate());
-				ps.setString(++i, userInfor.getEndDate());
-				ps.setInt(++i, userInfor.getTotal());
-				// thực hiện query
-				ps.executeUpdate();
-
-				ps.close();
-				ps = null;
 			}
+			// viết query
+			StringBuilder query = new StringBuilder("");
+			query.append("INSERT INTO tbl_detail_user_japan(user_id, code_level, start_date, end_date, total)");
+			query.append("\nVALUES (?, ?, ?, ?, ?);");
+			// hoàn thiện query
+			ps = conn.prepareStatement(query.toString());
+			int i = 0;
+			ps.setInt(++i, userId);
+			ps.setString(++i, userInfor.getCodeLevel());
+			ps.setString(++i, userInfor.getStartDate());
+			ps.setString(++i, userInfor.getEndDate());
+			ps.setString(++i, userInfor.getTotal());
+			// thực hiện query
+			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -139,8 +134,8 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 			int i = 0;
 			ps.setString(++i, userInforEntity.getCodeLevel());
 			ps.setString(++i, userInforEntity.getStartDate());
-			ps.setString(++i, userInforEntity.getStartDate());
-			ps.setInt(++i, userInforEntity.getTotal());
+			ps.setString(++i, userInforEntity.getEndDate());
+			ps.setString(++i, userInforEntity.getTotal());
 			ps.setInt(++i, userInforEntity.getUserId());
 			// thực hiện query
 			ps.executeUpdate();

@@ -27,64 +27,45 @@ public class LoginFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// System.out.println("login");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		String webURI = req.getRequestURI();
-		if ((req.getContextPath() + "/").equalsIgnoreCase(webURI)
-				|| (req.getContextPath() + ConstantUtil.ADM001_JSP).equalsIgnoreCase(webURI)) {
-			webURI = req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER;
+		String servletPath = req.getServletPath();
+		if (servletPath.equals("/")) {
+			// là URL của trang chủ
+			servletPath = ConstantUtil.LOGIN_CONTROLLER;
 		}
-		if (!webURI.matches(".*\\.do$") && !webURI.matches(".*\\.jsp$")) {
-			chain.doFilter(req, res);
-		} else {
-			// điều kiện URL trỏ đến ADM001
-			boolean inLogin = (req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER).equalsIgnoreCase(webURI);
-			boolean isLogin = null != req.getSession().getAttribute(ConstantUtil.DANH_DAU_LOGIN);
-			if (inLogin) {
-				// ở trang login
-				if (isLogin) {
-					// đã login thì chuyển hướng ListUser.do
-					res.sendRedirect(req.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
-				} else {
-					// chưa login thì chuyển tiếp login
-					req.getRequestDispatcher(ConstantUtil.LOGIN_CONTROLLER).forward(req, res);
-				}
+
+		try {
+			if (servletPath.matches(".*\\.jsp$")) {
+				// là URL của .jsp thì trả về màn hình lỗi
+				res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
+			} else if (!servletPath.matches(".*\\.do$")) {
+				// ko là URL của controller thì cho qua
+				chain.doFilter(req, res);
 			} else {
-				// không ở trang login
+				// đang ở trang login
+				boolean inLogin = servletPath.equals(ConstantUtil.LOGIN_CONTROLLER);
+				String loginId = (String) req.getSession().getAttribute(ConstantUtil.DANH_DAU_LOGIN);
+				// đã login thành công
+				boolean isLogin = null != loginId && new TblUserLogicImpl().checkAdminAccount(loginId);
+
 				if (isLogin) {
-					// đã login thì kiểm tra admin
-					String loginId = (String) req.getSession().getAttribute(ConstantUtil.DANH_DAU_LOGIN);
-					try {
-						if (new TblUserLogicImpl().checkAdminAccount(loginId)) {
-							// là adminAccount pass the request along the filter
-							// chain
-							chain.doFilter(request, response);
-						} else {
-							// ko là adminAccount gọi logout
-							if ((req.getContextPath() + ConstantUtil.LOGOUT_CONTROLLER).equalsIgnoreCase(webURI)) {
-								chain.doFilter(request, response);
-							} else {
-								res.sendRedirect(req.getContextPath() + ConstantUtil.LOGOUT_CONTROLLER);
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						// về error_system
-						res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
+					if (inLogin) {
+						res.sendRedirect(req.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
+					} else {
+						chain.doFilter(req, res);
 					}
 				} else {
-					// chưa login
-
-					if ((req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER).equalsIgnoreCase(req.getRequestURI())) {
-						// nếu là [/login] thì cho qua
+					if (inLogin) {
 						chain.doFilter(req, res);
 					} else {
-						// không là [/login] thì chuyển hướng login
 						res.sendRedirect(req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER);
 					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
 

@@ -227,7 +227,7 @@
 									<td class="lbl_left">点数:</td>
 									<td align="left"><input class="txBox" type="text"
 										name="total"
-										value="${(adm003userinfor.nameLevel != null)? adm003userinfor.total : '' }"
+										value="${(adm003userinfor.codeLevel != 'N0')? adm003userinfor.total : '' }"
 										size="5" onfocus="this.style.borderColor='#0066ff';"
 										onblur="this.style.borderColor='#aaaaaa';" /></td>
 								</tr>
