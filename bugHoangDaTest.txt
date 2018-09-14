@@ -1,0 +1,16 @@
+1, dang nhap roi , go Link ADM002,3,4,5, khong hien thi ListUser
+2, TRANG VUA HIEN THI VAN O DANG LINK, VAN CLICK DUOC: 
+3, ADM002 HIEN THI DATE DANG YYYY/MM/DD
+ADM002 1 BUG
+
+UPDATE USER HIEN THI THANH CONG NHUNG
+
+adm003 vung hien thi tieng nhat van hien thi tu dau
+
+muc total chua validate half size
+
+adm003 update chua thanh cong vao man DB
+adm003 4
+adm006 1
+
+ADM006 1

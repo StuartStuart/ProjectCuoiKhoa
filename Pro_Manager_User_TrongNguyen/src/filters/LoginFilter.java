@@ -31,7 +31,8 @@ public class LoginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String webURI = req.getRequestURI();
-		if ((req.getContextPath() + "/").equalsIgnoreCase(webURI)) {
+		if ((req.getContextPath() + "/").equalsIgnoreCase(webURI)
+				|| (req.getContextPath() + ConstantUtil.ADM001_JSP).equalsIgnoreCase(webURI)) {
 			webURI = req.getContextPath() + ConstantUtil.LOGIN_CONTROLLER;
 		}
 		if (!webURI.matches(".*\\.do$") && !webURI.matches(".*\\.jsp$")) {
@@ -56,7 +57,8 @@ public class LoginFilter implements Filter {
 					String loginId = (String) req.getSession().getAttribute(ConstantUtil.DANH_DAU_LOGIN);
 					try {
 						if (new TblUserLogicImpl().checkAdminAccount(loginId)) {
-							// là adminAccount pass the request along the filter chain
+							// là adminAccount pass the request along the filter
+							// chain
 							chain.doFilter(request, response);
 						} else {
 							// ko là adminAccount gọi logout
