@@ -65,6 +65,7 @@ public class LoginFilter implements Filter {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			req.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}

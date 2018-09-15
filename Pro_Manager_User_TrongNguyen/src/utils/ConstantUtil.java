@@ -105,7 +105,7 @@ public class ConstantUtil {
 	/*
 	 * đường dẫn đến servlet add user confirm
 	 */
-	public static final String ADD_USER_CONFIRM = "/AddUserConfirm.do";
+	public static final String ADD_USER_CONFIRM_CONTROLLER = "/AddUserConfirm.do";
 	/*
 	 * đường dẫn đến jsp ADM003
 	 */
@@ -262,4 +262,8 @@ public class ConstantUtil {
 	 * currentPage mặc định của search
 	 */
 	public static final Integer DEFAULT_CURRENT_PAGE = 1;
+	/*
+	 * cho phép đến system_error
+	 */
+	public static final String SYSTEM_ERROR_TYPE = "SYSTEM_ERROR_TYPE";
 }

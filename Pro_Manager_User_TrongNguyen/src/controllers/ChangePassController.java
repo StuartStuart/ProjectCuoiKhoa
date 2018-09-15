@@ -7,10 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
-import properties.MessageErrorProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -39,12 +39,12 @@ public class ChangePassController extends HttpServlet {
 				request.getRequestDispatcher(ConstantUtil.ADM007_JSP).forward(request, response);
 			} else {
 				// userId ko tồn tại thì gửi mess user ko tồn tại
-				request.setAttribute("systemerrormessage", MessageErrorProperties.getValue("Error013"));
-				request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
+				throw new Exception();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
+			request.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
@@ -58,6 +58,7 @@ public class ChangePassController extends HttpServlet {
 		Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userId"));
 		try {
 			TblUserLogic userLogic = new TblUserLogicImpl();
+			HttpSession session = request.getSession();
 			if (userLogic.checkExistedUserId(userId)) {
 				// userId có tồn tại thì getMess khi validate Pass
 				String errMess = new UserValidate().validatePass(request.getParameter("pass"),
@@ -66,26 +67,27 @@ public class ChangePassController extends HttpServlet {
 					// listMess ! rỗng thì gửi listMess đến 007
 					request.setAttribute("adm007message", errMess);
 					request.getRequestDispatcher(ConstantUtil.ADM007_JSP).forward(request, response);
+					return; // ko ảnh hưởng đến sendRedirect sang ADM006
 				} else {
 					// listMess rỗng thì chuẩn bị updatePass
 					String salt = CommonUtil.getSalt();
 					String pass = CommonUtil.encodeMatKhau(request.getParameter("pass"), salt);
 					if (userLogic.updatePasswordForId(userId, pass, salt)) {
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_UPDATE_TYPE);
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_UPDATE_TYPE);
 					} else {
-						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-								+ ConstantUtil.ADM006_ERROR_TYPE);
+						// không update thành công user
+						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 					}
 				}
 			} else {
-				// userId ko tồn tại thì gửi mess user ko tồn tại
-				response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER + "?type="
-						+ ConstantUtil.ADM006_ERROR_TYPE);
+				// không update thành công user
+				session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 			}
+			response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
+			request.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}

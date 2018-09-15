@@ -64,6 +64,7 @@ public class SuccessController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
+			request.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}

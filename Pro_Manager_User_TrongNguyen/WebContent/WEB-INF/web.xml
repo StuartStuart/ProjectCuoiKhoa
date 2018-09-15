@@ -8,7 +8,7 @@
     <session-timeout>5</session-timeout>
   </session-config>
   <error-page>
-        <error-code>404</error-code>
-        <location>/SystemError.do</location>
-</error-page>
+    <error-code>404</error-code>
+    <location>/SystemError.do</location>
+  </error-page>
 </web-app>

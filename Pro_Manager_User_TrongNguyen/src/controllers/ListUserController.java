@@ -138,7 +138,6 @@ public class ListUserController extends HttpServlet {
 				session.setAttribute(ConfigProperties.getValue("ADM002_SortSymbol"), sortWay);
 				break;
 			case ConstantUtil.ADM002_BACK:
-				session.removeAttribute(ConstantUtil.ADM006_TYPE);
 			default:
 				break;
 			}
@@ -185,6 +184,7 @@ public class ListUserController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
+			request.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}

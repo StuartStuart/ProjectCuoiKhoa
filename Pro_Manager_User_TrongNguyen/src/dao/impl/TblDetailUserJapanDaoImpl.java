@@ -41,7 +41,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 					// dong ps
 					ps.close();
 				} else {
-					new Exception();
+					throw new Exception();
 				}
 			}
 			// viết query
