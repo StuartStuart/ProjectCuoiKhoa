@@ -19,7 +19,7 @@ import utils.ConstantUtil;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-@WebFilter(description = "LoginFilter", urlPatterns = { "*" })
+@WebFilter(description = "Ko lọc 404", urlPatterns = { "*" })
 public class LoginFilter implements Filter {
 	/**
 	 * Kiểm tra session có tồn tại hay ko Nếu ko thì trở về ADM001
@@ -39,7 +39,7 @@ public class LoginFilter implements Filter {
 
 		try {
 			if (servletPath.matches(".*\\.jsp$")) {
-				// là URL của .jsp thì trả về màn hình lỗi
+				// là URL của .jsp hoặc URL ko tồn tại thì trả về màn hình lỗi
 				res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 			} else if (!servletPath.matches(".*\\.do$")) {
 				// ko là URL của controller thì cho qua

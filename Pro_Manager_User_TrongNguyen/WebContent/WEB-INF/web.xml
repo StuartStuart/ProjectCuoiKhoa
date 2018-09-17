@@ -9,6 +9,6 @@
   </session-config>
   <error-page>
     <error-code>404</error-code>
-    <location>/SystemError.do</location>
+    <location>/jsp/System_Error.jsp</location>
   </error-page>
 </web-app>

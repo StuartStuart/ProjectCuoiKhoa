@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import properties.MessageProperties;
 import utils.ConstantUtil;
@@ -26,7 +27,8 @@ public class SuccessController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			String type = (String) request.getSession().getAttribute(ConstantUtil.ADM006_TYPE);
+			HttpSession session = request.getSession();
+			String type = (String) session.getAttribute(ConstantUtil.ADM006_TYPE);
 			if (null != type) {
 				switch (type) {
 				case ConstantUtil.ADM006_ADD_TYPE:
@@ -50,11 +52,10 @@ public class SuccessController extends HttpServlet {
 					break;
 
 				case ConstantUtil.ADM006_ERROR_TYPE:
-
 				default:
 					// chuyển tiếp system error
-					request.setAttribute("systemerrormessage", MessageProperties.getValue("MSG005"));
-					request.getRequestDispatcher(ConstantUtil.SYSTEM_ERROR_JSP).forward(request, response);
+					session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+					response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 					break;
 				}
 			} else {

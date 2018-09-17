@@ -18,6 +18,7 @@ import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.MstJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
+import properties.MessageProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -36,6 +37,7 @@ public class AddUserInputController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		try {
 			if (ConstantUtil.ADD_USER_VALIDATE_CONTROLLER.equals(request.getServletPath())) {
 				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_INPUT_CONTROLLER + "?type="
@@ -43,19 +45,24 @@ public class AddUserInputController extends HttpServlet {
 			} else {
 				// nhận về 1 userInfor tùy thuộc từng điều kiện
 				UserInforEntity userInforDefault = getUserInforDefault(request, response);
+				if (null == userInforDefault) {
+					// ko tìm thấy user trong db
+					session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+					response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
+				} else {
+					// set các thông tin trong combobox lên request
+					setDataLogic(request);
 
-				// set các thông tin trong combobox lên request
-				setDataLogic(request);
+					// gửi userInforDefault lên request
+					request.setAttribute("adm003userinfor", userInforDefault);
 
-				// gửi userInforDefault lên request
-				request.setAttribute("adm003userinfor", userInforDefault);
-
-				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+					request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error
-			request.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
+			session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
@@ -172,7 +179,7 @@ public class AddUserInputController extends HttpServlet {
 					// lấy về UserInforEntity
 					editionUser = userLogic.getUserInfor(userId);
 				} else {
-					editionUser = null;
+					return null;
 				}
 
 				loginId = editionUser.getLoginName();
@@ -308,7 +315,6 @@ public class AddUserInputController extends HttpServlet {
 				String style = request.getParameter("styleJapanZone");
 				request.setAttribute("adm003style", style);
 				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
-
 			} else {
 				/*
 				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
@@ -317,7 +323,8 @@ public class AddUserInputController extends HttpServlet {
 				// tạo key
 				String key = CommonUtil.getSalt();
 				request.getSession().setAttribute("entityuserinfor" + key, userInfor);
-				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM_CONTROLLER + "?key=" + key);
+				response.sendRedirect(
+						request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM_CONTROLLER + "?key=" + key);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

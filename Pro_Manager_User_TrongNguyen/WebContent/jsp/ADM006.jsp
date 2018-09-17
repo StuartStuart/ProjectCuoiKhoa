@@ -37,7 +37,7 @@
 			<tr>
 				<input type="hidden" name="type" value="back" />
 				<td align="center" colspan="2"><input class="btn" type="submit"
-					value="OK" onclick="" /></td>
+					value="OK"/></td>
 			</tr>
 		</table>
 	</form>

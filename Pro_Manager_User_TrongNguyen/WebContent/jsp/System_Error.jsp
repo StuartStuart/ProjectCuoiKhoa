@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="properties.MessageProperties"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,8 @@
 	<!-- End vung header -->
 
 	<!-- Begin vung input-->
+	<form action="${pageContext.request.contextPath}/ListUser.do"
+		method="get" name="inputform">
 		<table class="tbl_input" border="0" width="80%" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -22,15 +25,22 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="center" colspan="2"><font color="red">${systemerrormessage}</font>
-				</td>
+				<td align="center" colspan="2"><font color="red">
+						${(SYSTEM_ERROR_TYPE == null)?MessageProperties.getValue("MSG_NotExist"):SYSTEM_ERROR_TYPE}
+				</font></td>
 			</tr>
 			<tr>
 				<td align="center" colspan="2">
 					<div style="height: 70px"></div>
 				</td>
 			</tr>
+			<tr>
+				<input type="hidden" name="type" value="back" />
+				<td align="center" colspan="2"><input class="btn" type="submit"
+					value="OK" /></td>
+			</tr>
 		</table>
+	</form>
 	<!-- End vung input -->
 
 	<!-- Begin vung footer -->

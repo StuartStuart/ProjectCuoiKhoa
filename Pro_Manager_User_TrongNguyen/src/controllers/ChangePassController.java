@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import logics.TblUserLogic;
 import logics.impl.TblUserLogicImpl;
+import properties.MessageProperties;
 import utils.CommonUtil;
 import utils.ConstantUtil;
 import validates.UserValidate;
@@ -31,7 +32,7 @@ public class ChangePassController extends HttpServlet {
 			throws ServletException, IOException {
 		// nhận về userId từ request
 		Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
-
+		HttpSession session = request.getSession();
 		try {
 			if (new TblUserLogicImpl().checkExistedUserId(userId)) {
 				// userId có tồn tại
@@ -39,7 +40,8 @@ public class ChangePassController extends HttpServlet {
 				request.getRequestDispatcher(ConstantUtil.ADM007_JSP).forward(request, response);
 			} else {
 				// userId ko tồn tại thì gửi mess user ko tồn tại
-				throw new Exception();
+				session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+				response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,23 +69,23 @@ public class ChangePassController extends HttpServlet {
 					// listMess ! rỗng thì gửi listMess đến 007
 					request.setAttribute("adm007message", errMess);
 					request.getRequestDispatcher(ConstantUtil.ADM007_JSP).forward(request, response);
-					return; // ko ảnh hưởng đến sendRedirect sang ADM006
 				} else {
 					// listMess rỗng thì chuẩn bị updatePass
 					String salt = CommonUtil.getSalt();
 					String pass = CommonUtil.encodeMatKhau(request.getParameter("pass"), salt);
 					if (userLogic.updatePasswordForId(userId, pass, salt)) {
 						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_UPDATE_TYPE);
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER);
 					} else {
 						// không update thành công user
-						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
+						throw new Exception();
 					}
 				}
 			} else {
-				// không update thành công user
-				session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
+				// không tồn tại user
+				session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+				response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 			}
-			response.sendRedirect(request.getContextPath() + ConstantUtil.SUCCESS_CONTROLLER);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// chuyển đến màn hình Error

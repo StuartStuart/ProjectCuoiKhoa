@@ -658,7 +658,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			openConnection();
 			// viết query
-			query = "SELECT user_id FROM tbl_user WHERE category = ? AND user_id = ?";
+			query = "SELECT user_id FROM tbl_user WHERE category = ? AND user_id = ?;";
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
