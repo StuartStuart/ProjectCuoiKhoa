@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import logics.impl.TblUserLogicImpl;
 import utils.ConstantUtil;
@@ -29,6 +30,7 @@ public class LoginFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		HttpSession session = req.getSession();
 		String servletPath = req.getServletPath();
 		if (servletPath.equals("/")) {
 			// là URL của trang chủ
@@ -45,7 +47,7 @@ public class LoginFilter implements Filter {
 			} else {
 				// đang ở trang login
 				boolean inLogin = servletPath.equals(ConstantUtil.LOGIN_CONTROLLER);
-				String loginId = (String) req.getSession().getAttribute(ConstantUtil.DANH_DAU_LOGIN);
+				String loginId = (String) session.getAttribute(ConstantUtil.DANH_DAU_LOGIN);
 				// đã login thành công
 				boolean isLogin = null != loginId && new TblUserLogicImpl().checkAdminAccount(loginId);
 
@@ -53,7 +55,36 @@ public class LoginFilter implements Filter {
 					if (inLogin) {
 						res.sendRedirect(req.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
 					} else {
-						chain.doFilter(req, res);
+						// ko ở trang login thì xét dk Success.do
+						switch (servletPath) {
+						case ConstantUtil.SUCCESS_CONTROLLER:
+							if (null != session.getAttribute(ConstantUtil.ADM006_TYPE)) {
+								// có thông báo ở ADM006
+								chain.doFilter(request, response);
+							} else {
+								// trở về ADM002
+								res.sendRedirect(req.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
+							}
+							break;
+						case ConstantUtil.SYSTEM_ERROR_CONTROLLER:
+							if (null != session.getAttribute(ConstantUtil.SYSTEM_ERROR_TYPE)) {
+								// có thông báo ở ADM006
+								chain.doFilter(request, response);
+							} else {
+								// trở về ADM002
+								res.sendRedirect(req.getContextPath() + ConstantUtil.LIST_USER_CONTROLLER);
+							}
+							break;
+						default:
+							if (null != session.getAttribute(ConstantUtil.ADM006_TYPE)) {
+								session.removeAttribute(ConstantUtil.ADM006_TYPE);
+							}
+							if (null != session.getAttribute(ConstantUtil.SYSTEM_ERROR_TYPE)) {
+								session.removeAttribute(ConstantUtil.SYSTEM_ERROR_TYPE);
+							}
+							chain.doFilter(request, response);
+							break;
+						}
 					}
 				} else {
 					if (inLogin) {
@@ -65,7 +96,7 @@ public class LoginFilter implements Filter {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			req.getSession().setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
+			session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, ConstantUtil.SYSTEM_ERROR_TYPE);
 			res.sendRedirect(req.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
@@ -77,7 +108,6 @@ public class LoginFilter implements Filter {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -88,7 +118,6 @@ public class LoginFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 
 	}
 }

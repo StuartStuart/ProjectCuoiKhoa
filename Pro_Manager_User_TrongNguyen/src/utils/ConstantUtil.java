@@ -266,4 +266,8 @@ public class ConstantUtil {
 	 * cho phép đến system_error
 	 */
 	public static final String SYSTEM_ERROR_TYPE = "SYSTEM_ERROR_TYPE";
+	/**
+	 * ký hiệu của admin
+	 */
+	public static final int ADMIN_CATEGORY = 0;
 }

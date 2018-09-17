@@ -195,27 +195,32 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	 */
 	@Override
 	public boolean deleteUser(Integer userId) throws Exception {
-		userDao.openConnection();
-		Connection conn = userDao.getConnection();
 		try {
-			// transaction
-			userDao.setAutoCommit(conn);
-			// lệnh 1
-			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-			japanDao.setConnection(conn);
-			japanDao.deleteUserById(userId);
-			// lệnh 2
-			userDao.deleteUserById(userId);
-			// commit
-			userDao.commitTransaction(conn);
+			userDao.openConnection();
+			Connection conn = userDao.getConnection();
+			try {
+				// transaction
+				userDao.setAutoCommit(conn);
+				// lệnh 1
+				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
+				japanDao.setConnection(conn);
+				japanDao.deleteUserById(userId);
+				// lệnh 2
+				userDao.deleteUserById(userId);
+				// commit
+				userDao.commitTransaction(conn);
 
-			return true;
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				// rollback kết quả
+				userDao.rollbackTransaction(conn);
+
+				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			// rollback kết quả
-			userDao.rollbackTransaction(conn);
-
-			return false;
+			throw e;
 		} finally {
 			try {
 				userDao.closeConnection();

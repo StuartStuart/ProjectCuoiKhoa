@@ -36,10 +36,11 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			this.openConnection(); // mở kết nối
 
-			query = "select salt, password from tbl_user where `login_name` = ?;";
+			query = "select salt, password from tbl_user where `login_name` = ? and category = ?;";
 			PreparedStatement ps = conn.prepareStatement(query);
 			int i = 0;
 			ps.setString(++i, userName);
+			ps.setInt(++i, ConstantUtil.ADMIN_CATEGORY);
 
 			ResultSet rs = ps.executeQuery(); // nháº­n vá»� cÃ¡c báº£n ghi
 			if (rs.next()) {
@@ -672,7 +673,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			try {
 				closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				throw e;
 			}

@@ -20,7 +20,6 @@ public class CharsetEncodingFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//		System.out.println("charset");
 		// place your code here
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
@@ -33,7 +32,6 @@ public class CharsetEncodingFilter implements Filter {
 	 */
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -42,7 +40,6 @@ public class CharsetEncodingFilter implements Filter {
 	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 		
 	}
 }
