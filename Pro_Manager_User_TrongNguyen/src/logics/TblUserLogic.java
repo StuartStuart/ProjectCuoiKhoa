@@ -4,7 +4,6 @@
  */
 package logics;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entities.UserInforEntity;
@@ -125,18 +124,6 @@ public interface TblUserLogic extends BaseLogic {
 	 * @throws Exception
 	 */
 	boolean deleteUser(Integer userId) throws Exception;
-
-	/**
-	 * gọi dao để update user có thông tin tương ứng
-	 * 
-	 * @param userInforEntity
-	 *            đối tượng cần update
-	 * @param changeTblDetail
-	 * @return true là update thành công
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws SQLException, Exception;
 
 	/**
 	 * kiểm tra sự tồn tại của userId bởi dao

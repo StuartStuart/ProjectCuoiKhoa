@@ -25,8 +25,7 @@ public class CommonUtil {
 	/**
 	 * chuyển yyyy-MM-dd về dạng yyyy/MM/dd
 	 * 
-	 * @param date
-	 *            ngày cần chuyển
+	 * @param date ngày cần chuyển
 	 * @return chuỗi ngày đúng format
 	 * @throws ParseException
 	 */
@@ -49,34 +48,18 @@ public class CommonUtil {
 	/**
 	 * kiểm tra total có là số nguyên dương ko
 	 * 
-	 * @param total
-	 *            điểm
+	 * @param total điểm
 	 * @return true là total là số nguyên dương
 	 */
 	public static boolean checkHalfSizeNumber(String total) {
 		return (total + "").matches("[1-9][0-9]*");
 	}
 
-	/*
-	 * chuyển từ chuỗi sang số
-	 * 
-	 */
-	// public static int convertStrToInt(String str) {
-	// try {
-	// return Integer.parseInt(str);
-	// } catch (NumberFormatException e) {
-	// // str không là số
-	// return 0;
-	// }
-	// }
-
 	/**
 	 * mã hóa chuỗi pass + salt sang SHA1
 	 * 
-	 * @param pass
-	 *            mật khẩu
-	 * @param salt
-	 *            chuỗi gây nhiễu
+	 * @param pass mật khẩu
+	 * @param salt chuỗi gây nhiễu
 	 * @return chuỗi đã mã hóa
 	 * @throws NoSuchAlgorithmException
 	 */
@@ -103,10 +86,8 @@ public class CommonUtil {
 	/**
 	 * lấy thứ tự của User đầu tiên sẽ hiển thị trên page
 	 * 
-	 * @param pageNumber
-	 *            trang sẽ hiển thị UserInfor
-	 * @param limit
-	 *            số user tôi đa sẽ được hiển thị page
+	 * @param pageNumber trang sẽ hiển thị UserInfor
+	 * @param limit      số user tôi đa sẽ được hiển thị page
 	 * @return thứ tự đầu tiên
 	 */
 	public static int getOffSet(Integer pageNumber, int limit) {
@@ -116,8 +97,7 @@ public class CommonUtil {
 	/**
 	 * tránh lỗi wild card trong sql
 	 * 
-	 * @param text
-	 *            chuỗi cần chuyển wild card
+	 * @param text chuỗi cần chuyển wild card
 	 * @return chuỗi đã được chuyển
 	 */
 	public static String convertWildCard(String text) {
@@ -130,12 +110,9 @@ public class CommonUtil {
 	/**
 	 * lấy danh sách số thứ tự của các trang để được hiển thị trên web browser
 	 * 
-	 * @param totalUser
-	 *            tổng số user tìm được
-	 * @param limit
-	 *            số lượng tối đa user trên 1 web browser
-	 * @param currentPage
-	 *            trang hiện thời
+	 * @param totalUser   tổng số user tìm được
+	 * @param limit       số lượng tối đa user trên 1 web browser
+	 * @param currentPage trang hiện thời
 	 * @return danh sách có nhiều nhất limit trang
 	 * @throws Exception
 	 */
@@ -169,7 +146,7 @@ public class CommonUtil {
 	 * @return số lượng lớn nhất
 	 * @throws Exception
 	 */
-	public static int getLimit() throws Exception {
+	public static int getUserLimit() throws Exception {
 		// xác định số trang có thể hiển thị
 		return Integer.parseInt(ConfigProperties.getValue("User_Limit"));
 	}
@@ -177,19 +154,17 @@ public class CommonUtil {
 	/**
 	 * tính tổng số trang sẽ được hiển thị
 	 * 
-	 * @param totalUser
-	 *            tổng số user
-	 * @param limit
-	 *            giới hạn user trên 1 web browser
+	 * @param totalUser tổng số user
+	 * @param limit     giới hạn user trên 1 web browser
 	 * @return
 	 */
 	public static int getTotalPage(int totalUser, int limit) {
 		// xác định số trang có thể hiển thị
-		int userLimit = limit; // Integer.parseInt(ConfigProperties.getValue("User_Limit"));
 		int totalPage;
 		if (0 == totalUser) {
 			totalPage = 0;
 		} else {
+			int userLimit = limit; // Integer.parseInt(ConfigProperties.getValue("User_Limit"));
 			totalPage = totalUser / userLimit;
 			if (totalPage * userLimit != totalUser) {
 				totalPage++;
@@ -200,31 +175,10 @@ public class CommonUtil {
 	}
 
 	/**
-	 * chuyển kiểu sắp xếp từ icon sang dạng db
-	 * 
-	 * @param firstSortSymbol
-	 *            biểu tượng cần chuyển
-	 * @return ASC hoặc DESC
-	 * @throws Exception
-	 */
-	// public static String convertSymbol(String sortSymbol) {
-	// try {
-	// return (ConfigProperties.getValue("ADM002_ASCSymbol").equals(sortSymbol))
-	// ? ConstantUtil.ADM002_SX_TANG
-	// : ConstantUtil.ADM002_SX_GIAM;
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// return "";
-	// }
-
-	/**
 	 * tạo danh sách các năm từ startYear đến năm hiện tại
 	 * 
-	 * @param startYear
-	 *            giới hạn dưới của năm
-	 * @param endYear
-	 *            giới hạn trên của năm
+	 * @param startYear giới hạn dưới của năm
+	 * @param endYear   giới hạn trên của năm
 	 * @return danh sách các năm từ startYear đến endYear
 	 */
 	public static ArrayList<Integer> getListYears(int startYear, int endYear) throws Exception {
@@ -279,6 +233,7 @@ public class CommonUtil {
 	/**
 	 * nhận thời gian hiện tại
 	 * 
+	 * @param plusOne năm hiện tại cộng thêm 1
 	 * @return chuỗi dạng yyyy-mm-dd
 	 */
 	public static String getNowTime(boolean plusOne) {
@@ -292,12 +247,9 @@ public class CommonUtil {
 	/**
 	 * chuyển 3 biến thành 1 chuỗi dạng yyyy-MM-dds
 	 * 
-	 * @param year
-	 *            năm
-	 * @param month
-	 *            tháng
-	 * @param date
-	 *            ngày
+	 * @param year  năm
+	 * @param month tháng
+	 * @param date  ngày
 	 * @return kiểu Date trong SQL
 	 * @throws Exception
 	 */
@@ -308,8 +260,7 @@ public class CommonUtil {
 	/**
 	 * check các ký tự trong chuỗi có là ký tự kana ko
 	 * 
-	 * @param fullNameKana
-	 *            chuỗi cần check
+	 * @param fullNameKana chuỗi cần check
 	 * @return true là chuỗi là kana
 	 */
 	public static boolean isKanaString(String fullNameKana) {
@@ -330,8 +281,7 @@ public class CommonUtil {
 	/**
 	 * nhận total từ textbox
 	 * 
-	 * @param str
-	 *            chuỗi textbox
+	 * @param str chuỗi textbox
 	 * @return null là chuỗi ko phải số
 	 */
 	public static Integer convertStrToInteger(String str) {
@@ -345,8 +295,7 @@ public class CommonUtil {
 	/**
 	 * kiểm tra các ký tự trong chuỗi có là ký tự 1 byte ko
 	 * 
-	 * @param pass
-	 *            chuỗi cần check
+	 * @param pass chuỗi cần check
 	 * @return true là chuỗi chỉ bao gồm các ký tự 1 byte
 	 */
 	public static boolean checkOneByteString(String pass) {
@@ -367,8 +316,7 @@ public class CommonUtil {
 	/**
 	 * kiểm tra sự hợp lệ của date
 	 * 
-	 * @param day
-	 *            date cần check
+	 * @param day date cần check
 	 * @return true là hợp lệ
 	 */
 	public static boolean checkDate(String dateToValidate) {
@@ -394,6 +342,12 @@ public class CommonUtil {
 		return new Date().getTime() + "";
 	}
 
+	/**
+	 * chuyển chuỗi date thành mảng gồm năm, tháng, ngày
+	 * 
+	 * @param date chuỗi cần chuyển
+	 * @return mảng 3 phần tử là năm thành ngày
+	 */
 	public static String[] convertToArrDateString(String date) {
 		return date.split("-");
 	}

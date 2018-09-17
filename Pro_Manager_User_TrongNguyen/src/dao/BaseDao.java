@@ -25,28 +25,12 @@ public interface BaseDao {
 	void setConnection(Connection conn);
 
 	/**
-	 * kết nối connection conn
-	 * 
-	 * @param conn connection cần kết nối
-	 * @throws Exception
-	 */
-	void openConnection(Connection conn) throws Exception;
-
-	/**
-	 * ngắt kết nối connection conn
-	 * 
-	 * @param conn connection cần ngắt kết nối
-	 * @throws SQLException
-	 */
-	void closeConnection(Connection conn) throws SQLException;
-
-	/**
 	 * set autocommit cho connection là false để thực hiện transaction
 	 * 
 	 * @param conn connection cần set auto commit
 	 * @throws SQLException
 	 */
-	void setAutoCommit(Connection conn) throws SQLException;
+	void setFalseAutoCommitTransaction() throws SQLException;
 
 	/**
 	 * commit nhóm lệnh đã thực hiện
@@ -54,7 +38,7 @@ public interface BaseDao {
 	 * @param conn connection cần commit
 	 * @throws SQLException
 	 */
-	void commitTransaction(Connection conn) throws SQLException;
+	void commitTransaction() throws SQLException;
 
 	/**
 	 * rollback nhóm lệnh đã thực hiện
@@ -62,7 +46,7 @@ public interface BaseDao {
 	 * @param conn connection cần rollback
 	 * @throws SQLException
 	 */
-	void rollbackTransaction(Connection conn) throws SQLException;
+	void rollbackTransaction() throws SQLException;
 
 	/**
 	 * mở kết nối đến db

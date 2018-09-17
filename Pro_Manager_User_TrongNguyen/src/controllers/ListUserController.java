@@ -39,7 +39,7 @@ public class ListUserController extends HttpServlet {
 			Integer sortType = (Integer) session.getAttribute(ConfigProperties.getValue("ADM002_SortType"));
 			String sortWay = (String) session.getAttribute(ConfigProperties.getValue("ADM002_SortSymbol"));
 			Integer currentPage = (Integer) session.getAttribute(ConfigProperties.getValue("ADM002_CurrentPage"));
-			int userLimit = CommonUtil.getLimit();
+			int userLimit = CommonUtil.getUserLimit();
 			int amountSortType = ConstantUtil.DEFAULT_WAYS.length;
 			String[] displaySX = { ConstantUtil.ADM002_SX_TANG, ConstantUtil.ADM002_SX_TANG,
 					ConstantUtil.ADM002_SX_GIAM };
@@ -54,7 +54,6 @@ public class ListUserController extends HttpServlet {
 				// trường hợp ấn submit
 				type = ConstantUtil.ADM002_SEARCH;
 			}
-
 			switch (type) {
 			case ConstantUtil.ADM002_SEARCH:
 				fullName = request.getParameter("fullname");

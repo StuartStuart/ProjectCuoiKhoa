@@ -4,7 +4,6 @@
  */
 package logics.impl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,6 +25,7 @@ import utils.ConstantUtil;
  */
 public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	private TblUserDao userDao;
+	private TblDetailUserJapanDao japanDao;
 
 	/*
 	 * Khởi tạo tblUserDaoImpl
@@ -35,6 +35,7 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public void init() {
 		userDao = new TblUserDaoImpl();
+		japanDao = new TblDetailUserJapanDaoImpl();
 	}
 
 	/*
@@ -135,24 +136,22 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
 		try {
 			userDao.openConnection();
-			Connection conn = userDao.getConnection();
 			try {
 				// transaction
-				userDao.setAutoCommit(conn);
+				userDao.setFalseAutoCommitTransaction();
 				// lệnh 1
 				userDao.insertUser(userInfor);
 				// lệnh 2
-				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-				japanDao.setConnection(conn);
+				japanDao.setConnection(userDao.getConnection());
 				japanDao.insertUser(userInfor);
 				// commit
-				userDao.commitTransaction(conn);
+				userDao.commitTransaction();
 
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 				// rollback kết quả
-				userDao.rollbackTransaction(conn);
+				userDao.rollbackTransaction();
 
 				return false;
 			}
@@ -197,84 +196,28 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	public boolean deleteUser(Integer userId) throws Exception {
 		try {
 			userDao.openConnection();
-			Connection conn = userDao.getConnection();
 			try {
 				// transaction
-				userDao.setAutoCommit(conn);
+				userDao.setFalseAutoCommitTransaction();
 				// lệnh 1
-				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-				japanDao.setConnection(conn);
+				japanDao.setConnection(userDao.getConnection());
 				japanDao.deleteUserById(userId);
 				// lệnh 2
 				userDao.deleteUserById(userId);
 				// commit
-				userDao.commitTransaction(conn);
+				userDao.commitTransaction();
 
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 				// rollback kết quả
-				userDao.rollbackTransaction(conn);
+				userDao.rollbackTransaction();
 
 				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		} finally {
-			try {
-				userDao.closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw e;
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see logics.TblUserLogic#updateUser(entities.UserInforEntity)
-	 */
-	@Override
-	public boolean updateUser(UserInforEntity userInforEntity, String changeTblDetail) throws Exception {
-		userDao.openConnection();
-		Connection conn = userDao.getConnection();
-		try {
-			// transaction
-			userDao.setAutoCommit(conn);
-			// lệnh 1
-			userDao.updateUser(userInforEntity);
-			// lệnh 2
-			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-			japanDao.setConnection(conn);
-			switch (changeTblDetail) {
-			case ConstantUtil.UPDATE_DETAIL_JAPAN_USER:
-				japanDao.updateUser(userInforEntity);
-
-				break;
-			case ConstantUtil.INSERT_DETAIL_JAPAN_USER:
-				// insert
-				japanDao.insertUser(userInforEntity);
-				break;
-			case ConstantUtil.DELETE_DETAIL_JAPAN_USER:
-				// delete
-				japanDao.deleteUserById(userInforEntity.getUserId());
-				break;
-			case ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER:
-			default:
-				break;
-			}
-			// commit
-			userDao.commitTransaction(conn);
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			// rollback kết quả
-			userDao.rollbackTransaction(conn);
-
-			return false;
 		} finally {
 			try {
 				userDao.closeConnection();
@@ -365,19 +308,18 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			 * thực hiện update
 			 */
 			userDao.openConnection();
-			Connection conn = userDao.getConnection();
 			try {
 				// transaction
-				userDao.setAutoCommit(conn);
+				userDao.setFalseAutoCommitTransaction();
 				// lệnh 1
 				userDao.updateUser(userInforEntity);
 				// lệnh 2
 				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-				japanDao.setConnection(conn);
+				japanDao.setConnection(userDao.getConnection());
 				switch (changeTblDetail) {
 				case ConstantUtil.UPDATE_DETAIL_JAPAN_USER:
+					// update
 					japanDao.updateUser(userInforEntity);
-
 					break;
 				case ConstantUtil.INSERT_DETAIL_JAPAN_USER:
 					// insert
@@ -392,13 +334,13 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 					break;
 				}
 				// commit
-				userDao.commitTransaction(conn);
+				userDao.commitTransaction();
 
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
 				// rollback kết quả
-				userDao.rollbackTransaction(conn);
+				userDao.rollbackTransaction();
 
 				return false;
 			} finally {

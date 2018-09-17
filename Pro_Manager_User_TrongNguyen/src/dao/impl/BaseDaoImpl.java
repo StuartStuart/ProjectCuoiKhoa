@@ -172,7 +172,7 @@ public class BaseDaoImpl implements BaseDao {
 	 * @see dao.BaseDao#setAutoCommit(java.sql.Connection)
 	 */
 	@Override
-	public void setAutoCommit(Connection conn) throws SQLException {
+	public void setFalseAutoCommitTransaction() throws SQLException {
 		try {
 			conn.setAutoCommit(false);
 		} catch (SQLException e) {
@@ -187,7 +187,7 @@ public class BaseDaoImpl implements BaseDao {
 	 * @see dao.BaseDao#commitTransaction(java.sql.Connection)
 	 */
 	@Override
-	public void commitTransaction(Connection conn) throws SQLException {
+	public void commitTransaction() throws SQLException {
 		try {
 			conn.commit();
 		} catch (SQLException e) {
@@ -202,54 +202,9 @@ public class BaseDaoImpl implements BaseDao {
 	 * @see dao.BaseDao#rollbackTransaction(java.sql.Connection)
 	 */
 	@Override
-	public void rollbackTransaction(Connection conn) throws SQLException {
+	public void rollbackTransaction() throws SQLException {
 		try {
 			conn.rollback();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.BaseDao#openConnection(java.sql.Connection)
-	 */
-	@Override
-	public void openConnection(Connection conn) throws Exception {
-		try {
-			String className, url, user, pass;
-			// nháº­n vá»� className
-			className = DatabaseProperties.getValue("className");
-			url = DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname");
-			user = DatabaseProperties.getValue("user");
-			pass = DatabaseProperties.getValue("pass");
-			// káº¿t ná»‘i Ä‘áº¿n Class
-			Class.forName(className);
-			// má»Ÿ káº¿t ná»‘i Ä‘áº¿n cÆ¡ sá»Ÿ dá»¯ liá»‡u
-			if (conn == null) {
-				// thiáº¿t láº­p káº¿t ná»‘i
-				conn = DriverManager.getConnection(url, user, pass);
-			}
-		} catch (ClassNotFoundException | SQLException | IOException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.BaseDao#closeConnection(java.sql.Connection)
-	 */
-	@Override
-	public void closeConnection(Connection conn) throws SQLException {
-		try {
-			if (conn != null) {
-				conn.close();
-				conn = null;
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
