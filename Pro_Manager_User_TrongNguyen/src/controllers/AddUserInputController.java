@@ -39,25 +39,22 @@ public class AddUserInputController extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		try {
-			if (ConstantUtil.ADD_USER_VALIDATE_CONTROLLER.equals(request.getServletPath())) {
-				response.sendRedirect(request.getContextPath() + ConstantUtil.ADD_USER_INPUT_CONTROLLER + "?type="
-						+ ConstantUtil.ADM003_ADD_TYPE);
+			String type = request.getParameter("type");
+			Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
+			if (ConstantUtil.ADM003_EDIT_TYPE.equals(type) && !new TblUserLogicImpl().checkExistedUserId(userId)) {
+				// ko tìm thấy user trong db khi type là edit
+				session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+				response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 			} else {
 				// nhận về 1 userInfor tùy thuộc từng điều kiện
 				UserInforEntity userInforDefault = getUserInforDefault(request, response);
-				if (null == userInforDefault) {
-					// ko tìm thấy user trong db
-					session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
-					response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
-				} else {
-					// set các thông tin trong combobox lên request
-					setDataLogic(request);
+				// set các thông tin trong combobox lên request
+				setDataLogic(request);
 
-					// gửi userInforDefault lên request
-					request.setAttribute("adm003userinfor", userInforDefault);
+				// gửi userInforDefault lên request
+				request.setAttribute("adm003userinfor", userInforDefault);
 
-					request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
-				}
+				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -174,13 +171,7 @@ public class AddUserInputController extends HttpServlet {
 				// lấy về userId dạng Integer
 				userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 
-				UserInforEntity editionUser;
-				if (null != userId && userLogic.checkExistedUserId(userId)) {
-					// lấy về UserInforEntity
-					editionUser = userLogic.getUserInfor(userId);
-				} else {
-					return null;
-				}
+				UserInforEntity editionUser = userLogic.getUserInfor(userId);
 
 				loginId = editionUser.getLoginName();
 				groupId = editionUser.getGroupId();

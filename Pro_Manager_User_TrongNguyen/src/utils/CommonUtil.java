@@ -304,8 +304,6 @@ public class CommonUtil {
 
 			if ((int) ConstantUtil.FIRST_ONE_BYTE_CHAR > so || so > (int) ConstantUtil.LAST_ONE_BYTE_CHAR) {
 				// ko là ký tự kana
-
-				// thì
 				return false;
 			}
 		}
