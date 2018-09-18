@@ -60,7 +60,7 @@ public class MstJapanDaoImpl extends BaseDaoImpl implements MstJapanDao {
 	 * @see dao.MstJapanDao#checkExistedCodeLevel(int)
 	 */
 	@Override
-	public boolean checkExistedCodeLevel(String codeLevel) throws SQLException {
+	public boolean checkExistedCodeLevel(String codeLevel) throws Exception {
 		try { // mở conn
 			openConnection();
 			// tạo query

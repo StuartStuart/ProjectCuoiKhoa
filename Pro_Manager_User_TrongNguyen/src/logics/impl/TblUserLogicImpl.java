@@ -15,7 +15,6 @@ import entities.TblUserEntity;
 import entities.UserInforEntity;
 import logics.TblUserLogic;
 import utils.CommonUtil;
-import utils.ConstantUtil;
 
 /**
  * Ä‘á»‘i tÆ°á»£ng TblUserLogic
@@ -136,28 +135,22 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	public boolean createUser(UserInforEntity userInfor) throws Exception {
 		try {
 			userDao.openConnection();
-			try {
-				// transaction
-				userDao.setFalseAutoCommitTransaction();
-				// lệnh 1
-				userDao.insertUser(userInfor);
-				// lệnh 2
-				japanDao.setConnection(userDao.getConnection());
-				japanDao.insertUser(userInfor);
-				// commit
-				userDao.commitTransaction();
+			// transaction
+			userDao.setFalseAutoCommitTransaction();
+			// lệnh 1
+			userInfor.setUserId(userDao.insertUser(userInfor));
+			// lệnh 2
+			japanDao.setConnection(userDao.getConnection());
+			japanDao.insertUser(userInfor);
+			// commit
+			userDao.commitTransaction();
 
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				// rollback kết quả
-				userDao.rollbackTransaction();
-
-				return false;
-			}
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			// rollback kết quả
+			userDao.rollbackTransaction();
+			return false;
 		} finally {
 			try {
 				userDao.closeConnection();
@@ -196,28 +189,23 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	public boolean deleteUser(Integer userId) throws Exception {
 		try {
 			userDao.openConnection();
-			try {
-				// transaction
-				userDao.setFalseAutoCommitTransaction();
-				// lệnh 1
-				japanDao.setConnection(userDao.getConnection());
-				japanDao.deleteUserById(userId);
-				// lệnh 2
-				userDao.deleteUserById(userId);
-				// commit
-				userDao.commitTransaction();
+			// transaction
+			userDao.setFalseAutoCommitTransaction();
+			// lệnh 1
+			japanDao.setConnection(userDao.getConnection());
+			japanDao.deleteUserById(userId);
+			// lệnh 2
+			userDao.deleteUserById(userId);
+			// commit
+			userDao.commitTransaction();
 
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				// rollback kết quả
-				userDao.rollbackTransaction();
-
-				return false;
-			}
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			// rollback kết quả
+			userDao.rollbackTransaction();
+
+			return false;
 		} finally {
 			try {
 				userDao.closeConnection();
@@ -282,78 +270,48 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 	@Override
 	public boolean updateUser(UserInforEntity userInforEntity, boolean isExistedUserId) throws Exception {
 		try {
+			userDao.openConnection();
+			// transaction
+			userDao.setFalseAutoCommitTransaction();
+			// lệnh 1
+			userDao.updateUser(userInforEntity);
+			// lệnh 2
+			japanDao.setConnection(userDao.getConnection());
 			// check tồn tại codeLevel - isExistedCodeLevel
 			boolean isExistedCodeLevel = new MstJapanLogicImpl().checkExistCodeLevel(userInforEntity.getCodeLevel());
-			String changeTblDetail;
 			if (!isExistedCodeLevel) {
 				// nếu codeLevel ko tồn tại
 				if (isExistedUserId) {
 					// tồn tại id
-					changeTblDetail = ConstantUtil.DELETE_DETAIL_JAPAN_USER;
-				} else {
-					// ko tồn tại id
-					changeTblDetail = ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER;
+					japanDao.deleteUserById(userInforEntity.getUserId());
 				}
 			} else {
 				// codeLevel tồn tại
 				if (isExistedUserId) {
 					// tồn tại userId
-					changeTblDetail = ConstantUtil.UPDATE_DETAIL_JAPAN_USER;
+					japanDao.updateUser(userInforEntity);
 				} else {
 					// ko tồn tại usr id
-					changeTblDetail = ConstantUtil.INSERT_DETAIL_JAPAN_USER;
-				}
-			}
-			/*
-			 * thực hiện update
-			 */
-			userDao.openConnection();
-			try {
-				// transaction
-				userDao.setFalseAutoCommitTransaction();
-				// lệnh 1
-				userDao.updateUser(userInforEntity);
-				// lệnh 2
-				TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-				japanDao.setConnection(userDao.getConnection());
-				switch (changeTblDetail) {
-				case ConstantUtil.UPDATE_DETAIL_JAPAN_USER:
-					// update
-					japanDao.updateUser(userInforEntity);
-					break;
-				case ConstantUtil.INSERT_DETAIL_JAPAN_USER:
-					// insert
 					japanDao.insertUser(userInforEntity);
-					break;
-				case ConstantUtil.DELETE_DETAIL_JAPAN_USER:
-					// delete
-					japanDao.deleteUserById(userInforEntity.getUserId());
-					break;
-				case ConstantUtil.DO_NOTHING_DETAIL_JAPAN_USER:
-				default:
-					break;
-				}
-				// commit
-				userDao.commitTransaction();
-
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				// rollback kết quả
-				userDao.rollbackTransaction();
-
-				return false;
-			} finally {
-				try {
-					userDao.closeConnection();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					throw e;
 				}
 			}
+			// commit
+			userDao.commitTransaction();
+
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			// rollback kết quả
+			userDao.rollbackTransaction();
+
+			return false;
+		} finally {
+			try {
+				userDao.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			}
 		}
 	}
 }

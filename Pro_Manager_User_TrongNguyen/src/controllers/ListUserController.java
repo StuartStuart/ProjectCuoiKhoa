@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.impl.BaseDaoImpl;
 import entities.TblMstGroupEntity;
+import entities.UserInforEntity;
 import logics.TblUserLogic;
 import logics.impl.MstGroupLogicImpl;
 import logics.impl.TblUserLogicImpl;
@@ -77,7 +78,7 @@ public class ListUserController extends HttpServlet {
 				// đổi lại currentPage
 				currentPage = ConstantUtil.DEFAULT_CURRENT_PAGE;
 				session.setAttribute(ConfigProperties.getValue("ADM002_CurrentPage"), currentPage);
-				
+
 				totalUser = tblUserLogic.getTotalUser(groupId, fullName);
 				totalPage = CommonUtil.getTotalPage(totalUser, userLimit);
 				break;
@@ -167,11 +168,17 @@ public class ListUserController extends HttpServlet {
 			request.setAttribute("wayEndDate", displaySX[index++]);
 
 			// used for send userInfors
-			index = 0;
-			request.setAttribute("userInfors", // send userInfors List
-					tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId, fullName,
-							ConstantUtil.ADM002_SORT_TYPE_URL[sortType], displaySX[index++], displaySX[index++],
-							displaySX[index++]));
+			ArrayList<UserInforEntity> listUser;
+			if (0 != totalUser) {
+				index = 0;
+				listUser = tblUserLogic.getListUser(CommonUtil.getOffSet(currentPage, userLimit), userLimit, groupId,
+						fullName, ConstantUtil.ADM002_SORT_TYPE_URL[sortType], displaySX[index++], displaySX[index++],
+						displaySX[index++]);
+			} else {
+				listUser = new ArrayList<>();
+			}
+			request.setAttribute("userInfors", listUser);
+
 			/*
 			 * build paging
 			 */

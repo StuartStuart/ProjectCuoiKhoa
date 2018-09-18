@@ -4,7 +4,6 @@
  */
 package dao.impl;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dao.TblDetailUserJapanDao;
@@ -26,24 +25,6 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	@Override
 	public void insertUser(UserInforEntity userInfor) throws Exception {
 		try {
-			Integer userId = userInfor.getUserId();
-			if (null == userId) {
-				// viet query
-				query = "SELECT user_id FROM tbl_user WHERE login_name = ?;";
-				// hoan thien query
-				ps = conn.prepareStatement(query);
-				int i = 0;
-				ps.setString(++i, userInfor.getLoginName());
-				// thuc hien query
-				ResultSet rs = ps.executeQuery();
-				if (rs.next()) {
-					userId = rs.getInt("user_id");
-					// dong ps
-					ps.close();
-				} else {
-					throw new Exception();
-				}
-			}
 			// viết query
 			StringBuilder query = new StringBuilder("");
 			query.append("INSERT INTO tbl_detail_user_japan(user_id, code_level, start_date, end_date, total)");
@@ -51,7 +32,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 			// hoàn thiện query
 			ps = conn.prepareStatement(query.toString());
 			int i = 0;
-			ps.setInt(++i, userId);
+			ps.setInt(++i, userInfor.getUserId());
 			ps.setString(++i, userInfor.getCodeLevel());
 			ps.setString(++i, userInfor.getStartDate());
 			ps.setString(++i, userInfor.getEndDate());

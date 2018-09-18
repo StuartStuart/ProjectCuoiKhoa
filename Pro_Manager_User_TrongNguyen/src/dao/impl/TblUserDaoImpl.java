@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.mysql.jdbc.Statement;
+
 import dao.TblDetailUserJapanDao;
 import dao.TblUserDao;
 import entities.TblUserEntity;
@@ -485,14 +487,14 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @see dao.TblUserDao#insertUser(entities.UserInforEntity)
 	 */
 	@Override
-	public void insertUser(UserInforEntity userInfor) throws Exception {
+	public Integer insertUser(UserInforEntity userInfor) throws Exception {
 		// viết query
 		StringBuilder query = new StringBuilder("");
 		query.append(
 				"INSERT INTO tbl_user(group_id, login_name, `password`, full_name, full_name_kana, email, tel, birthday, salt, category)");
 		query.append(" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		// hoàn thiện query
-		ps = conn.prepareStatement(query.toString());
+		ps = conn.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
 		int i = 0;
 		ps.setInt(++i, userInfor.getGroupId());
 		ps.setString(++i, userInfor.getLoginName());
@@ -507,6 +509,12 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		ps.setInt(++i, userInfor.getCategory());
 		// thực hiện query
 		ps.executeUpdate();
+		ResultSet rs = ps.getGeneratedKeys();
+		if (rs.next()) {
+			return rs.getInt(1);
+		} else {
+			return null;
+		}
 	}
 
 	/*
@@ -515,7 +523,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	 * @see dao.TblUserDao#getUserIdByLoginName(java.lang.String)
 	 */
 	@Override
-	public Integer getUserIdByLoginName(String loginName) throws SQLException {
+	public Integer getUserIdByLoginName(String loginName) throws Exception {
 
 		try {
 			openConnection();

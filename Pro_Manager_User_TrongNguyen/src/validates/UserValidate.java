@@ -52,92 +52,72 @@ public class UserValidate {
 					// check đã tồn tại
 					listErrMsg.add(MessageErrorProperties.getValue("Error003_LoginName"));
 				}
-			} /*
-				 * else { userInfor.setUserId(null); }
-				 */
+			}
 			// validate group
-			{
-				// check ko chọn
-				if (0 == userInfor.getGroupId()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error002_Group"));
-				} else if (!new MstGroupLogicImpl().checkExistedGroupId(userInfor.getGroupId())) {
-					// check ko tồn tại
-					listErrMsg.add(MessageErrorProperties.getValue("Error004_Group"));
-				}
+			// check ko chọn
+			if (0 == userInfor.getGroupId()) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error002_Group"));
+			} else if (!new MstGroupLogicImpl().checkExistedGroupId(userInfor.getGroupId())) {
+				// check ko tồn tại
+				listErrMsg.add(MessageErrorProperties.getValue("Error004_Group"));
 			}
 			// validate full name
-			{
-				// check ko nhập
-				if (userInfor.getFullName().isEmpty()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error001_FullName"));
-				} else {
-					// check max length
-					int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullName"));
-					int currentLength = userInfor.getFullName().length();
-					if (currentLength > maxLength) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error006_FullName"));
-					}
+			// check ko nhập
+			if (userInfor.getFullName().isEmpty()) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error001_FullName"));
+			} else {
+				// check max length
+				int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullName"));
+				int currentLength = userInfor.getFullName().length();
+				if (currentLength > maxLength) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullName"));
 				}
 			}
 			// validate full name kana
-			{
-				// check max length
-				int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullNameKana"));
-				int currentLength = userInfor.getFullNameKana().length();
-				if (currentLength > maxLength) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error006_FullNameKana"));
-				} else {
-					// check kana
-					String chuoiKana = userInfor.getFullNameKana();
-					if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
-					}
+			// check max length
+			int maxLength = CommonUtil.convertStrToInteger(ConfigProperties.getValue("MaxLength_FullNameKana"));
+			int currentLength = userInfor.getFullNameKana().length();
+			if (currentLength > maxLength) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error006_FullNameKana"));
+			} else {
+				// check kana
+				String chuoiKana = userInfor.getFullNameKana();
+				if (!chuoiKana.isEmpty() && !CommonUtil.isKanaString(chuoiKana)) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error009_FullNameKana"));
 				}
 			}
 			// validate category
-			{
-				int category = userInfor.getCategory();
-				if (category > 1 || category < 0) {
-					listErrMsg.add(MessageErrorProperties.getValue("ErrorCategory"));
-				}
+			int category = userInfor.getCategory();
+			if (category > 1 || category < 0) {
+				listErrMsg.add(MessageErrorProperties.getValue("ErrorCategory"));
 			}
 			// validate birthday
-			{
-				// check ngày hợp lệ
-				if (!CommonUtil.checkDate(userInfor.getBirthDay())) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error011_BirthDay"));
-				}
+			// check ngày hợp lệ
+			if (!CommonUtil.checkDate(userInfor.getBirthDay())) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error011_BirthDay"));
 			}
 			// validate email
-			{
-				// check ko nhập
-				if (userInfor.getEmail().isEmpty()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error001_Email"));
-				} else
+			// check ko nhập
+			if (userInfor.getEmail().isEmpty()) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error001_Email"));
+			} else if (userInfor.getEmail().length() > CommonUtil
+					.convertStrToInteger(ConfigProperties.getValue("MaxLength_Email"))) {
 				// check max length
-				if (userInfor.getEmail().length() > CommonUtil
-						.convertStrToInteger(ConfigProperties.getValue("MaxLength_Email"))) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error006_Email"));
-				} else
+				listErrMsg.add(MessageErrorProperties.getValue("Error006_Email"));
+			} else if (!userInfor.getEmail().matches(ConstantUtil.EMAIL_REGREX)) {
 				// check sai format
-				if (!userInfor.getEmail().matches(ConstantUtil.EMAIL_REGREX)) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error005_Email"));
-				} else
+				listErrMsg.add(MessageErrorProperties.getValue("Error005_Email"));
+			} else if (new TblUserLogicImpl().checkExistedEmail(userInfor.getUserId(), userInfor.getEmail())) {
 				// check đã tồn tại
-				if (new TblUserLogicImpl().checkExistedEmail(userInfor.getUserId(), userInfor.getEmail())) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error003_Email"));
-				}
+				listErrMsg.add(MessageErrorProperties.getValue("Error003_Email"));
 			}
 			// validate tel
-			{
-				// check ko nhập
-				if (userInfor.getTel().isEmpty()) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error001_Tel"));
-				} else
+			// check ko nhập
+			if (userInfor.getTel().isEmpty()) {
+				listErrMsg.add(MessageErrorProperties.getValue("Error001_Tel"));
+			} else if (!userInfor.getTel().matches("[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}")) {
 				// check sai format
-				if (!userInfor.getTel().matches("[0-9]{1,4}-[0-9]{1,4}-[0-9]{1,4}")) {
-					listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
-				}
+				listErrMsg.add(MessageErrorProperties.getValue("Error005_Tel"));
 			}
 			// validate pass
 			if (null == userInfor.getUserId()) {
@@ -150,44 +130,34 @@ public class UserValidate {
 			}
 
 			// validate japan zone
-			if (!userInfor.getCodeLevel().equalsIgnoreCase("N0")) {
+			if (!userInfor.getCodeLevel().equalsIgnoreCase(ConstantUtil.DEFAULT_CODE_LEVEL)) {
 				// đã select code level
-
-				// thì
 				// validate japan level
-				{
-					// check ko tồn tại
-					if (!new MstJapanLogicImpl().checkExistedCodeLevel(userInfor.getCodeLevel())) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error004_JapanLevel"));
-					}
+				// check ko tồn tại
+				if (!new MstJapanLogicImpl().checkExistedCodeLevel(userInfor.getCodeLevel())) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error004_JapanLevel"));
 				}
 				// validate start date
-				{
-					// check ngày ko hợp lệ
-					if (!CommonUtil.checkDate(userInfor.getStartDate())) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error011_StartDate"));
-					}
+				// check ngày ko hợp lệ
+				if (!CommonUtil.checkDate(userInfor.getStartDate())) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error011_StartDate"));
 				}
 				// validate end date
-				{
-					// check ngày ko hợp lệ
-					if (!CommonUtil.checkDate(userInfor.getEndDate())) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error011_EndDate"));
-					}
-					// check ngày hết hạn nhỏ hơn ngày cấp
-					if (userInfor.getEndDate().compareTo(userInfor.getStartDate()) < 1) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error012_EndDate"));
-					}
+				// check ngày ko hợp lệ
+				if (!CommonUtil.checkDate(userInfor.getEndDate())) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error011_EndDate"));
+				}
+				// check ngày hết hạn nhỏ hơn ngày cấp
+				if (userInfor.getEndDate().compareTo(userInfor.getStartDate()) < 1) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error012_EndDate"));
 				}
 				// validate total
-				{
-					// check ko nhập
-					if (null == userInfor.getTotal() || userInfor.getTotal().isEmpty()) {
-						listErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
-					} else if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
-						// check là số haffsize
-						listErrMsg.add(MessageErrorProperties.getValue("Error018_Total"));
-					}
+				// check ko nhập
+				if (null == userInfor.getTotal() || userInfor.getTotal().isEmpty()) {
+					listErrMsg.add(MessageErrorProperties.getValue("Error001_Total"));
+				} else if (!CommonUtil.checkHalfSizeNumber(userInfor.getTotal())) {
+					// check là số haffsize
+					listErrMsg.add(MessageErrorProperties.getValue("Error018_Total"));
 				}
 			}
 		} catch (Exception e) {
@@ -198,6 +168,14 @@ public class UserValidate {
 		return listErrMsg;
 	}
 
+	/**
+	 * validate pass và repass đã nhập
+	 * 
+	 * @param pass
+	 * @param repass
+	 * @return 1 chuổi thông báo lỗi mắc phải
+	 * @throws Exception
+	 */
 	public String validatePass(String pass, String repass) throws Exception {
 		try {
 			String errMess = "";

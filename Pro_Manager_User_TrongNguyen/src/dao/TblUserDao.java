@@ -115,7 +115,7 @@ public interface TblUserDao extends BaseDao {
 	 * @return 
 	 * @throws Exception
 	 */
-	void insertUser(UserInforEntity userInfor) throws Exception;
+	Integer insertUser(UserInforEntity userInfor) throws Exception;
 
 	/**
 	 * nhận userId có loginName tương ứng từ db

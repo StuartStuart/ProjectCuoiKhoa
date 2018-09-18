@@ -1,7 +1,3 @@
-/Config.properties
-/Database.properties
-/Message.properties
-/MessageError.properties
 /controllers/
 /dao/
 /entities/

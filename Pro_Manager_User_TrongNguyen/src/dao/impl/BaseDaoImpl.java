@@ -93,12 +93,10 @@ public class BaseDaoImpl implements BaseDao {
 	/**
 	 * má»Ÿ káº¿t ná»‘i db
 	 * 
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws IOException
+	 * @throws Exception
 	 */
 	@Override
-	public void openConnection() {
+	public void openConnection() throws Exception {
 		try {
 			String className, url, user, pass;
 			// nháº­n vá»� className
@@ -115,6 +113,7 @@ public class BaseDaoImpl implements BaseDao {
 			}
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
+			throw e;
 		}
 
 	}
@@ -144,18 +143,6 @@ public class BaseDaoImpl implements BaseDao {
 	 */
 	@Override
 	public boolean isExistColName(String nameField) throws Exception {
-		// try {
-		// this.initListDBFieldName();
-		// for (final String nameDBField : listDBFieldName) {
-		// if (nameDBField.matches(".*" + nameField + "$")) {
-		// return true;
-		// }
-		// }
-		// return false;
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// throw e;
-		// }
 		for (String colName : WHITE_LIST) {
 			if (colName.equals(nameField)) {
 				// trong white list
@@ -174,7 +161,9 @@ public class BaseDaoImpl implements BaseDao {
 	@Override
 	public void setFalseAutoCommitTransaction() throws SQLException {
 		try {
-			conn.setAutoCommit(false);
+			if (null != conn) {
+				conn.setAutoCommit(false);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -189,7 +178,9 @@ public class BaseDaoImpl implements BaseDao {
 	@Override
 	public void commitTransaction() throws SQLException {
 		try {
-			conn.commit();
+			if (null != conn) {
+				conn.commit();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -204,7 +195,9 @@ public class BaseDaoImpl implements BaseDao {
 	@Override
 	public void rollbackTransaction() throws SQLException {
 		try {
-			conn.rollback();
+			if (null != conn) {
+				conn.rollback();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
