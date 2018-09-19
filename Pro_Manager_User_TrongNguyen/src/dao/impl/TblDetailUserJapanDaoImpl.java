@@ -7,7 +7,7 @@ package dao.impl;
 import java.sql.SQLException;
 
 import dao.TblDetailUserJapanDao;
-import entities.UserInforEntity;
+import entities.TblDetailUserJapanEntity;
 
 /**
  * đối tượng TblDetailUserJapanDao
@@ -23,7 +23,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	 * @see dao.TblDetailUserJapanDao#insertUser(entities.UserInforEntity)
 	 */
 	@Override
-	public void insertUser(UserInforEntity userInfor) throws Exception {
+	public void insertUser(TblDetailUserJapanEntity userInfor) throws Exception {
 		try {
 			// viết query
 			StringBuilder query = new StringBuilder("");
@@ -104,7 +104,7 @@ public class TblDetailUserJapanDaoImpl extends BaseDaoImpl implements TblDetailU
 	 * @see dao.TblDetailUserJapanDao#updateUser(entities.UserInforEntity)
 	 */
 	@Override
-	public void updateUser(UserInforEntity userInforEntity) throws Exception {
+	public void updateUser(TblDetailUserJapanEntity userInforEntity) throws Exception {
 		try {
 			StringBuilder sb = new StringBuilder("");
 			sb.append("UPDATE tbl_detail_user_japan");

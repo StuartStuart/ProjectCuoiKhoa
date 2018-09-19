@@ -24,7 +24,7 @@
 	<!-- Begin vung input-->
 	<form action="${pageContext.request.contextPath }/AddUserConfirm.do"
 		method="post" name="inputform">
-		<input type="hidden" name="keyEntity" value="${key}" />
+		<input type="hidden" name="key" value="${key}" />
 		<table class="tbl_input" border="0" width="75%" cellpadding="0"
 			cellspacing="0">
 			<tr>

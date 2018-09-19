@@ -4,7 +4,7 @@
  */
 package dao;
 
-import entities.UserInforEntity;
+import entities.TblDetailUserJapanEntity;
 
 /**
  * đối tượng TblDetailUserJapanDao
@@ -21,7 +21,7 @@ public interface TblDetailUserJapanDao extends BaseDao {
 	 * @return 
 	 * @throws Exception
 	 */
-	void insertUser(UserInforEntity userInfor) throws Exception;
+	void insertUser(TblDetailUserJapanEntity userInfor) throws Exception;
 
 	/**
 	 * xóa thông tin từ tbl)detail_user_japan
@@ -50,5 +50,5 @@ public interface TblDetailUserJapanDao extends BaseDao {
 	 * @param changeTblDetail 
 	 * @throws Exception 
 	 */
-	void updateUser(UserInforEntity userInforEntity) throws Exception;
+	void updateUser(TblDetailUserJapanEntity userInforEntity) throws Exception;
 }

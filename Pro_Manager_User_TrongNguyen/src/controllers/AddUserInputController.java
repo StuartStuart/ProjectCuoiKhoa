@@ -145,62 +145,22 @@ public class AddUserInputController extends HttpServlet {
 				// xóa obj
 				session.removeAttribute("entityuserinfor" + key);
 
-				userId = sessionUser.getUserId();
-				loginId = sessionUser.getLoginName();
-				groupId = sessionUser.getGroupId();
-				mstGroup = sessionUser.getMstGroup();
-				fullName = sessionUser.getFullName();
-				fullNameKana = sessionUser.getFullNameKana();
-				category = sessionUser.getCategory();
-				birthDay = sessionUser.getBirthDay();
-				email = sessionUser.getEmail();
-				tel = sessionUser.getTel();
-				pass = "";
-				repass = "";
-				codeLevel = sessionUser.getCodeLevel();
-				mstJapan = sessionUser.getMstJapan();
-				startDate = sessionUser.getStartDate();
-				endDate = sessionUser.getEndDate();
-				total = sessionUser.getTotal();
-				break;
+				return sessionUser;
 			case ConstantUtil.ADM003_EDIT_TYPE:
-				// thêm các thông tin mặc định cho user bằng các thông tin
-				// từ db
-				// phụ thuộc user_id
-
 				// lấy về userId dạng Integer
 				userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
 
 				UserInforEntity editionUser = userLogic.getUserInfor(userId);
 
-				loginId = editionUser.getLoginName();
-				groupId = editionUser.getGroupId();
-				mstGroup = editionUser.getMstGroup();
-				fullName = editionUser.getFullName();
-				fullNameKana = editionUser.getFullNameKana();
-				category = editionUser.getCategory();
-				birthDay = editionUser.getBirthDay();
-				email = editionUser.getEmail();
-				tel = editionUser.getTel();
-				pass = "";
-				repass = "";
-				mstJapan = editionUser.getMstJapan();
-				codeLevel = editionUser.getCodeLevel();
-				if (null == codeLevel) {
-					codeLevel = ConstantUtil.DEFAULT_CODE_LEVEL;
-					startDate = CommonUtil.getNowTime(false);
-					endDate = CommonUtil.getNowTime(true);
-				} else {
-					startDate = editionUser.getStartDate();
-					endDate = editionUser.getEndDate();
+				if (null == editionUser.getCodeLevel()) {
+					editionUser.setCodeLevel(ConstantUtil.DEFAULT_CODE_LEVEL);
+					editionUser.setStartDate(CommonUtil.getNowTime(false));
+					editionUser.setEndDate(CommonUtil.getNowTime(true));
 				}
-				total = editionUser.getTotal();
-				break;
+				return editionUser;
 			case ConstantUtil.ADM003_ADD_TYPE:
-			default: // cùng trường hợp với add type
-				// thêm các thông tin mặc định cho user, ví dụ startDate là
-				// ngày
-				// hiện tại
+			default:
+				// setup thong tin mac dinh
 				userId = null;
 				loginId = "";
 				groupId = ConstantUtil.ADM003_DEFAULT_GROUP;
@@ -289,33 +249,42 @@ public class AddUserInputController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			HttpSession session = request.getSession();
+			String type = request.getParameter("type");
 			// nhận về các thuộc tính trên request
-			UserInforEntity userInfor = getUserInforDefault(request, response);
-
-			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInfor);
-			if (0 != listErrMsg.size()) {
-				// kiểm tra thấy có lỗi
-
-				// cài đặt 7 combobox
-				setDataLogic(request);
-				// thì set mảng lỗi lên request
-				request.setAttribute("errmsg", listErrMsg);
-				// set userinfor lên request
-				request.setAttribute("adm003userinfor", userInfor);
-				// set styleJapanZone lên req
-				String style = request.getParameter("styleJapanZone");
-				request.setAttribute("adm003style", style);
-				request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+			Integer userId = CommonUtil.convertStrToInteger(request.getParameter("userid"));
+			if (ConstantUtil.ADM003_EDIT_TYPE.equals(type) && !new TblUserLogicImpl().checkExistedUserId(userId)) {
+				// ko tìm thấy user trong db khi type là edit
+				session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+				response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 			} else {
-				/*
-				 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
-				 */
+				UserInforEntity userInfor = getUserInforDefault(request, response);
 
-				// tạo key
-				String key = CommonUtil.getSalt();
-				request.getSession().setAttribute("entityuserinfor" + key, userInfor);
-				response.sendRedirect(
-						request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM_CONTROLLER + "?key=" + key);
+				ArrayList<String> listErrMsg = new UserValidate().validateUser(userInfor);
+				if (0 != listErrMsg.size()) {
+					// kiểm tra thấy có lỗi
+
+					// cài đặt 7 combobox
+					setDataLogic(request);
+					// thì set mảng lỗi lên request
+					request.setAttribute("errmsg", listErrMsg);
+					// set userinfor lên request
+					request.setAttribute("adm003userinfor", userInfor);
+					// set styleJapanZone lên req
+					String style = request.getParameter("styleJapanZone");
+					request.setAttribute("adm003style", style);
+					request.getRequestDispatcher(ConstantUtil.ADM003_JSP).forward(request, response);
+				} else {
+					/*
+					 * ko có lỗi thì set userinfor lên session và chuyển hướng đến AddUserConfirm.do
+					 */
+
+					// tạo key
+					String key = CommonUtil.getSalt();
+					session.setAttribute("entityuserinfor" + key, userInfor);
+					response.sendRedirect(
+							request.getContextPath() + ConstantUtil.ADD_USER_CONFIRM_CONTROLLER + "?key=" + key);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -324,5 +293,4 @@ public class AddUserInputController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 		}
 	}
-
 }

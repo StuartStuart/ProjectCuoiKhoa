@@ -12,7 +12,6 @@ import java.util.Date;
 
 import com.mysql.jdbc.Statement;
 
-import dao.TblDetailUserJapanDao;
 import dao.TblUserDao;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
@@ -218,37 +217,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	private String chuoiDieuKienSX(String sortType, String sortByFullName, String sortByCodeLevel, String sortByEndDate)
 			throws Exception {
 		StringBuilder chuoiSX = new StringBuilder("");
-		// /*
-		// * các kiểu sắp xếp tương ứng với loại sắp xếp
-		// */
-		// String[] sortingWays = { sortByFullName, sortByCodeLevel,
-		// sortByEndDate };
-		// int lengthSortTypes = WHITE_LIST.length;
-		// /*
-		// * thêm loại và kiểu sắp xếp còn lại theo thứ tự
-		// */
-		// if (!this.isExistColName(sortType)) { // be hacked
-		// sortType = WHITE_LIST[0];
-		// }
-		//
-		// String cachSapXepCuaKieuUuTien = "";
-		// for (int i = 0; i < lengthSortTypes; i++) {
-		// if (!WHITE_LIST[i].equals(sortType)) {
-		// chuoiSX.append(", " + WHITE_LIST[i]);
-		// if (sortingWays.length > i) {
-		// chuoiSX.append(" " + sortingWays[i]);
-		// } else { // Khi có kiểu sắp xếp với cách sắp được ngầm
-		// // định
-		// chuoiSX.append(" " + ConstantUtil.ADM002_SX_TANG);
-		// }
-		// } else {
-		// cachSapXepCuaKieuUuTien = sortingWays[i];
-		// }
-		// }
-		// // nối queryTail vào đuôi query
-		// return sortType + " " + cachSapXepCuaKieuUuTien + " " +
-		// chuoiSX.toString();
-
 		try {
 			/*
 			 * sortType tại trong WhiteList và không phải fullName
@@ -558,46 +526,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see dao.TblUserDao#deleteUserById(java.lang.Integer)
-	 */
-	@Override
-	public boolean deleteUser(Integer userId) throws SQLException {
-		try {
-			// đồng bộ conn
-			openConnection();
-			// set AutoCommit
-			conn.setAutoCommit(false);
-			// tran 1
-			TblDetailUserJapanDao japanDao = new TblDetailUserJapanDaoImpl();
-			japanDao.setConnection(this.conn);
-			japanDao.deleteUserById(userId);
-			// tran 2
-			deleteUserById(userId);
-			// commit
-			conn.commit();
-			// trả về kết quả
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			return false;
-		} finally {
-			try {
-				closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw e;
-			}
-		}
-	}
-
 	/**
 	 * xóa user từ db
 	 * 
@@ -607,11 +535,7 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 	public void deleteUserById(Integer userId) throws Exception {
 		try {
 			// viết query
-			query = "DELETE FROM tbl_user WHERE user_id = ?; "/*
-																 * + "SET @num := 0; " +
-																 * "	UPDATEtbl_usere SET id = @num := (@num+1);" +
-																 * " ALTER TABLEtbl_usere AUTO_INCREMENT = 1;"
-																 */;
+			query = "DELETE FROM tbl_user WHERE user_id = ?; ";
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
@@ -685,7 +609,6 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 				throw e;
 			}
 		}
-
 	}
 
 	@Override
@@ -693,15 +616,14 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 		try {
 			openConnection();
 			// viết query
-			query = "SELECT category FROM tbl_user WHERE login_name = ?;";
+			query = "SELECT category FROM tbl_user WHERE login_name = ? AND category = ?;";
 			// hoàn thiện query
 			ps = conn.prepareStatement(query);
 			int i = 0;
 			ps.setString(++i, loginId);
-			// thực hiện query
-			ResultSet rs = ps.executeQuery();
+			ps.setInt(++i, ConstantUtil.ADMIN_CATEGORY);
 			// trả về kết quả
-			return (rs.next() && 0 == rs.getInt("category"));
+			return ps.executeQuery().next();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -752,5 +674,4 @@ public class TblUserDaoImpl extends BaseDaoImpl implements TblUserDao {
 			}
 		}
 	}
-
 }

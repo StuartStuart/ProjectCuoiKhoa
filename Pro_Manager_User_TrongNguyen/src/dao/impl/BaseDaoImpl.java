@@ -98,12 +98,11 @@ public class BaseDaoImpl implements BaseDao {
 	@Override
 	public void openConnection() throws Exception {
 		try {
-			String className, url, user, pass;
 			// nháº­n vá»� className
-			className = DatabaseProperties.getValue("className");
-			url = DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname");
-			user = DatabaseProperties.getValue("user");
-			pass = DatabaseProperties.getValue("pass");
+			String className = DatabaseProperties.getValue("className");
+			String url = DatabaseProperties.getValue("url") + DatabaseProperties.getValue("dbname");
+			String user = DatabaseProperties.getValue("user");
+			String pass = DatabaseProperties.getValue("pass");
 			// káº¿t ná»‘i Ä‘áº¿n Class
 			Class.forName(className);
 			// má»Ÿ káº¿t ná»‘i Ä‘áº¿n cÆ¡ sá»Ÿ dá»¯ liá»‡u

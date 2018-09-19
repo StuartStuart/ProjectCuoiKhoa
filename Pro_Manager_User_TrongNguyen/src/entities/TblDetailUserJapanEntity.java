@@ -9,58 +9,95 @@ package entities;
  *
  */
 public class TblDetailUserJapanEntity {
-	private int detail_user_japan_id;
-	private int user_id;
-	private String code_level;
-	private String start_date;
-	private String end_date;
-	private int total;
+	private int detailUserJapanId;
+	private int userId;
+	private String codeLevel;
+	private String startDate;
+	private String endDate;
+	private String total;
 
-	public int getDetail_user_japan_id() {
-		return detail_user_japan_id;
+	/**
+	 * @return the detailUserJapanId
+	 */
+	public int getDetailUserJapanId() {
+		return detailUserJapanId;
 	}
 
-	public void setDetail_user_japan_id(int detail_user_japan_id) {
-		this.detail_user_japan_id = detail_user_japan_id;
+	/**
+	 * @param detailUserJapanId the detailUserJapanId to set
+	 */
+	public void setDetailUserJapanId(int detailUserJapanId) {
+		this.detailUserJapanId = detailUserJapanId;
 	}
 
-	public int getUser_id() {
-		return user_id;
+	/**
+	 * @return the userId
+	 */
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
-	public String getCode_level() {
-		return code_level;
+	/**
+	 * @return the codeLevel
+	 */
+	public String getCodeLevel() {
+		return codeLevel;
 	}
 
-	public void setCode_level(String code_level) {
-		this.code_level = code_level;
+	/**
+	 * @param codeLevel the codeLevel to set
+	 */
+	public void setCodeLevel(String codeLevel) {
+		this.codeLevel = codeLevel;
 	}
 
-	public String getStart_date() {
-		return start_date;
+	/**
+	 * @return the startDate
+	 */
+	public String getStartDate() {
+		return startDate;
 	}
 
-	public void setStart_date(String start_date) {
-		this.start_date = start_date;
+	/**
+	 * @param startDate the startDate to set
+	 */
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 
-	public String getEnd_date() {
-		return end_date;
+	/**
+	 * @return the endDate
+	 */
+	public String getEndDate() {
+		return endDate;
 	}
 
-	public void setEnd_date(String end_date) {
-		this.end_date = end_date;
+	/**
+	 * @param endDate the endDate to set
+	 */
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
-	public int getTotal() {
+	/**
+	 * @return the total
+	 */
+	public String getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	/**
+	 * @param total the total to set
+	 */
+	public void setTotal(String total) {
 		this.total = total;
 	}
+
 }

@@ -11,6 +11,7 @@ import dao.TblDetailUserJapanDao;
 import dao.TblUserDao;
 import dao.impl.TblDetailUserJapanDaoImpl;
 import dao.impl.TblUserDaoImpl;
+import entities.TblDetailUserJapanEntity;
 import entities.TblUserEntity;
 import entities.UserInforEntity;
 import logics.TblUserLogic;
@@ -140,8 +141,13 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			// lệnh 1
 			userInfor.setUserId(userDao.insertUser(userInfor));
 			// lệnh 2
-			japanDao.setConnection(userDao.getConnection());
-			japanDao.insertUser(userInfor);
+			TblDetailUserJapanEntity detailUser = new TblDetailUserJapanEntity();
+			detailUser.setUserId(userInfor.getUserId());
+			detailUser.setCodeLevel(userInfor.getCodeLevel());
+			detailUser.setStartDate(userInfor.getStartDate());
+			detailUser.setEndDate(userInfor.getEndDate());
+			detailUser.setTotal(userInfor.getTotal());
+			japanDao.insertUser(detailUser);
 			// commit
 			userDao.commitTransaction();
 
@@ -277,22 +283,28 @@ public class TblUserLogicImpl extends BaseLogicImpl implements TblUserLogic {
 			userDao.updateUser(userInforEntity);
 			// lệnh 2
 			japanDao.setConnection(userDao.getConnection());
+			TblDetailUserJapanEntity detailUser = new TblDetailUserJapanEntity();
+			detailUser.setUserId(userInforEntity.getUserId());
+			detailUser.setCodeLevel(userInforEntity.getCodeLevel());
+			detailUser.setStartDate(userInforEntity.getStartDate());
+			detailUser.setEndDate(userInforEntity.getEndDate());
+			detailUser.setTotal(userInforEntity.getTotal());
 			// check tồn tại codeLevel - isExistedCodeLevel
-			boolean isExistedCodeLevel = new MstJapanLogicImpl().checkExistCodeLevel(userInforEntity.getCodeLevel());
+			boolean isExistedCodeLevel = new MstJapanLogicImpl().checkExistCodeLevel(detailUser.getCodeLevel());
 			if (!isExistedCodeLevel) {
 				// nếu codeLevel ko tồn tại
 				if (isExistedUserId) {
 					// tồn tại id
-					japanDao.deleteUserById(userInforEntity.getUserId());
+					japanDao.deleteUserById(detailUser.getUserId());
 				}
 			} else {
 				// codeLevel tồn tại
 				if (isExistedUserId) {
 					// tồn tại userId
-					japanDao.updateUser(userInforEntity);
+					japanDao.updateUser(detailUser);
 				} else {
 					// ko tồn tại usr id
-					japanDao.insertUser(userInforEntity);
+					japanDao.insertUser(detailUser);
 				}
 			}
 			// commit

@@ -14,13 +14,14 @@ import entities.UserInforEntity;
 import logics.TblUserLogic;
 import logics.impl.TblDetailUserJapanLogicImpl;
 import logics.impl.TblUserLogicImpl;
+import properties.MessageProperties;
 import utils.ConstantUtil;
 import validates.UserValidate;
 
 /**
  * Servlet implementation class AddUserConfirm
  */
-@WebServlet(description = "Xử lý khi click vào button Xác nhận của ADM003", urlPatterns = { "/AddUserConfirm.do" })
+@WebServlet(description = "Xử lý khi click vào button Xác nhận của ADM003", urlPatterns = { ConstantUtil.ADD_USER_CONFIRM_CONTROLLER })
 public class AddUserConfirmController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -60,17 +61,16 @@ public class AddUserConfirmController extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			HttpSession session = request.getSession();
-			String keyParam = request.getParameter("keyEntity");
-			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + keyParam);
-			session.removeAttribute("entityuserinfor" + keyParam);
+			String key = request.getParameter("key");
+			UserInforEntity userInforEntity = (UserInforEntity) session.getAttribute("entityuserinfor" + key);
+			session.removeAttribute("entityuserinfor" + key);
 			// validate lần 2
 			ArrayList<String> listErrMsg = new UserValidate().validateUser(userInforEntity);
+			TblUserLogic tblUserLogic = new TblUserLogicImpl();
 			if (0 == listErrMsg.size()) {
 				// ko tồn tại lỗi
 
-				// thì kiểm tra tiếp các điều kiện update or add
-				// obj thực hiện create or update user
-				TblUserLogic tblUserLogic = new TblUserLogicImpl();
+				// kiểm tra tiếp các điều kiện update or add
 				if (null == userInforEntity.getUserId()) {
 					// là case add
 					if (tblUserLogic.createUser(userInforEntity)) {
@@ -81,20 +81,25 @@ public class AddUserConfirmController extends HttpServlet {
 						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
 					}
 				} else {
-					// là case update
-					// check tồn tại detailUserId - isExistedUserId
-					boolean isExistedUserId = new TblDetailUserJapanLogicImpl()
-							.checkExistUserId(userInforEntity.getUserId());
+					// là case update: kiểm tra user có tồn tại
+					if (tblUserLogic.checkExistedUserId(userInforEntity.getUserId())) {
+						// check tồn tại detailUserId - isExistedUserId
+						boolean isExistedUserId = new TblDetailUserJapanLogicImpl()
+								.checkExistUserId(userInforEntity.getUserId());
 
-					// gọi logic update userInfor
-					boolean isUpdateSuccess = tblUserLogic.updateUser(userInforEntity, isExistedUserId);
+						// gọi logic update userInfor
+						boolean isUpdateSuccess = tblUserLogic.updateUser(userInforEntity, isExistedUserId);
 
-					// gọi updateUserInfor()
-					if (isUpdateSuccess) {
-						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_UPDATE_TYPE);
+						// gọi updateUserInfor()
+						if (isUpdateSuccess) {
+							session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_UPDATE_TYPE);
+						} else {
+							// không update thành công user
+							session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
+						}
 					} else {
-						// không update thành công user
-						session.setAttribute(ConstantUtil.ADM006_TYPE, ConstantUtil.ADM006_ERROR_TYPE);
+						session.setAttribute(ConstantUtil.SYSTEM_ERROR_TYPE, MessageProperties.getValue("MSG005"));
+						response.sendRedirect(request.getContextPath() + ConstantUtil.SYSTEM_ERROR_CONTROLLER);
 					}
 				}
 			} else {
